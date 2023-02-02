@@ -17,6 +17,8 @@ public class LoaiKTXController {
         return loaiKTXService.getAll();
     }
 
+//    @GetMapping
+
     @PostMapping("/add")
     String addLoaiKTX(@RequestBody LoaiKTX loaiKTX){
         return loaiKTXService.addLoaiKTX(loaiKTX);
