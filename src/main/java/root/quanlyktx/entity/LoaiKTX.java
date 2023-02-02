@@ -18,10 +18,6 @@ public class LoaiKTX {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getSoNguoi() {
         return soNguoi;
     }

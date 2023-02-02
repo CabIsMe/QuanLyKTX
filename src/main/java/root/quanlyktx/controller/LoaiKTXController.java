@@ -17,10 +17,20 @@ public class LoaiKTXController {
         return loaiKTXService.getAll();
     }
 
-//    @GetMapping
-
     @PostMapping("/add")
     String addLoaiKTX(@RequestBody LoaiKTX loaiKTX){
         return loaiKTXService.addLoaiKTX(loaiKTX);
     }
+    @DeleteMapping("/remove/{id}")
+    String deleteLoaiKTX(@PathVariable("id") Integer id){
+        if(loaiKTXService.deleteLoaiKTX(id)){
+            return "remove success";
+        }
+        return "remove fail";
+    }
+    @PutMapping("/update/{id}")
+    LoaiKTX updateLoaiKTX(@PathVariable("id") Integer id, @RequestBody LoaiKTX loaiKTX){
+        return loaiKTXService.updateLoaiKTX(id, loaiKTX);
+    }
+
 }
