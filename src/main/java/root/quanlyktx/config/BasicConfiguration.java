@@ -42,7 +42,7 @@ public class BasicConfiguration extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
 
         http.cors().and().csrf().disable()
-                .authorizeRequests().antMatchers("/api/**").permitAll()
+                .authorizeRequests().antMatchers("/api/**","/loaiktx/").permitAll()
                 .anyRequest().authenticated()
         ;
     }
