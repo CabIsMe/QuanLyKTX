@@ -10,6 +10,3 @@ ALTER COLUMN gia_nuoc float;
 
 ALTER TABLE account
 ALTER COLUMN password varchar(MAX)
-
-ALTER TABLE quan_tri_vien
-ADD FOREIGN KEY (MSCB) REFERENCES account(username)
