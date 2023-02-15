@@ -1,6 +1,7 @@
 package root.quanlyktx.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,8 +20,8 @@ public class GiaNuocTheoThang {
     @Column(name = "gia_nuoc")
     private double giaNuoc;
 
-    @OneToMany(mappedBy = "idDonGia")
-    private List<PhieuNuocKTX> phieuNuocKTXList;
+//    @OneToMany(mappedBy = "idDonGia", fetch = FetchType.EAGER)
+//    private List<PhieuNuocKTX> phieuNuocKTXList= new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -54,13 +55,13 @@ public class GiaNuocTheoThang {
         this.giaNuoc = giaNuoc;
     }
 
-    public List<PhieuNuocKTX> getPhieuNuocKTXList() {
-        return phieuNuocKTXList;
-    }
-
-    public void setPhieuNuocKTXList(List<PhieuNuocKTX> phieuNuocKTXList) {
-        this.phieuNuocKTXList = phieuNuocKTXList;
-    }
+//    public List<PhieuNuocKTX> getPhieuNuocKTXList() {
+//        return phieuNuocKTXList;
+//    }
+//
+//    public void setPhieuNuocKTXList(List<PhieuNuocKTX> phieuNuocKTXList) {
+//        this.phieuNuocKTXList = phieuNuocKTXList;
+//    }
 
     public GiaNuocTheoThang() {
     }

@@ -8,7 +8,7 @@ import root.quanlyktx.service.LoaiKTXService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/loaiktx")
+@RequestMapping("/api/loaiktx")
 public class LoaiKTXController {
     @Autowired
     LoaiKTXService loaiKTXService;

@@ -6,6 +6,8 @@ import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.repository.PhongKTXRepository;
 
+import java.util.List;
+
 @Service
 public class PhongKTXService {
 
@@ -46,5 +48,14 @@ public class PhongKTXService {
 
         }
         return null;
+    }
+
+
+    public List<PhongKTX> getALL(){
+        return phongKTXRepository.findAll();
+    }
+
+    public PhongKTX findById(Integer id){
+        return phongKTXRepository.findById(id).get();
     }
 }

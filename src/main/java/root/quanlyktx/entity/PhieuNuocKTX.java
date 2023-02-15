@@ -11,12 +11,16 @@ public class PhieuNuocKTX {
     private Integer id;
     @Column(name = "ma_so_KTX")
     private Integer maSoKTX;
-    @Column(name = "id_don_gia")
-    private Integer idDonGia;
+    @ManyToOne
+    @JoinColumn(name = "id_don_gia")
+    private GiaNuocTheoThang giaNuocTheoThang;
+//    @Column(name = "id_don_gia")
+//    private Integer idDonGia;
     @Column(name = "luong_nuoc_tieu_thu")
     private Integer luongNuocTieuThu;
     @Column(name ="trang_thai")
     private boolean trangThai;
+
 
     public Integer getId() {
         return id;
@@ -34,13 +38,22 @@ public class PhieuNuocKTX {
         this.maSoKTX = maSoKTX;
     }
 
-    public Integer getIdDonGia() {
-        return idDonGia;
+    public GiaNuocTheoThang getGiaNuocTheoThang() {
+        return giaNuocTheoThang;
     }
 
-    public void setIdDonGia(Integer idDonGia) {
-        this.idDonGia = idDonGia;
+    public void setGiaNuocTheoThang(GiaNuocTheoThang giaNuocTheoThang) {
+        this.giaNuocTheoThang = giaNuocTheoThang;
     }
+
+
+//    public Integer getIdDonGia() {
+//        return idDonGia;
+//    }
+//
+//    public void setIdDonGia(Integer idDonGia) {
+//        this.idDonGia = idDonGia;
+//    }
 
     public Integer getLuongNuocTieuThu() {
         return luongNuocTieuThu;

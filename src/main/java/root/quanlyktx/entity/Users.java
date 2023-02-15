@@ -6,12 +6,12 @@ import java.util.List;
 import javax.persistence.*;
 
 @Entity
-@Table(name ="quan_tri_vien")
-public class QuanTriVien {
+@Table(name ="sinh_vien")
+public class Users {
 
     @Id
-    @Column(name = "MSCB")
-    private String MSCB;
+    @Column(name = "MSSV")
+    private String MSSV;
     @Column(name = "ho_ten")
     private String ho_ten;
     @Column(name = "gioi_tinh")
@@ -24,10 +24,37 @@ public class QuanTriVien {
     private String SDT;
     @Column(name = "mail")
     private String mail;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "phan_quyen")
+    private Integer phanQuyen;
 
+    @OneToMany(mappedBy = "MSSV")
+    private List<HopDongKTX> hopDongKTXList;
 
+    public String getPassword() {
+        return password;
+    }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
+    public Integer getPhanQuyen() {
+        return phanQuyen;
+    }
+
+    public void setPhanQuyen(Integer phanQuyen) {
+        this.phanQuyen = phanQuyen;
+    }
+
+    public String getMSSV() {
+        return MSSV;
+    }
+
+    public void setMSSV(String MSSV) {
+        this.MSSV = MSSV;
+    }
 
     public String getHo_ten() {
         return ho_ten;
@@ -77,14 +104,15 @@ public class QuanTriVien {
         this.mail = mail;
     }
 
-    public String getMSCB() {
-        return MSCB;
+    public List<HopDongKTX> getHopDongKTXList() {
+        return hopDongKTXList;
     }
 
-    public void setMSCB(String MSCB) {
-        this.MSCB = MSCB;
+    public void setHopDongKTXList(List<HopDongKTX> hopDongKTXList) {
+        this.hopDongKTXList = hopDongKTXList;
     }
 
-    public QuanTriVien() {
+
+    public Users() {
     }
 }

@@ -28,8 +28,13 @@ public class PhongKTX {
     @OneToMany(mappedBy = "phongKTX")
     private List<HopDongKTX> hopDongKTXList;
 
-    @OneToMany(mappedBy = "phongKTX")
-    private List<DonXinKTX> donXinKTXList;
+    public List<HopDongKTX> getHopDongKTXList() {
+        return hopDongKTXList;
+    }
+
+    public void setHopDongKTXList(List<HopDongKTX> hopDongKTXList) {
+        this.hopDongKTXList = hopDongKTXList;
+    }
 
     public Integer getId() {
         return id;
