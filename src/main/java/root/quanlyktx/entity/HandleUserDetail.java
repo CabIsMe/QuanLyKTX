@@ -23,14 +23,24 @@ public class HandleUserDetail implements UserDetails {
         this.user = user;
         this.authorities=authorities;
     }
+//    public static HandleUserDetail build(User user) {
+//        List<GrantedAuthority> authorities= new ArrayList<>();
+//        if(user.getRole()==4)
+//            authorities.add(new SimpleGrantedAuthority("student"));
+//        else if(user.getRole()==3)
+//            authorities.add(new SimpleGrantedAuthority("admin"));
+//
+//
+//        return new HandleUserDetail(user, authorities);
+//    }
     public static HandleUserDetail build(User user) {
         List<GrantedAuthority> authorities= new ArrayList<>();
-        if(user.getRole()==4)
-            authorities.add(new SimpleGrantedAuthority("student"));
-        else if(user.getRole()==3)
-            authorities.add(new SimpleGrantedAuthority("admin"));
+//        if(user.getRole()==4)
+//            authorities.add(new SimpleGrantedAuthority("student"));
+//        else if(user.getRole()==3)
+//            authorities.add(new SimpleGrantedAuthority("admin"));
 
-
+        authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName()));
         return new HandleUserDetail(user, authorities);
     }
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
