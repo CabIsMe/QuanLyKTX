@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 //@PreAuthorize("hasAuthority('student')")
 @RequestMapping("/api/student/loaiktx")
+
 public class LoaiKTXController {
     @Autowired
     LoaiKTXService loaiKTXService;

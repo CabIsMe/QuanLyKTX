@@ -8,5 +8,6 @@ ALTER COLUMN gia_nuoc float;
 -- Vô Diagram --> Tìm table "user", kéo Column "username" vào Table "sinh_vien", Column "MSSV",
 -- Table "user", kéo Column "username" vào Table "quan_tri_vien", Column "MSCB".
 
-ALTER TABLE user
+ALTER TABLE users
 ALTER COLUMN password varchar(MAX)
+

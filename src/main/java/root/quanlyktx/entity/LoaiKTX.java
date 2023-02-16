@@ -40,6 +40,17 @@ public class LoaiKTX {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "loaiKTX")
     private List<PhongKTX> phongKTXList;
 
+    @OneToMany(mappedBy = "loaiKTX", fetch = FetchType.LAZY)
+    private List<PhongKTX> phongKTXs;
+
+    public List<PhongKTX> getPhongKTXs() {
+        return phongKTXs;
+    }
+
+    public void setPhongKTXs(List<PhongKTX> phongKTXs) {
+        this.phongKTXs = phongKTXs;
+    }
+
     public Integer getId() {
         return id;
     }
