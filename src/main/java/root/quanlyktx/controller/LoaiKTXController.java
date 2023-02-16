@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 //@PreAuthorize("hasAuthority('student')")
-@RequestMapping("/api/student/loaiktx")
+@RequestMapping("/api/loaiktx")
 
 public class LoaiKTXController {
     @Autowired
