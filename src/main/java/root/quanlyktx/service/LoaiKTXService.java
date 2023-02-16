@@ -1,24 +1,30 @@
 package root.quanlyktx.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.repository.LoaiKTXRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoaiKTXService {
     @Autowired
+    private ModelMapper modelMapper;
+    @Autowired
     LoaiKTXRepository loaiKTXRepository;
-    public List<LoaiKTX> getAll(){
-        return loaiKTXRepository.findAll();
+    public List<LoaiKTXDto> getAll(){
+        List <LoaiKTX> loaiKTXList=loaiKTXRepository.findAll();
+        return loaiKTXList.stream().map(content -> modelMapper.map(content,LoaiKTXDto.class)).collect(Collectors.toList());
     }
-    public String addLoaiKTX(LoaiKTX loaiKTX){
+    public String addLoaiKTX(LoaiKTXDto loaiKTXDto){
         try{
-            loaiKTXRepository.save(loaiKTX);
+            loaiKTXRepository.save(modelMapper.map(loaiKTXDto, LoaiKTX.class));
             return "success";
         }catch (Exception e){
             e.getStackTrace();
