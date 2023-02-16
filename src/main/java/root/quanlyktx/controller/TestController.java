@@ -3,19 +3,23 @@ package root.quanlyktx.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import root.quanlyktx.dto.UserDto;
+import root.quanlyktx.entity.User;
 import root.quanlyktx.repository.UserRepository;
+import root.quanlyktx.service.UserService;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
     @GetMapping("/all")
-    public String allAccess() {
-        userRepository.findAll();
+    public List<UserDto> getAllUser() {
 
-        return "Public Content.";
+        return userService.getAll();
     }
 
     @GetMapping("/student")

@@ -20,7 +20,7 @@ public class LoaiKTXService {
     LoaiKTXRepository loaiKTXRepository;
     public List<LoaiKTXDto> getAll(){
         List <LoaiKTX> loaiKTXList=loaiKTXRepository.findAll();
-        return loaiKTXList.stream().map(content -> modelMapper.map(content,LoaiKTXDto.class)).collect(Collectors.toList());
+        return loaiKTXList.stream().map(loaiKTX -> modelMapper.map(loaiKTX,LoaiKTXDto.class)).collect(Collectors.toList());
     }
     public String addLoaiKTX(LoaiKTXDto loaiKTXDto){
         try{
