@@ -17,8 +17,8 @@ public class PhongKTX {
     @Column(name = "loai_KTX")
     private Integer loaiKTX;
 
-    @Column(name = "hinh_anh")
-    private String hinhAnh;
+//    @Column(name = "hinh_anh")
+//    private String hinhAnh;
 
     @OneToMany(mappedBy = "maSoKTX")
     private List<PhieuDienKTX> phieuDienKTXList;
@@ -56,13 +56,13 @@ public class PhongKTX {
     }
 
 
-    public String getHinhAnh() {
-        return hinhAnh;
-    }
-
-    public void setHinhAnh(String hinhAnh) {
-        this.hinhAnh = hinhAnh;
-    }
+//    public String getHinhAnh() {
+//        return hinhAnh;
+//    }
+//
+//    public void setHinhAnh(String hinhAnh) {
+//        this.hinhAnh = hinhAnh;
+//    }
 
     public List<PhieuDienKTX> getPhieuDienKTXList() {
         return phieuDienKTXList;

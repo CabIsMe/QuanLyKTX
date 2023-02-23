@@ -3,6 +3,7 @@ package root.quanlyktx.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
+import root.quanlyktx.dto.PhongKTXDTO;
 import root.quanlyktx.entity.PhieuNuocKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.service.PhongKTXService;
@@ -17,8 +18,8 @@ public class PhongKTXController {
     @Autowired
     PhongKTXService phongKTXService;
     @PostMapping("/add")
-    public String addPhongKTX(@RequestBody PhongKTX phongKTX){
-        return phongKTXService.addPhongKTX(phongKTX);
+    public String addPhongKTX(@RequestBody PhongKTXDTO phongKTXDTO){
+        return phongKTXService.addPhongKTX(phongKTXDTO);
     }
     @DeleteMapping("/remove/{id}")
     public String deletePhongKTX(@PathVariable("id") Integer id){
@@ -29,16 +30,16 @@ public class PhongKTXController {
     }
 
     @PutMapping("/update/{id}")
-    public PhongKTX updatePhongKTX(@PathVariable("id") Integer id, @RequestBody PhongKTX phongKTX){
-        return phongKTXService.updatePhongKTX(id, phongKTX);
+    public PhongKTXDTO updatePhongKTX(@PathVariable("id") Integer id, @RequestBody PhongKTXDTO phongKTXDTO){
+        return phongKTXService.updatePhongKTX(id, phongKTXDTO);
     }
 
     @GetMapping("/")
-    List <PhongKTX> getAll() { return phongKTXService.getALL();}
+    public List <PhongKTXDTO> getAll() { return phongKTXService.getALL();}
 
     @GetMapping("/{id}")
-    PhongKTX findById(@PathVariable("id") Integer id){
-        return phongKTXService.findById(id);
+    public PhongKTXDTO getById(@PathVariable("id") Integer id){
+        return phongKTXService.getById(id);
     }
 
 //    @GetMapping("/{id}/lastmonth")

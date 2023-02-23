@@ -17,8 +17,8 @@ public class HopDongKTX {
     private String MSSV;
     @Column(name = "ngay_lam_don")
     private Date ngayLamDon;
-    @Column(name = "ngay_bat_dau")
-    private Date ngayBatDau;
+    @Column(name = "ngay_hieu_luc")
+    private Date ngayHieuLuc;
     @Column(name = "ngay_ket_thuc")
     private Date ngayKetThuc;
     @Column(name = "trang_thai")
@@ -56,12 +56,12 @@ public class HopDongKTX {
         this.ngayLamDon = ngayLamDon;
     }
 
-    public Date getNgayBatDau() {
-        return ngayBatDau;
+    public Date getNgayHieuLuc() {
+        return ngayHieuLuc;
     }
 
-    public void setNgayBatDau(Date ngayBatDau) {
-        this.ngayBatDau = ngayBatDau;
+    public void setNgayHieuLuc(Date ngayHieuLuc) {
+        this.ngayHieuLuc = ngayHieuLuc;
     }
 
     public Date getNgayKetThuc() {

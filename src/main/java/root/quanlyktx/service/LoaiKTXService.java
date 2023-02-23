@@ -39,14 +39,17 @@ public class LoaiKTXService {
         }
         return false;
     }
-    public LoaiKTX updateLoaiKTX(Integer id, LoaiKTX loaiKTX){
+    public LoaiKTXDto updateLoaiKTX(Integer id, LoaiKTXDto loaiKTXDto){
         if(loaiKTXRepository.existsById(id)){
+
             try{
                 LoaiKTX loaiKTX_root= loaiKTXRepository.findById(id).get();
-                loaiKTX_root.setGiaPhong(loaiKTX.getGiaPhong());
-                loaiKTX_root.setSoNguoi(loaiKTX.getSoNguoi());
+                loaiKTX_root.setGiaPhong(loaiKTXDto.getGiaPhong());
+                loaiKTX_root.setSoNguoi(loaiKTXDto.getSoGiuong());
+                loaiKTX_root.setTenLoai(loaiKTXDto.getTenLoai());
+                loaiKTX_root.setImage(loaiKTXDto.getImage());
                 loaiKTXRepository.save(loaiKTX_root);
-                return loaiKTX_root;
+                return modelMapper.map(loaiKTX_root, LoaiKTXDto.class);
             }
             catch (Exception e){
                 e.printStackTrace();

@@ -36,8 +36,8 @@ public class LoaiKTXController {
         return "remove fail";
     }
     @PutMapping("/update/{id}")
-    LoaiKTX updateLoaiKTX(@PathVariable("id") Integer id, @RequestBody LoaiKTX loaiKTX){
-        return loaiKTXService.updateLoaiKTX(id, loaiKTX);
+    private LoaiKTXDto updateLoaiKTX(@PathVariable("id") Integer id, @RequestBody LoaiKTXDto loaiKTXDto){
+        return loaiKTXService.updateLoaiKTX(id, loaiKTXDto);
     }
 
 }

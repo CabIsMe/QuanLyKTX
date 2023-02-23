@@ -2,12 +2,15 @@ package root.quanlyktx.dto;
 
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Date;
+
 @Data
+@Getter
+@Setter
 public class HopDongKTXDTO {
-
-
     private Integer id;
 
     private Integer phongKTX;
@@ -16,7 +19,7 @@ public class HopDongKTXDTO {
 
     private Date ngayLamDon;
 
-    private Date ngayBatDau;
+    private Date ngayHieuLuc;
 
     private Date ngayKetThuc;
 

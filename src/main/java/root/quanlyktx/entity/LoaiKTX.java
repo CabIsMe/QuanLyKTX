@@ -16,6 +16,16 @@ public class LoaiKTX {
     private Double giaPhong;
     @Column(name = "hinh_anh")
     private String Image;
+    @Column(name = "ten_loai")
+    private String tenLoai;
+
+    public String getTenLoai() {
+        return tenLoai;
+    }
+
+    public void setTenLoai(String tenLoai) {
+        this.tenLoai = tenLoai;
+    }
 
     public void setId(Integer id) {
         this.id = id;

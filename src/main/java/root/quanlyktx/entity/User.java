@@ -20,8 +20,28 @@ public class User {
     private String SDT;
     private String mail;
     private String password;
+
     @Column(name = "phan_quyen")
     private Integer role_id;
+    public Integer getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(Integer role_id) {
+        this.role_id = role_id;
+    }
+
+    @ManyToOne()
+    @JoinColumn(name="phan_quyen", referencedColumnName = "id", insertable = false, updatable = false)
+    private Role role;
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Role getRole() {
+        return role;
+    }
 
     public User() {
     }
@@ -31,17 +51,17 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String hoTen, boolean gioiTinh, Date ngaySinh, String CMND, String SDT, String mail, String password, Integer role_id) {
-        this.username = username;
-        this.hoTen = hoTen;
-        this.gioiTinh = gioiTinh;
-        this.ngaySinh = ngaySinh;
-        this.CMND = CMND;
-        this.SDT = SDT;
-        this.mail = mail;
-        this.password = password;
-        this.role_id = role_id;
-    }
+//    public User(String username, String hoTen, boolean gioiTinh, Date ngaySinh, String CMND, String SDT, String mail, String password, Integer role_id) {
+//        this.username = username;
+//        this.hoTen = hoTen;
+//        this.gioiTinh = gioiTinh;
+//        this.ngaySinh = ngaySinh;
+//        this.CMND = CMND;
+//        this.SDT = SDT;
+//        this.mail = mail;
+//        this.password = password;
+//        this.role_id = role_id;
+//    }
 
     public String getUsername() {
         return username;
@@ -97,22 +117,6 @@ public class User {
 
     public void setMail(String mail) {
         this.mail = mail;
-    }
-
-    public Integer getRole_id() {
-        return role_id;
-    }
-
-    public void setRole_id(Integer role_id) {
-        this.role_id = role_id;
-    }
-
-    public Integer getRole() {
-        return role_id;
-    }
-
-    public void setRole(Integer role) {
-        this.role_id = role;
     }
 
 
