@@ -3,11 +3,15 @@ package root.quanlyktx.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.UserDto;
 
+import root.quanlyktx.entity.HandleUserDetail;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.entity.User;
 import root.quanlyktx.repository.UserRepository;
@@ -24,7 +28,16 @@ public class UserService {
 //    @Autowired
 //    BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    public UserDto getInfo(String username){
 
+//        HandleUserDetail userDetails =
+//                (HandleUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User user=userRepository.findByUsername(username);
+            return modelMapper.map(user, UserDto.class);
+
+
+
+    }
      public List<UserDto> getAll(){
          List <User> userList=userRepository.findAll();
          return userList.stream()

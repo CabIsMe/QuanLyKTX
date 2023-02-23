@@ -20,6 +20,7 @@ public class PhongKTXService {
     @Autowired
     PhongKTXRepository phongKTXRepository;
     public String addPhongKTX(PhongKTXDTO phongKTXDTO){
+
         try{
             phongKTXRepository.save(modelMapper.map(phongKTXDTO, PhongKTX.class));
             return "success";
@@ -65,5 +66,9 @@ public class PhongKTXService {
     public PhongKTXDTO getById(Integer id){
         PhongKTX phongKTX = phongKTXRepository.findById(id).get();
         return modelMapper.map(phongKTX, PhongKTXDTO.class);
+    }
+    public List<PhongKTXDTO> getAllByLoaiPhong(Integer id){
+        List<PhongKTX>phongKTXList=phongKTXRepository.findAllByLoaiKTX(id);
+        return phongKTXList.stream().map(phongKTX -> modelMapper.map(phongKTX, PhongKTXDTO.class)).collect(Collectors.toList());
     }
 }

@@ -1,20 +1,21 @@
 package root.quanlyktx.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.service.HopDongKTXService;
+import root.quanlyktx.service.UserService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/hopdong")
+@CrossOrigin(origins = "*", maxAge = 3600)
+
 public class HopDongKTXController {
     @Autowired
     HopDongKTXService hopDongKTXService;
+
     @GetMapping("/")
     public List<HopDongKTXDTO> getAll(){ return hopDongKTXService.getAll();}
     @GetMapping("/{id}")

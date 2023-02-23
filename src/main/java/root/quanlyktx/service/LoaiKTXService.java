@@ -22,6 +22,12 @@ public class LoaiKTXService {
         List <LoaiKTX> loaiKTXList=loaiKTXRepository.findAll();
         return loaiKTXList.stream().map(loaiKTX -> modelMapper.map(loaiKTX,LoaiKTXDto.class)).collect(Collectors.toList());
     }
+    public LoaiKTXDto getSingleLoaiKTX(Integer id){
+        if(loaiKTXRepository.existsById(id)){
+            return modelMapper.map(loaiKTXRepository.findById(id).get(),LoaiKTXDto.class);
+        }
+        return null;
+    }
     public String addLoaiKTX(LoaiKTXDto loaiKTXDto){
         try{
             loaiKTXRepository.save(modelMapper.map(loaiKTXDto, LoaiKTX.class));

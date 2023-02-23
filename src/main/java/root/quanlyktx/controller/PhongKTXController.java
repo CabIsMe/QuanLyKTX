@@ -2,6 +2,7 @@ package root.quanlyktx.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.PhongKTXDTO;
 import root.quanlyktx.entity.PhieuNuocKTX;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/phongktx")
+@CrossOrigin(origins = "*", maxAge = 3600)
 
 public class PhongKTXController {
 
@@ -42,6 +44,13 @@ public class PhongKTXController {
         return phongKTXService.getById(id);
     }
 
+    @GetMapping("/loaiktx/{id}")
+    public ResponseEntity<?> getAllByLoaiPhong(@PathVariable("id") Integer id){
+        if(phongKTXService.getAllByLoaiPhong(id).isEmpty()){
+            return ResponseEntity.badRequest().body("Empty");
+        }
+        return ResponseEntity.ok().body(phongKTXService.getAllByLoaiPhong(id));
+    }
 //    @GetMapping("/{id}/lastmonth")
 //    PhongKTX fndByIdLastMonth(@PathVariable("id") Integer id){
 //        PhongKTX phongKTX_root =phongKTXService.findById(id);

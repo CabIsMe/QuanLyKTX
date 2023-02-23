@@ -19,6 +19,9 @@ public class LoaiKTX {
     @Column(name = "ten_loai")
     private String tenLoai;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "loaiKTX")
+    private List<PhongKTX> phongKTXList;
+
     public String getTenLoai() {
         return tenLoai;
     }
@@ -46,21 +49,6 @@ public class LoaiKTX {
     public void setImage(String image) {
         Image = image;
     }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "loaiKTX")
-    private List<PhongKTX> phongKTXList;
-
-    @OneToMany(mappedBy = "loaiKTX", fetch = FetchType.LAZY)
-    private List<PhongKTX> phongKTXs;
-
-    public List<PhongKTX> getPhongKTXs() {
-        return phongKTXs;
-    }
-
-    public void setPhongKTXs(List<PhongKTX> phongKTXs) {
-        this.phongKTXs = phongKTXs;
-    }
-
     public Integer getId() {
         return id;
     }

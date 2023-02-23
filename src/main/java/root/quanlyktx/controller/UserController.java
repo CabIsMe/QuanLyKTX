@@ -11,6 +11,7 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
     @PutMapping("/update/{MSSV}")
     private UserDto updateSinhVien(@PathVariable("MSSV") String MSSV,@RequestBody UserDto userDto){
        return userService.updateSinhVien(MSSV, userDto);

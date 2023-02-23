@@ -20,7 +20,7 @@ public class PhongKTX {
 //    @Column(name = "hinh_anh")
 //    private String hinhAnh;
 
-    @OneToMany(mappedBy = "maSoKTX")
+    @OneToMany(mappedBy = "maSoKTX", fetch = FetchType.LAZY)
     private List<PhieuDienKTX> phieuDienKTXList;
 
     @OneToMany(mappedBy = "maSoKTX")
