@@ -32,8 +32,6 @@ public class AuthController {
     UserRepository userRepository;
 
     @Autowired
-    RoleRepository roleRepository;
-    @Autowired
     UserService userService;
 
     @Autowired
@@ -57,13 +55,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(),roles));
     }
 
-    @GetMapping("/infomation/{MSSV}")
-    private UserDto getInfo(@PathVariable("MSSV") String MSSV){
-        if(MSSV.equals("")){
-            return null;
-        }
-        return userService.getInfo(MSSV);
-    }
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         if (userRepository.existsById(user.getUsername())) {
