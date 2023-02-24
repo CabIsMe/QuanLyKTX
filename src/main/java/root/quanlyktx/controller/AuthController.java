@@ -58,7 +58,7 @@ public class AuthController {
     }
 
     @GetMapping("/infomation/{MSSV}")
-    private UserDto getInfo(String MSSV){
+    private UserDto getInfo(@PathVariable("MSSV") String MSSV){
         if(MSSV.equals("")){
             return null;
         }
