@@ -41,7 +41,6 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
-    private static String username="";
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody User user) {
@@ -55,16 +54,15 @@ public class AuthController {
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
-        username=userDetails.getUsername();
         return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUsername(),roles));
     }
 
-    @GetMapping("/infomation")
-    private UserDto getInfo(){
-        if(username.equals("")){
+    @GetMapping("/infomation/{MSSV}")
+    private UserDto getInfo(String MSSV){
+        if(MSSV.equals("")){
             return null;
         }
-        return userService.getInfo(username);
+        return userService.getInfo(MSSV);
     }
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
