@@ -9,6 +9,7 @@ import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.repository.HopDongKTXRepository;
 
 import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +45,7 @@ public class HopDongKTXService {
     public Integer countByTrangThaiTrue(){
         return hopDongKTXRepository.countHopDongKTXByTrangThaiTrue();
     }
+
     public List<HopDongKTXDTO> xoaHopDongChuaDongPhi(){
         List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
         Date date = new java.sql.Date(new java.util.Date().getTime());
