@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer> {
     List<HopDongKTX> findAllByPhongKTX(Integer idPhong);
+    Integer countHopDongKTXByPhongKTX(Integer idPhong);
+    Integer countHopDongKTXByTrangThaiTrue();
 }

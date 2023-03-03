@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import root.quanlyktx.jwt.AuthEntryPointJwt;
 import root.quanlyktx.jwt.AuthTokenFilter;
-import root.quanlyktx.service.UserDetailsServiceImpl;
+import root.quanlyktx.userdetail.UserDetailsServiceImpl;
 
 @Configuration
 @EnableGlobalMethodSecurity(
@@ -36,6 +36,10 @@ public class WebSecurityConfig {
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
+//    @Bean
+//    public JavaMailSender javaMailSender(){
+//        return new JavaMailSenderImpl();
+//    }
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();

@@ -1,14 +1,13 @@
 package root.quanlyktx.entity;
 
-import org.hibernate.annotations.Comment;
-import java.sql.Date;
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "admins")
+public class Admin {
     @Id
-    @Column(name = "MSSV")
+    @Column(name = "MSCB")
     private String username;
     @Column(name = "ho_ten")
     private String hoTen;
@@ -20,20 +19,21 @@ public class User {
     private String SDT;
     private String mail;
     private String password;
-
     @Column(name = "phan_quyen")
     private Integer role_id;
-    public Integer getRole_id() {
-        return role_id;
-    }
-
-    public void setRole_id(Integer role_id) {
-        this.role_id = role_id;
-    }
-
+//    @Column(name = "trang_thai")
+//    private boolean status;
     @ManyToOne()
     @JoinColumn(name="phan_quyen", referencedColumnName = "id", insertable = false, updatable = false)
     private Role role;
+
+//    public boolean isStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(boolean status) {
+//        this.status = status;
+//    }
 
     public void setRole(Role role) {
         this.role = role;
@@ -42,26 +42,20 @@ public class User {
     public Role getRole() {
         return role;
     }
-
-    public User() {
+    public Integer getRole_id() {
+        return role_id;
     }
 
-    public User(String username, String password) {
+    public void setRole_id(Integer role_id) {
+        this.role_id = role_id;
+    }
+    public Admin() {
+    }
+
+    public Admin(String username, String password) {
         this.username = username;
         this.password = password;
     }
-
-//    public User(String username, String hoTen, boolean gioiTinh, Date ngaySinh, String CMND, String SDT, String mail, String password, Integer role_id) {
-//        this.username = username;
-//        this.hoTen = hoTen;
-//        this.gioiTinh = gioiTinh;
-//        this.ngaySinh = ngaySinh;
-//        this.CMND = CMND;
-//        this.SDT = SDT;
-//        this.mail = mail;
-//        this.password = password;
-//        this.role_id = role_id;
-//    }
 
     public String getUsername() {
         return username;

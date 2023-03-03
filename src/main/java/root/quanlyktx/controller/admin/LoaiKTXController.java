@@ -1,4 +1,4 @@
-package root.quanlyktx.controller;
+package root.quanlyktx.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

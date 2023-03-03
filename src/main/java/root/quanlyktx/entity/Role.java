@@ -1,5 +1,7 @@
 package root.quanlyktx.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 import java.util.List;
@@ -14,15 +16,16 @@ public class Role {
     private Integer id;
     @Column(name = "quyen")
     private String roleName;
-//    @Column(name = "role_desc")
-//    private String roleDesc;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "role_id")
-    private List<User> users;
 
-    public List<User> getUsers() {
-        return users;
-    }
+//    @JsonIgnore
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "role_id")
+//    private List<User> users;
+
+
+//    public List<User> getUsers() {
+//        return users;
+//    }
 
 
     public Role(){}
@@ -48,11 +51,4 @@ public class Role {
         this.roleName = roleName;
     }
 
-//    public String getRoleDesc() {
-//        return roleDesc;
-//    }
-//
-//    public void setRoleDesc(String roleDesc) {
-//        this.roleDesc = roleDesc;
-//    }
 }

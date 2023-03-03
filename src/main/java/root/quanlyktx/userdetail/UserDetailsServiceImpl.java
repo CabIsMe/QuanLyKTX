@@ -1,30 +1,37 @@
-package root.quanlyktx.service;
+package root.quanlyktx.userdetail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import root.quanlyktx.entity.User;
-import root.quanlyktx.entity.HandleUserDetail;
-import root.quanlyktx.repository.UserRepository;
+import root.quanlyktx.entity.Admin;
+import root.quanlyktx.entity.Student;
+import root.quanlyktx.repository.AdminRepository;
+import root.quanlyktx.userdetail.HandleStudentDetail;
+import root.quanlyktx.repository.StudentRepository;
 
 import javax.transaction.Transactional;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    UserRepository userRepository;
+    StudentRepository studentRepository;
+    @Autowired
+    AdminRepository adminRepository;
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if(user ==null){
+        Student student = studentRepository.findByUsername(username);
+        Admin admin= adminRepository.findByUsername(username);
+        if(student ==null && admin == null){
             throw new UsernameNotFoundException("User not found");
         }
 //        InMemoryUserDetailsManager inMemoryUserDetailsManager= new InMemoryUserDetailsManager(account);
-
-        return HandleUserDetail.build(user);
+        if(student == null){
+            return HandleAdminDetail.build(admin);
+        }
+        return HandleStudentDetail.build(student);
     }
 
 }

@@ -1,4 +1,4 @@
-package root.quanlyktx.controller;
+package root.quanlyktx.controller.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,14 +8,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import root.quanlyktx.dto.UserDto;
-import root.quanlyktx.entity.User;
-import root.quanlyktx.entity.HandleUserDetail;
+import root.quanlyktx.entity.Student;
+import root.quanlyktx.userdetail.HandleStudentDetail;
 import root.quanlyktx.jwt.JwtResponse;
 import root.quanlyktx.jwt.JwtUtils;
-import root.quanlyktx.repository.UserRepository;
-import root.quanlyktx.repository.RoleRepository;
-import root.quanlyktx.service.UserService;
+import root.quanlyktx.repository.StudentRepository;
+import root.quanlyktx.service.StudentService;
 
 
 import java.util.List;
@@ -29,10 +27,10 @@ public class AuthController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
+    StudentRepository studentRepository;
 
     @Autowired
-    UserService userService;
+    StudentService studentService;
 
     @Autowired
     PasswordEncoder encoder;
@@ -41,14 +39,14 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@RequestBody User user) {
+    public ResponseEntity<?> authenticateUser(@RequestBody Student student) {
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+                new UsernamePasswordAuthenticationToken(student.getUsername(), student.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-        HandleUserDetail userDetails = (HandleUserDetail) authentication.getPrincipal();
+        HandleStudentDetail userDetails = (HandleStudentDetail) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
@@ -57,17 +55,17 @@ public class AuthController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        if (userRepository.existsById(user.getUsername())) {
+    public ResponseEntity<?> registerUser(@RequestBody Student student) {
+        if (studentRepository.existsById(student.getUsername())) {
             return ResponseEntity.badRequest().body("Error: Username is already taken!");
         }
 
         // Create new user's account
         try{
-            User user1 = new User(user.getUsername(), encoder.encode(user.getPassword()));
+            Student student1 = new Student(student.getUsername(), encoder.encode(student.getPassword()));
             // student la 2
-            user1.setRole_id(4);
-            userRepository.save(user1);
+            student1.setRole_id(4);
+            studentRepository.save(student1);
             return ResponseEntity.ok("User registered successfully!");
         }
         catch (Exception e){

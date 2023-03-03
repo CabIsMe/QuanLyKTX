@@ -8,6 +8,8 @@ import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.repository.HopDongKTXRepository;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,5 +37,26 @@ public class HopDongKTXService {
         return hopDongKTXList.stream()
                 .map(hopDongKTX -> modelMapper.map(hopDongKTX,HopDongKTXDTO.class))
                 .collect(Collectors.toList());
+    }
+    public Integer countByPhongKTX(Integer idPhong){
+        return hopDongKTXRepository.countHopDongKTXByPhongKTX(idPhong);
+    }
+    public Integer countByTrangThaiTrue(){
+        return hopDongKTXRepository.countHopDongKTXByTrangThaiTrue();
+    }
+    public List<HopDongKTXDTO> xoaHopDongChuaDongPhi(){
+        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
+        Date date = new java.sql.Date(new java.util.Date().getTime());
+        System.out.println(date);
+        List<HopDongKTXDTO> hdXoa = new ArrayList<HopDongKTXDTO>();
+        for(HopDongKTX hd : hopDongKTXList){
+            // hd day occurs before date
+            if (hd.getNgayHieuLuc().compareTo(date) < 0 && hd.isTrangThai() == false){
+                hdXoa.add(modelMapper.map(hd, HopDongKTXDTO.class));
+                hopDongKTXRepository.delete(hd);
+            }
+        }
+
+        return hdXoa;
     }
 }

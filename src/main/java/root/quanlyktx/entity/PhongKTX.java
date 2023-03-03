@@ -12,7 +12,6 @@ public class PhongKTX {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-
 //    @ManyToOne
     @Column(name = "loai_KTX")
     private Integer loaiKTX;
@@ -55,14 +54,6 @@ public class PhongKTX {
         this.loaiKTX = loaiKTX;
     }
 
-
-//    public String getHinhAnh() {
-//        return hinhAnh;
-//    }
-//
-//    public void setHinhAnh(String hinhAnh) {
-//        this.hinhAnh = hinhAnh;
-//    }
 
     public List<PhieuDienKTX> getPhieuDienKTXList() {
         return phieuDienKTXList;

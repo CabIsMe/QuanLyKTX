@@ -1,10 +1,9 @@
-package root.quanlyktx.controller;
+package root.quanlyktx.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.service.HopDongKTXService;
-import root.quanlyktx.service.UserService;
 
 import java.util.List;
 
@@ -18,12 +17,18 @@ public class HopDongKTXController {
 
     @GetMapping("/")
     public List<HopDongKTXDTO> getAll(){ return hopDongKTXService.getAll();}
+
     @GetMapping("/{id}")
     public HopDongKTXDTO getById(@PathVariable("id") Integer id){
        return hopDongKTXService.getById(id);
     }
+
     @GetMapping("/phong/{idphongktx}")
     public List<HopDongKTXDTO> getByIdPhongKTX(@PathVariable("idphongktx") Integer idphongktx){
         return hopDongKTXService.getByPhongKTX(idphongktx);
+    }
+    @DeleteMapping("/xoahd")
+    public List<HopDongKTXDTO> xoaHopDongChuaDong(){
+        return hopDongKTXService.xoaHopDongChuaDongPhi();
     }
 }

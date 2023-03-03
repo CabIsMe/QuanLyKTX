@@ -3,10 +3,9 @@ package root.quanlyktx.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import root.quanlyktx.dto.UserDto;
-import root.quanlyktx.entity.User;
-import root.quanlyktx.repository.UserRepository;
-import root.quanlyktx.service.UserService;
+import root.quanlyktx.entity.Role;
+import root.quanlyktx.repository.RoleRepository;
+import root.quanlyktx.service.StudentService;
 
 import java.util.List;
 
@@ -15,11 +14,17 @@ import java.util.List;
 @RequestMapping("/api/test")
 public class TestController {
     @Autowired
-    UserService userService;
-    @GetMapping("/all")
-    public List<UserDto> getAllUser() {
+    StudentService studentService;
 
-        return userService.getAll();
+    @Autowired
+    RoleRepository roleRepository;
+    @GetMapping("/all")
+//    public List<UserDto> getAllUser() {
+//        return userService.getAll();
+//
+//    }
+    public List<Role> getAllRole(){
+        return roleRepository.findAll();
     }
 
     @GetMapping("/student")
