@@ -11,8 +11,7 @@ public class EmailController {
     private EmailService emailService;
 
     @PostMapping("/sendMail")
-    public String
-    sendMail(@RequestBody EmailDetails details)
+    public String sendMail(@RequestBody EmailDetails details)
     {
         String status
                 = emailService.sendSimpleMail(details);

@@ -20,4 +20,13 @@ public class OtpService {
         }
     }
 
+    public OTP getOtpByUsername(String username){
+        try{
+            return otpRepository.getOTPByUsername(username);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

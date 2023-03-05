@@ -33,6 +33,7 @@ public class AdminService {
     }
      public List<StudentDto> getAll(){
          List <Admin> studentList = adminRepository.findAll();
+
          return studentList.stream()
                  .map(user -> modelMapper
                  .map(user, StudentDto.class))

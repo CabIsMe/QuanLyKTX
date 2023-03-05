@@ -3,6 +3,10 @@ package root.quanlyktx.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.StudentDto;
 
@@ -18,8 +22,8 @@ public class StudentService {
     StudentRepository studentRepository;
     @Autowired
     private ModelMapper modelMapper;
-//    @Autowired
-//    BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private PasswordEncoder encoder;
 
     public StudentDto getInfo(String username){
 
@@ -41,7 +45,7 @@ public class StudentService {
 
          if (studentRepository.existsById(MSSV)){
              try{
-                 Student student_root = studentRepository.findById(MSSV).get();
+                 Student student_root = studentRepository.getReferenceById(MSSV);
                  student_root.setHoTen(studentDto.getHoTen());
                  student_root.setGioiTinh(studentDto.isGioiTinh());
                  student_root.setNgaySinh(studentDto.getNgaySinh());
@@ -57,4 +61,32 @@ public class StudentService {
          }
          return null;
      }
+     public ResponseEntity<?> registerStudent(Student std){
+        if(studentRepository.existsById(std.getUsername())){
+            Student student=studentRepository.getReferenceById(std.getUsername());
+            if(student.getPassword()==null){
+              student.setPassword(encoder.encode(std.getPassword()));
+              studentRepository.save(student);
+              return ResponseEntity.ok().body("Successfully!");
+            }
+            return new ResponseEntity<>("Account is already taken!", HttpStatus.BAD_REQUEST);
+        }
+         return new ResponseEntity<>("Username does not exist or is not allowed!", HttpStatus.FORBIDDEN);
+     }
+    public boolean updateStatus(String username, boolean stt){
+        try {
+            Student student = studentRepository.getReferenceById(username);
+            student.setStatus(stt);
+            studentRepository.save(student);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public Student getStudentByUsername(String username){
+        return studentRepository.findByUsername(username);
+    }
+
+
 }

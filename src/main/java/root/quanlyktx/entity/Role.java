@@ -20,10 +20,10 @@ public class Role {
 
 //    @JsonIgnore
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "role_id")
-//    private List<User> users;
-
-
-//    public List<User> getUsers() {
+//    private List<Student> users;
+//
+//
+//    public List<Student> getUsers() {
 //        return users;
 //    }
 

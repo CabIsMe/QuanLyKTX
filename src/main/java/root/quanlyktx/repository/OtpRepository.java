@@ -6,4 +6,5 @@ import root.quanlyktx.entity.OTP;
 
 @Repository
 public interface OtpRepository extends JpaRepository<OTP, String> {
+    OTP getOTPByUsername(String username);
 }
