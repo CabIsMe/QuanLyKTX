@@ -1,12 +1,14 @@
 package root.quanlyktx.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.ToString;
 import org.hibernate.annotations.Comment;
 import java.sql.Date;
 import java.util.List;
 import javax.persistence.*;
 
 @Entity
+@ToString
 @Table(name = "students")
 public class Student {
     @Id

@@ -2,6 +2,8 @@ package root.quanlyktx.service;
 
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +13,10 @@ import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.StudentDto;
 
 import root.quanlyktx.entity.Student;
+import root.quanlyktx.jwt.AuthEntryPointJwt;
 import root.quanlyktx.repository.StudentRepository;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +28,13 @@ public class StudentService {
     private ModelMapper modelMapper;
     @Autowired
     private PasswordEncoder encoder;
+    private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
+//    @PostConstruct
+//    public void handleOtpExpired() {
+//        // your initialization code here
+//        System.out.println("MyComponent initialized!");
+//    }
     public StudentDto getInfo(String username){
 
 //        HandleUserDetail userDetails =
@@ -61,32 +71,43 @@ public class StudentService {
          }
          return null;
      }
-     public ResponseEntity<?> registerStudent(Student std){
+     public boolean registerStudent(Student std){
         if(studentRepository.existsById(std.getUsername())){
             Student student=studentRepository.getReferenceById(std.getUsername());
-            if(student.getPassword()==null){
+            System.out.println(student.toString());
+            if(student.getPassword()==null && !student.isStatus()){
               student.setPassword(encoder.encode(std.getPassword()));
               studentRepository.save(student);
-              return ResponseEntity.ok().body("Successfully!");
+              return true;
             }
-            return new ResponseEntity<>("Account is already taken!", HttpStatus.BAD_REQUEST);
+            logger.error("Account is already taken!");
+            return false;
         }
-         return new ResponseEntity<>("Username does not exist or is not allowed!", HttpStatus.FORBIDDEN);
+        logger.error("Username does not exist or is not allowed!");
+        return false;
+
+
      }
-    public boolean updateStatus(String username, boolean stt){
+
+    public void updateStatus(String username, boolean stt){
         try {
             Student student = studentRepository.getReferenceById(username);
             student.setStatus(stt);
             studentRepository.save(student);
-            return true;
         }catch (Exception e){
             e.printStackTrace();
-            return false;
         }
     }
     public Student getStudentByUsername(String username){
         return studentRepository.findByUsername(username);
     }
-
+    public void deleteStudent(String username){
+        if(studentRepository.existsById(username)){
+            Student student=studentRepository.findByUsername(username);
+            student.setPassword(null);
+            studentRepository.save(student);
+        }
+        logger.error("Account is not exist to delete!");
+    }
 
 }

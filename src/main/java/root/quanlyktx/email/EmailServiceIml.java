@@ -22,7 +22,7 @@ public class EmailServiceIml implements EmailService {
     @Value("${spring.mail.username}") private String sender;
 
     @Override
-    public String sendSimpleMail(EmailDetails details) {
+    public boolean sendSimpleMail(EmailDetails details) {
         try {
 
             // Creating a simple mail message
@@ -37,13 +37,13 @@ public class EmailServiceIml implements EmailService {
 
             // Sending the mail
             javaMailSender.send(mailMessage);
-            return "Mail Sent Successfully...";
+            return true;
         }
 
         // Catch block to handle the exceptions
         catch (Exception e) {
             e.printStackTrace();
-            return "Error while Sending Mail";
+            return false;
         }
     }
 
@@ -86,4 +86,5 @@ public class EmailServiceIml implements EmailService {
             return "Error while sending mail!!!";
         }
     }
+
 }
