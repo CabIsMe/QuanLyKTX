@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.entity.HopDongKTX;
-import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.repository.HopDongKTXRepository;
 
-import java.sql.Date;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,5 +59,9 @@ public class HopDongKTXService {
         }
 
         return hdXoa;
+    }
+    public List<HopDongKTX> getHopDongTemp(String mssv){
+
+        return hopDongKTXRepository.findAllByMSSV(mssv);
     }
 }
