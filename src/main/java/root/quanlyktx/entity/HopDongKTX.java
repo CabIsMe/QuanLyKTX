@@ -21,13 +21,13 @@ public class HopDongKTX {
     private Integer phongKTX;
     @Column(name = "MSSV")
     private String MSSV;
-    @JsonFormat(pattern = "dd/MM/yyyy", locale = "vi_VN")
     @Column(name = "ngay_lam_don")
+    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayLamDon;
-    @JsonFormat(pattern = "dd/MM/yyyy", locale = "vi_VN")
     @Column(name = "ngay_hieu_luc")
+    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayHieuLuc;
-    @JsonFormat(pattern = "dd/MM/yyyy", locale = "vi_VN")
+    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     @Column(name = "ngay_ket_thuc")
     private Date ngayKetThuc;
     @Column(name = "trang_thai")
