@@ -31,4 +31,7 @@ public class HopDongKTXController {
     public List<HopDongKTXDTO> xoaHopDongChuaDong(){
         return hopDongKTXService.xoaHopDongChuaDongPhi();
     }
+
+    @GetMapping("/timkiem")
+    public  HopDongKTXDTO search(@RequestParam Integer id){ return  hopDongKTXService.getById(id);}
 }
