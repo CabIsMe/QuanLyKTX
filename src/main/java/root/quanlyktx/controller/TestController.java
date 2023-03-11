@@ -5,7 +5,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.Role;
+import root.quanlyktx.entity.Student;
 import root.quanlyktx.repository.RoleRepository;
+import root.quanlyktx.repository.StudentRepository;
 import root.quanlyktx.service.HopDongKTXService;
 import root.quanlyktx.service.StudentService;
 
@@ -26,6 +28,24 @@ public class TestController {
     @Autowired
     HopDongKTXService hopDongKTXService;
 
+    @Autowired
+    StudentRepository studentRepository;
+    @PutMapping("/xoastatus/{mssv}")
+    public Student getXoaStt(@PathVariable String mssv){
+        Student student=studentRepository.findByUsername(mssv);
+        student.setStatus(false);
+        studentRepository.save(student);
+        return student;
+
+    }
+    @PutMapping("/xoamatkhau/{mssv}")
+    public Student getXoaPass(@PathVariable String mssv){
+        Student student=studentRepository.findByUsername(mssv);
+        student.setPassword(null);
+        studentRepository.save(student);
+        return student;
+
+    }
     @GetMapping("/all")
     public HopDongKTX gettttt(String mssv){
         List <HopDongKTX> hopDongKTXList= hopDongKTXService.getHopDongTemp("n19dccn018");
@@ -60,4 +80,6 @@ public class TestController {
     public String adminAccess() {
         return "Admin Board.";
     }
+
+
 }

@@ -30,8 +30,8 @@ public class TT_PhongController {
         List<PhongKTXDTO> phongKTXDTOList= phongKTXService.getAllByLoaiPhong(idLoaiPhong);
         List<ThongTinPhong> thongTinPhongs= new ArrayList<>();
         for (PhongKTXDTO phongKTXDTO: phongKTXDTOList) {
-            thongTinPhongs.add(new ThongTinPhong(phongKTXDTO.getId().hashCode(),loaiKTXDto.getGiaPhong(),
-                    loaiKTXDto.getSoGiuong()- hopDongKTXService.countByPhongKTX(phongKTXDTO.getId())));
+            thongTinPhongs.add(new ThongTinPhong(phongKTXDTO.getId(),loaiKTXDto.getGiaPhong(),
+                    loaiKTXDto.getSoGiuong()- hopDongKTXService.countByPhongKTX(phongKTXDTO.getId()),loaiKTXDto.getImage()));
         }
         return thongTinPhongs;
     }
