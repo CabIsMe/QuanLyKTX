@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.ViewBillRoomDTO;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.Role;
+import root.quanlyktx.entity.Student;
 import root.quanlyktx.repository.RoleRepository;
+import root.quanlyktx.repository.StudentRepository;
 import root.quanlyktx.service.HopDongKTXService;
 import root.quanlyktx.service.StudentService;
 
@@ -28,6 +30,24 @@ public class TestController {
     @Autowired
     HopDongKTXService hopDongKTXService;
 
+    @Autowired
+    StudentRepository studentRepository;
+    @PutMapping("/xoastatus/{mssv}")
+    public Student getXoaStt(@PathVariable String mssv){
+        Student student=studentRepository.findByUsername(mssv);
+        student.setStatus(false);
+        studentRepository.save(student);
+        return student;
+
+    }
+    @PutMapping("/xoamatkhau/{mssv}")
+    public Student getXoaPass(@PathVariable String mssv){
+        Student student=studentRepository.findByUsername(mssv);
+        student.setPassword(null);
+        studentRepository.save(student);
+        return student;
+
+    }
     @GetMapping("/all")
     public ViewBillRoomDTO gettttt(String mssv){
         ViewBillRoomDTO hopDongKTX = hopDongKTXService.getBillRoom("n19dccn");
@@ -64,6 +84,7 @@ public class TestController {
     public String adminAccess() {
         return "Admin Board.";
     }
+
 
 //    @GetMapping("tmp")
 //    public Integer tmp(){

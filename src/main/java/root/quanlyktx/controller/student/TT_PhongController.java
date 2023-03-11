@@ -32,7 +32,7 @@ public class TT_PhongController {
         List<ThongTinPhong> thongTinPhongs= new ArrayList<>();
         for (PhongKTXDTO phongKTXDTO: phongKTXDTOList) {
             thongTinPhongs.add(new ThongTinPhong(phongKTXDTO.getId().hashCode(),loaiKTXDto.getGiaPhong(),
-                    loaiKTXDto.getSoGiuong()- hopDongKTXService.numBedEmpty(phongKTXDTO.getId())));
+                    loaiKTXDto.getSoGiuong()- hopDongKTXService.numBedEmpty(phongKTXDTO.getId()),loaiKTXDto.getImage()));
         }
         return thongTinPhongs;
     }

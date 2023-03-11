@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import root.quanlyktx.jwt.AuthEntryPointJwt;
 import root.quanlyktx.jwt.AuthTokenFilter;
 import root.quanlyktx.userdetail.UserDetailsServiceImpl;
@@ -26,6 +27,7 @@ import root.quanlyktx.userdetail.UserDetailsServiceImpl;
         // jsr250Enabled = true,
         prePostEnabled = true)
 @EnableWebSecurity
+
 public class WebSecurityConfig {
     @Autowired
     UserDetailsServiceImpl userDetailsService;

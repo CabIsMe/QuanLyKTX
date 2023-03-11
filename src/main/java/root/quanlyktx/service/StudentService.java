@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.dto.StudentDto;
 
 import root.quanlyktx.entity.Student;
@@ -17,6 +18,9 @@ import root.quanlyktx.jwt.AuthEntryPointJwt;
 import root.quanlyktx.repository.StudentRepository;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +32,8 @@ public class StudentService {
     private ModelMapper modelMapper;
     @Autowired
     private PasswordEncoder encoder;
+    @Autowired
+    private OtpService otpService;
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
 //    @PostConstruct
@@ -71,22 +77,27 @@ public class StudentService {
          }
          return null;
      }
-     public boolean registerStudent(Student std){
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
+    public ResponseEntity<?> registerStudent(Student std) {
         if(studentRepository.existsById(std.getUsername())){
-            Student student=studentRepository.getReferenceById(std.getUsername());
-            System.out.println(student.toString());
+            Student student=studentRepository.findByUsername(std.getUsername());
             if(student.getPassword()==null && !student.isStatus()){
               student.setPassword(encoder.encode(std.getPassword()));
               studentRepository.save(student);
-              return true;
+                try {
+                    otpService.sendOTP(student);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Send mail error");
+                }
+                return ResponseEntity.ok().body("Register Success");
             }
             logger.error("Account is already taken!");
-            return false;
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Account is already taken!");
+//            throw new Exception("Account is already taken!");
         }
         logger.error("Username does not exist or is not allowed!");
-        return false;
-
-
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Username does not exist or is not allowed!");
      }
 
     public void updateStatus(String username, boolean stt){

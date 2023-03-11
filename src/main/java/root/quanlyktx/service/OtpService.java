@@ -2,6 +2,7 @@ package root.quanlyktx.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.email.EmailDetails;
 import root.quanlyktx.email.EmailServiceIml;
 import root.quanlyktx.entity.OTP;
@@ -36,6 +37,7 @@ public class OtpService {
             return null;
         }
     }
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public void sendOTP(Student student) throws Exception{
         char[] OTP= OTPCode.generateOTP();
         Date date = new Date();

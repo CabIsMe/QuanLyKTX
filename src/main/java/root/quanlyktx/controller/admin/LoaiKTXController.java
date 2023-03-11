@@ -10,7 +10,7 @@ import root.quanlyktx.service.LoaiKTXService;
 import java.util.List;
 
 @RestController
-//@PreAuthorize("hasAuthority('student')")
+@PreAuthorize("hasAuthority('student')")
 @RequestMapping("/api/loaiktx")
 @CrossOrigin(origins = "*", maxAge = 3600)
 

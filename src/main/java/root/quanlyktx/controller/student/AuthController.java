@@ -22,6 +22,7 @@ import root.quanlyktx.jwt.JwtUtils;
 import root.quanlyktx.service.StudentService;
 
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,15 +67,11 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt,userDetails.getUsername(),roles));
     }
 
-    @Transactional(rollbackFor = {Exception.class, Throwable.class})
+
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody Student student) throws Exception{
-        if(!studentService.registerStudent(student)){
-            throw new Exception("Register failed");
-        }
-        Student student1=studentService.getStudentByUsername(student.getUsername());
-        otpService.sendOTP(student1);
-        return ResponseEntity.ok().body("Register success!");
+    @Transactional(rollbackFor = {Exception.class, Throwable.class})
+    public ResponseEntity<?> registerUser(@RequestBody Student student) {
+        return studentService.registerStudent(student);
 
     }
     @PutMapping("/verify-again")
