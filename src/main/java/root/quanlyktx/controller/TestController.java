@@ -1,6 +1,7 @@
 package root.quanlyktx.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.ViewBillRoomDTO;
@@ -63,4 +64,15 @@ public class TestController {
     public String adminAccess() {
         return "Admin Board.";
     }
+
+//    @GetMapping("tmp")
+//    public Integer tmp(){
+//        return hopDongKTXService.checkNumBedEmpty(1);
+    //    @GetMapping("tmp1")
+//    public ResponseEntity<ViewBillRoomDTO> get(){
+//        ViewBillRoomDTO hopDongKTX = hopDongKTXService.getBillRoom("n19dccn");
+//    }
 }
+
+
+

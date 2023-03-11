@@ -32,21 +32,21 @@ public class ViewBillRoomDTO {
     private Double total;
     private Boolean status;
 
-    public ViewBillRoomDTO mapper(Student student, HopDongKTX hopDongKTX, PhongKTX phongKTX, LoaiKTX loaiKTX){
-        ViewBillRoomDTO viewBillRoomDTO = new ViewBillRoomDTO();
-        viewBillRoomDTO.setId(hopDongKTX.getId());
-        viewBillRoomDTO.setImage(loaiKTX.getImage());
-        viewBillRoomDTO.setPrice(loaiKTX.getGiaPhong());
-        viewBillRoomDTO.setRoomType(phongKTX.getLoaiKTX());
-        viewBillRoomDTO.setBedNumber(loaiKTX.getSoGiuong());
-        viewBillRoomDTO.setFullName(student.getHoTen());
-        viewBillRoomDTO.setStudentID(student.getUsername());
-        viewBillRoomDTO.setPhoneNumber(student.getSDT());
-        viewBillRoomDTO.setDateCreated(hopDongKTX.getNgayLamDon());
-        viewBillRoomDTO.setDateStart(hopDongKTX.getNgayKetThuc());
-        viewBillRoomDTO.setDateEnd(hopDongKTX.getNgayHieuLuc());
-        viewBillRoomDTO.setTotal(loaiKTX.getGiaPhong()*5);
-        viewBillRoomDTO.setStatus(hopDongKTX.isTrangThai());
-        return viewBillRoomDTO;
-    }
+//    public ViewBillRoomDTO mapper(Student student, HopDongKTX hopDongKTX, PhongKTX phongKTX, LoaiKTX loaiKTX){
+//        ViewBillRoomDTO viewBillRoomDTO = new ViewBillRoomDTO();
+//        viewBillRoomDTO.setId(hopDongKTX.getId());
+//        viewBillRoomDTO.setImage(loaiKTX.getImage());
+//        viewBillRoomDTO.setPrice(loaiKTX.getGiaPhong());
+//        viewBillRoomDTO.setRoomType(phongKTX.getLoaiKTX());
+//        viewBillRoomDTO.setBedNumber(loaiKTX.getSoGiuong());
+//        viewBillRoomDTO.setFullName(student.getHoTen());
+//        viewBillRoomDTO.setStudentID(student.getUsername());
+//        viewBillRoomDTO.setPhoneNumber(student.getSDT());
+//        viewBillRoomDTO.setDateCreated(hopDongKTX.getNgayLamDon());
+//        viewBillRoomDTO.setDateStart(hopDongKTX.getNgayKetThuc());
+//        viewBillRoomDTO.setDateEnd(hopDongKTX.getNgayHieuLuc());
+//        viewBillRoomDTO.setTotal(loaiKTX.getGiaPhong()*5);
+//        viewBillRoomDTO.setStatus(hopDongKTX.isTrangThai());
+//        return viewBillRoomDTO;
+//    }
 }
