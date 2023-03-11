@@ -3,6 +3,7 @@ package root.quanlyktx.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import root.quanlyktx.dto.ViewBillRoomDTO;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.Role;
 import root.quanlyktx.entity.Student;
@@ -47,19 +48,21 @@ public class TestController {
 
     }
     @GetMapping("/all")
-    public HopDongKTX gettttt(String mssv){
-        List <HopDongKTX> hopDongKTXList= hopDongKTXService.getHopDongTemp("n19dccn018");
-        List<Date> dates= new ArrayList<>();
-        for(HopDongKTX hopDongKTX: hopDongKTXList){
-            dates.add(hopDongKTX.getNgayLamDon());
-        }
-        System.out.println(Collections.max(dates));
-        for(HopDongKTX hopDongKTX: hopDongKTXList){
-            if(hopDongKTX.getNgayLamDon() ==Collections.max(dates)){
-                return hopDongKTX;
-            }
-        }
-            return null;
+    public ViewBillRoomDTO gettttt(String mssv){
+        ViewBillRoomDTO hopDongKTX = hopDongKTXService.getBillRoom("n19dccn");
+        return hopDongKTX;
+//        List <HopDongKTX> hopDongKTXList= hopDongKTXService.getHopDongTemp("n19dccn");
+//        List<Date> dates= new ArrayList<>();
+//        for(HopDongKTX hopDongKTX: hopDongKTXList){
+//            dates.add(hopDongKTX.getNgayLamDon());
+//        }
+//        System.out.println(Collections.max(dates));
+//        for(HopDongKTX hopDongKTX: hopDongKTXList){
+//            if(hopDongKTX.getNgayLamDon() ==Collections.max(dates)){
+//                return hopDongKTX;
+//            }
+//        }
+//            return null;
     }
 //    public List<UserDto> getAllUser() {
 //        return userService.getAll();

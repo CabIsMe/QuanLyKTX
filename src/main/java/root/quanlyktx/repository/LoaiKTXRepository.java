@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface LoaiKTXRepository extends JpaRepository<LoaiKTX, Integer> {
+    LoaiKTX findLoaiKTXById(Integer id);
 
 }

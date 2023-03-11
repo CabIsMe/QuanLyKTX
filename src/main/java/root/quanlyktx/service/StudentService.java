@@ -121,4 +121,17 @@ public class StudentService {
         logger.error("Account is not exist to delete!");
     }
 
+    public List<StudentDto> getListByTitle(String title) {
+        List <Student> students= studentRepository.search(title);
+
+//        if(students.isEmpty() ){
+//            String tmp=title.charAt(0)+ title.substring(1, 2).toUpperCase() + title.substring(2);
+//            logger.warn(tmp);
+//            students=studentRepository.search(tmp);
+//            if(students.isEmpty() ){
+//                students=studentRepository.search(title);
+//            }
+//        }
+        return students.stream().map(content -> modelMapper.map(content,StudentDto.class)).collect(Collectors.toList());
+    }
 }

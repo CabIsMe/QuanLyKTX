@@ -8,6 +8,7 @@ import root.quanlyktx.service.StudentService;
 
 
 import java.sql.Date;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -22,5 +23,6 @@ public class TT_SinhVienController {
         Date date = Date.valueOf("2022-01-01");
         return new ThongTinSV(studentService.getInfo(MSSV),date, Date.valueOf(""),false );
     }
+
 
 }

@@ -59,4 +59,7 @@ public class PhongKTXController {
 //
 //        return phongKTXService.findById(id);
 //    }
+
+    @GetMapping("/timkiem")
+    public PhongKTXDTO search(@RequestParam Integer id){ return  phongKTXService.getById(id);}
 }

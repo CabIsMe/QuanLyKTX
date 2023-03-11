@@ -36,4 +36,9 @@ public class TT_PhongController {
         return thongTinPhongs;
     }
 
+    @PostMapping("/registerRoom/{mssv}/{idphongktx}")
+    private String registerRoom(@PathVariable("mssv") String mssv,@PathVariable("idphongktx") Integer idPhongKTX){
+        return hopDongKTXService.addBillRoom(mssv,idPhongKTX);
+    }
+
 }
