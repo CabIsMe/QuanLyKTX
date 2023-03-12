@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.dto.ViewBillRoomDTO;
-import root.quanlyktx.dto.ViewInforRoom;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.entity.PhongKTX;

@@ -32,12 +32,13 @@ public class MapperToDTOService {
 
     public ViewInforRoom mapperInforRoom(PhongKTX phongKTX,LoaiKTX loaiKTX,Integer numBedEmpty){
         ViewInforRoom viewInforRoom =new ViewInforRoom();
-        viewInforRoom.setImg(loaiKTX.getImage());
+//        viewInforRoom.setImg(loaiKTX.getImage());
         viewInforRoom.setIdPhong(phongKTX.getId());
-        viewInforRoom.setPrice(loaiKTX.getGiaPhong());
-        viewInforRoom.setNumBed(loaiKTX.getSoGiuong());
+//        viewInforRoom.setPrice(loaiKTX.getGiaPhong());
+//        viewInforRoom.setNumBed(loaiKTX.getSoGiuong());
         viewInforRoom.setNumBedEmpty(numBedEmpty);
-        viewInforRoom.setDescription(loaiKTX.getDescription());
+        viewInforRoom.setLoaiKTX(loaiKTX);
+//        viewInforRoom.setDescription(loaiKTX.getDescription());
         return viewInforRoom;
     }
 }

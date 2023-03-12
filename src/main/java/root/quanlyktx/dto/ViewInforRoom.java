@@ -4,17 +4,19 @@ package root.quanlyktx.dto;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import root.quanlyktx.entity.LoaiKTX;
 
 @Data
 @Getter
 @Setter
 public class ViewInforRoom {
-    private String img;
+//    private String img;
     private Integer idPhong;
-    private Double price;
-    private Integer numBed;
+//    private Double price;
+//    private Integer numBed;
     private Integer numBedEmpty;
-    private String description;
+    private LoaiKTX loaiKTX;
+//    private String description;
 //    private String fullName;
 //    private String mssv;
 //    private String phoneNumber;

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.ViewBillRoomDTO;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.Role;
@@ -11,6 +12,7 @@ import root.quanlyktx.entity.Student;
 import root.quanlyktx.repository.RoleRepository;
 import root.quanlyktx.repository.StudentRepository;
 import root.quanlyktx.service.HopDongKTXService;
+import root.quanlyktx.service.LoaiKTXService;
 import root.quanlyktx.service.StudentService;
 
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class TestController {
     RoleRepository roleRepository;
     @Autowired
     HopDongKTXService hopDongKTXService;
+    @Autowired
+    LoaiKTXService loaiKTXService;
 
     @Autowired
     StudentRepository studentRepository;
@@ -93,6 +97,10 @@ public class TestController {
 //    public ResponseEntity<ViewBillRoomDTO> get(){
 //        ViewBillRoomDTO hopDongKTX = hopDongKTXService.getBillRoom("n19dccn");
 //    }
+    @GetMapping("/")
+    List <LoaiKTXDto> getAll(){
+        return loaiKTXService.getAll();
+    }
 }
 
 
