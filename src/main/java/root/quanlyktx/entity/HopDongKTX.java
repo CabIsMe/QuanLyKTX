@@ -1,6 +1,7 @@
 package root.quanlyktx.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.parameters.P;
@@ -38,21 +39,10 @@ public class HopDongKTX {
     @JoinColumn(name = "phong_KTX",referencedColumnName = "id",updatable = false,insertable = false)
     private PhongKTX phongKTX;
 
-    public Integer getIdPhongKTX() {
-        return idPhongKTX;
-    }
-
-    public void setIdPhongKTX(Integer idPhongKTX) {
-        this.idPhongKTX = idPhongKTX;
-    }
-
-    public PhongKTX getPhongKTX() {
-        return phongKTX;
-    }
-
-    public void setPhongKTX(PhongKTX phongKTX) {
-        this.phongKTX = phongKTX;
-    }
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "MSSV",referencedColumnName = "MSSV", insertable = false, updatable = false)
+    Student student;
 
     public Integer getId() {
         return id;
@@ -62,6 +52,13 @@ public class HopDongKTX {
         this.id = id;
     }
 
+    public Integer getIdPhongKTX() {
+        return idPhongKTX;
+    }
+
+    public void setIdPhongKTX(Integer idPhongKTX) {
+        this.idPhongKTX = idPhongKTX;
+    }
 
     public String getMSSV() {
         return MSSV;
@@ -103,8 +100,23 @@ public class HopDongKTX {
         this.trangThai = trangThai;
     }
 
-    public HopDongKTX() {
+    public PhongKTX getPhongKTX() {
+        return phongKTX;
     }
+
+    public void setPhongKTX(PhongKTX phongKTX) {
+        this.phongKTX = phongKTX;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public HopDongKTX(){}
 
     public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, Date ngayHieuLuc, Date ngayKetThuc, boolean trangThai) {
         this.idPhongKTX = idPhongKTX;

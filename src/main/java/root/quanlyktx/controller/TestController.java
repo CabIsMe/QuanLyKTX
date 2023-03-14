@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.ViewBillRoomDTO;
 import root.quanlyktx.entity.HopDongKTX;
+import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.entity.Role;
 import root.quanlyktx.entity.Student;
+import root.quanlyktx.repository.HopDongKTXRepository;
+import root.quanlyktx.repository.PhongKTXRepository;
 import root.quanlyktx.repository.RoleRepository;
 import root.quanlyktx.repository.StudentRepository;
 import root.quanlyktx.service.HopDongKTXService;
@@ -32,6 +35,9 @@ public class TestController {
     @Autowired
     HopDongKTXService hopDongKTXService;
     @Autowired
+    HopDongKTXRepository hopDongKTXRepository;
+    @Autowired
+    PhongKTXRepository phongKTXRepository;
     LoaiKTXService loaiKTXService;
 
     @Autowired
@@ -52,10 +58,7 @@ public class TestController {
         return student;
 
     }
-    @GetMapping("/all")
-    public ViewBillRoomDTO gettttt(String mssv){
-        ViewBillRoomDTO hopDongKTX = hopDongKTXService.getBillRoom("n19dccn");
-        return hopDongKTX;
+
 //        List <HopDongKTX> hopDongKTXList= hopDongKTXService.getHopDongTemp("n19dccn");
 //        List<Date> dates= new ArrayList<>();
 //        for(HopDongKTX hopDongKTX: hopDongKTXList){
@@ -68,14 +71,19 @@ public class TestController {
 //            }
 //        }
 //            return null;
-    }
-//    public List<UserDto> getAllUser() {
-//        return userService.getAll();
-
+        @GetMapping("/all")
+//    public ViewBillRoomDTO gettttt(String mssv){
+//        ViewBillRoomDTO hopDongKTX = hopDongKTXService.getBillRoom("n19dccn");
+//        return hopDongKTX;
 //    }
-    public List<Role> getAllRole(){
-        return roleRepository.findAll();
-    }
+        public List<Student> getAllStd(){
+            return studentRepository.findAll();
+        }
+
+
+//    public List<Role> getAllRole(){
+//        return roleRepository.findAll();
+//    }
 
     @GetMapping("/student")
 //    @PreAuthorize("hasRole('student')")

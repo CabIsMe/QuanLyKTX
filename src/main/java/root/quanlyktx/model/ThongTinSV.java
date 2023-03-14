@@ -14,5 +14,4 @@ public class ThongTinSV {
     private Date ngayKetThuc;
     private Boolean trangThaiThanhToan;
 
-
 }

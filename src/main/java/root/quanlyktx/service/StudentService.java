@@ -97,7 +97,7 @@ public class StudentService {
 //            throw new Exception("Account is already taken!");
         }
         logger.error("Username does not exist or is not allowed!");
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Username does not exist or is not allowed!");
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body("Username does not exist!");
      }
 
     public void updateStatus(String username, boolean stt){

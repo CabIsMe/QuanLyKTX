@@ -20,7 +20,7 @@ public class LoaiKTX {
     private String Image;
     @Column(name = "ten_loai")
     private String tenLoai;
-    @Column(name = "mo_ta")
+    @Column(name="mo_ta")
     private String description;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "loaiKTX")

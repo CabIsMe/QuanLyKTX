@@ -18,4 +18,5 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     List <HopDongKTX> findAllByMSSV(String MSSV);
     HopDongKTX findFirstByMSSVOrderByNgayLamDonDesc(String mssv);
     HopDongKTX getHopDongKTXById(Integer id);
+    HopDongKTX getByMSSV(String MSSV);
 }

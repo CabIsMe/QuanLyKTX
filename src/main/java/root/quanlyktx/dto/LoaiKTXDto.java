@@ -18,6 +18,6 @@ public class LoaiKTXDto {
     private Double giaPhong;
     private String Image;
     private String tenLoai;
-
+    private String description;
 
 }
