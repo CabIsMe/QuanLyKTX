@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.PhongKTXDTO;
+import root.quanlyktx.dto.ViewInforRoom;
 import root.quanlyktx.model.ThongTinPhong;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.service.HopDongKTXService;
@@ -33,13 +34,19 @@ public class TT_PhongController {
             thongTinPhongs.add(new ThongTinPhong(phongKTXDTO.getId(),loaiKTXDto.getGiaPhong(),
                     loaiKTXDto.getSoGiuong()- hopDongKTXService.countByPhongKTX(phongKTXDTO.getId())
                     ,loaiKTXDto.getImage()));
+
         }
         return thongTinPhongs;
     }
 
-    @PostMapping("/registerRoom/{mssv}/{idphongktx}")
-    private String registerRoom(@PathVariable("mssv") String mssv,@PathVariable("idphongktx") Integer idPhongKTX){
-        return hopDongKTXService.addBillRoom(mssv,idPhongKTX);
+    @PostMapping("/registerRoom/{mssv}/{idphongktx}/{idloaiktx}")
+    private String registerRoom(@PathVariable("mssv") String mssv,@PathVariable("idphongktx") Integer idPhongKTX,@PathVariable("idloaiktx") Integer idLoaiKTX){
+        return hopDongKTXService.addBillRoom(mssv,idPhongKTX,idLoaiKTX);
+    }
+
+    @GetMapping("/inforRoom/{idphongktx}")
+    private ViewInforRoom getViewInforRoom(@PathVariable("idphongktx") Integer idPhongKTX){
+        return phongKTXService.getViewInforRoom(idPhongKTX);
     }
 
 }

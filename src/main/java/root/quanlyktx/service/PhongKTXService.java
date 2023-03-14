@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.PhongKTXDTO;
+import root.quanlyktx.dto.ViewInforRoom;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.entity.PhongKTX;
+import root.quanlyktx.repository.LoaiKTXRepository;
 import root.quanlyktx.repository.PhongKTXRepository;
 
 import java.util.List;
@@ -19,6 +21,13 @@ public class PhongKTXService {
     private ModelMapper modelMapper;
     @Autowired
     PhongKTXRepository phongKTXRepository;
+    @Autowired
+    MapperToDTOService mapperToDTOService;
+    @Autowired
+    HopDongKTXService hopDongKTXService;
+    @Autowired
+    LoaiKTXRepository loaiKTXRepository;
+
     public String addPhongKTX(PhongKTXDTO phongKTXDTO){
 
         try{
@@ -70,5 +79,11 @@ public class PhongKTXService {
     public List<PhongKTXDTO> getAllByLoaiPhong(Integer id){
         List<PhongKTX>phongKTXList=phongKTXRepository.findAllByLoaiKTX(id);
         return phongKTXList.stream().map(phongKTX -> modelMapper.map(phongKTX, PhongKTXDTO.class)).collect(Collectors.toList());
+    }
+
+    public ViewInforRoom getViewInforRoom(Integer idPhongKTX){
+        PhongKTX phongKTX = phongKTXRepository.findPhongKTXById(idPhongKTX);
+        LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(phongKTX.getLoaiKTX());
+        return mapperToDTOService.mapperInforRoom(phongKTX,loaiKTX, hopDongKTXService.numBedEmpty(idPhongKTX));
     }
 }

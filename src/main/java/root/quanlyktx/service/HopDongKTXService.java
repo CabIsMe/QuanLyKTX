@@ -34,6 +34,8 @@ public class HopDongKTXService {
     LoaiKTXRepository loaiKTXRepository;
     @Autowired
     StudentRepository studentRepository;
+    @Autowired
+    MapperToDTOService mapperToDTOService;
 
 
     public List<HopDongKTXDTO> getAll() {
@@ -92,15 +94,15 @@ public class HopDongKTXService {
         } else {
             PhongKTX phongKTX = phongKTXRepository.findPhongKTXById(hopDongKTX.getPhongKTX());
             LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(phongKTX.getLoaiKTX());
-            return new ViewBillRoomDTO().mapper(student, hopDongKTX, phongKTX, loaiKTX);
+            return mapperToDTOService.mapperBillRoom(student, hopDongKTX, phongKTX, loaiKTX);
         }
     }
 
     public Integer checkAddBillRoom(String mssv) {
         HopDongKTX hopDongKTX = hopDongKTXRepository.findFirstByMSSVOrderByNgayLamDonDesc(mssv);
-        LocalDate oneWeek = LocalDate.now().plusDays(7);
-        if (hopDongKTX==null) return 0;
+        if (hopDongKTX==null) return 1;
         else {
+            LocalDate oneWeek = LocalDate.now().plusDays(7);
             //if status is paid, check datEnd to less than (current date plus 7 days)
             if (hopDongKTX.isTrangThai()) {
                 if (hopDongKTX.getNgayHieuLuc().compareTo(Date.from(oneWeek.atStartOfDay(ZoneId.systemDefault()).toInstant())) <= 0) {
@@ -117,14 +119,21 @@ public class HopDongKTXService {
         }
     }
 
-    public Integer checkNumBedEmpty(Integer phongKTX){
+    public Integer numBedEmpty(Integer phongKTX){
+        return hopDongKTXRepository.countHopDongKTXByPhongKTXAndNgayKetThucAfterAndTrangThaiFalse(phongKTX,new Date())+hopDongKTXRepository.countHopDongKTXByPhongKTXAndTrangThaiTrue(phongKTX);
+    }
 
+    public Integer checkNumBedEmpty(Integer phongKTX,Integer numBed){
+        Integer numBedEmpty = numBedEmpty(phongKTX);
+        if(numBedEmpty > numBed) return 0;
         return 1;
     }
 
-    public String addBillRoom(String mssv, Integer phongKTX) {
+    public String addBillRoom(String mssv, Integer phongKTX,Integer idloaiKTX) {
+        LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(idloaiKTX);
         Integer checkAddBillRoom = checkAddBillRoom(mssv);
-        if (checkAddBillRoom == 0) return "null";
+        Integer checkNumBed = checkNumBedEmpty(phongKTX,loaiKTX.getSoGiuong());
+        if (checkAddBillRoom == 0 || checkNumBed == 0) return "null";
         else{
             HopDongKTX hopDongKTX = new HopDongKTX();
             LocalDate paymentDueDate = LocalDate.now().plusDays(7);
@@ -142,6 +151,7 @@ public class HopDongKTXService {
                 return "error";
             }
         }
-        //thieu check so giuong con trong khong
     }
+
+
 }

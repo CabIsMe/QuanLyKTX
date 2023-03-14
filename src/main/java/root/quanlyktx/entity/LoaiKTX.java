@@ -21,14 +21,6 @@ public class LoaiKTX {
     @Column(name="mo_ta")
     private String description;
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "loaiKTX")
     private List<PhongKTX> phongKTXList;
 
@@ -95,5 +87,13 @@ public class LoaiKTX {
 
     public LoaiKTX() {
 
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
