@@ -31,7 +31,8 @@ public class TT_PhongController {
         List<ThongTinPhong> thongTinPhongs= new ArrayList<>();
         for (PhongKTXDTO phongKTXDTO: phongKTXDTOList) {
             thongTinPhongs.add(new ThongTinPhong(phongKTXDTO.getId(),loaiKTXDto.getGiaPhong(),
-                    loaiKTXDto.getSoGiuong()- hopDongKTXService.countByPhongKTX(phongKTXDTO.getId()),loaiKTXDto.getImage()));
+                    loaiKTXDto.getSoGiuong()- hopDongKTXService.countByPhongKTX(phongKTXDTO.getId())
+                    ,loaiKTXDto.getImage()));
         }
         return thongTinPhongs;
     }

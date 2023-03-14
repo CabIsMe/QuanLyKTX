@@ -32,6 +32,18 @@ public class Student {
     @JoinColumn(name="phan_quyen", referencedColumnName = "id", insertable = false, updatable = false)
     private Role role;
 
+    @JsonIgnore
+    @OneToMany()
+    private List<HopDongKTX> hopDongKTXList;
+
+    public List<HopDongKTX> getHopDongKTXList() {
+        return hopDongKTXList;
+    }
+
+    public void setHopDongKTXList(List<HopDongKTX> hopDongKTXList) {
+        this.hopDongKTXList = hopDongKTXList;
+    }
+
     public boolean isStatus() {
         return status;
     }

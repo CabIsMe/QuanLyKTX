@@ -1,6 +1,7 @@
 package root.quanlyktx.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,6 +20,7 @@ public class HopDongKTX {
     private Integer id;
     @Column(name = "phong_KTX")
     private Integer phongKTX;
+    @JsonIgnore
     @Column(name = "MSSV")
     private String MSSV;
     @Column(name = "ngay_lam_don")
@@ -32,6 +34,15 @@ public class HopDongKTX {
     private Date ngayKetThuc;
     @Column(name = "trang_thai")
     private boolean trangThai;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "MSSV",referencedColumnName = "MSSV", insertable = false, updatable = false)
+    Student student;
+
+    public Student getStudent() {
+        return student;
+    }
 
     public Integer getId() {
         return id;

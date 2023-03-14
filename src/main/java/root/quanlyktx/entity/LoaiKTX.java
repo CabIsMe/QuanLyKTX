@@ -18,6 +18,16 @@ public class LoaiKTX {
     private String Image;
     @Column(name = "ten_loai")
     private String tenLoai;
+    @Column(name="mo_ta")
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "loaiKTX")
     private List<PhongKTX> phongKTXList;

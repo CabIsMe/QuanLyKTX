@@ -11,4 +11,5 @@ public class ThongTinPhong {
     private Double giaPhong;
     private Integer soGiuongTrong;
     private String image;
+
 }

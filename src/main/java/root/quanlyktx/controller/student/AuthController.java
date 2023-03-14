@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.entity.OTP;
@@ -18,11 +17,7 @@ import root.quanlyktx.service.OtpService;
 import root.quanlyktx.userdetail.HandleStudentDetail;
 import root.quanlyktx.jwt.JwtResponse;
 import root.quanlyktx.jwt.JwtUtils;
-
 import root.quanlyktx.service.StudentService;
-
-
-import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +26,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
+    private final int otpExp =3;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -54,6 +50,7 @@ public class AuthController {
                 otpService.sendOTP(student1);
             } catch (Exception e) {
                 e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Send mail error");
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("Your account is not yet verified, Pleas again");
@@ -79,7 +76,7 @@ public class AuthController {
         OTP otp= otpService.getOtpByUsername(accountAndOtp.getUsername());
         Student student1=studentService.getStudentByUsername(accountAndOtp.getUsername());
         if( !student1.isStatus()){
-            if(accountAndOtp.getOTP().equals(otp.getOtpCode())&& new Date().getTime() - (otp.getTimeGenerate()) < (3*60*1000)){
+            if(accountAndOtp.getOTP().equals(otp.getOtpCode())&& new Date().getTime() - (otp.getTimeGenerate()) < (otpExp*60*1000)){
                 studentService.updateStatus(accountAndOtp.getUsername(),true);
                 return ResponseEntity.ok(true);
             }
@@ -90,14 +87,26 @@ public class AuthController {
     @PostMapping("/two-factor-auth")
     public ResponseEntity<?> verifyStudent(@RequestBody AccountAndOtp accountAndOtp){
         OTP otp= otpService.getOtpByUsername(accountAndOtp.getUsername());
-
         if(otp==null)
             return ResponseEntity.badRequest().body("OTP not found!");
 
-        if(new Date().getTime() - (otp.getTimeGenerate()) > (3*60*1000) || !otp.getOtpCode().equals(accountAndOtp.getOTP())){
+        if(new Date().getTime() - (otp.getTimeGenerate()) > (otpExp*60*1000) || !otp.getOtpCode().equals(accountAndOtp.getOTP())){
             return ResponseEntity.badRequest().body("OTP expired or incorrect!");
         }
         studentService.updateStatus(accountAndOtp.getUsername(),true);
         return ResponseEntity.ok(true);
+    }
+    @GetMapping("resend-otp/{MSSV}")
+    public ResponseEntity<?> resendOtp(@PathVariable String MSSV){
+        Student student=studentService.getStudentByUsername(MSSV);
+       if(student!=null){
+           try {
+               otpService.sendOTP(student);
+           } catch (Exception e) {
+               e.printStackTrace();
+               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Send mail error");
+           }
+       }
+       return ResponseEntity.ok(true);
     }
 }

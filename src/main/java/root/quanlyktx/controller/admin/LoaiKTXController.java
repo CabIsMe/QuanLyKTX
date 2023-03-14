@@ -13,7 +13,6 @@ import java.util.List;
 @PreAuthorize("hasAuthority('student')")
 @RequestMapping("/api/loaiktx")
 @CrossOrigin(origins = "*", maxAge = 3600)
-
 public class LoaiKTXController {
     @Autowired
     LoaiKTXService loaiKTXService;
