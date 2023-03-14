@@ -2,11 +2,8 @@ package root.quanlyktx.controller.student;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import root.quanlyktx.dto.ViewBillRoomDTO;
+import org.springframework.web.bind.annotation.*;
+import root.quanlyktx.model.ViewBillRoom;
 import root.quanlyktx.service.HopDongKTXService;
 
 @RestController
@@ -15,11 +12,14 @@ import root.quanlyktx.service.HopDongKTXService;
 public class BillsController {
     @Autowired
     HopDongKTXService hopDongKTXService;
-    @GetMapping("/room")
-    public ViewBillRoomDTO getBillRoom(String mssv) {
-        ViewBillRoomDTO hopDongKTX = hopDongKTXService.getBillRoom(mssv);
+    @GetMapping("/room/{mssv}")
+    public ViewBillRoom getBillRoom(@PathVariable("mssv") String mssv) {
+        ViewBillRoom hopDongKTX = hopDongKTXService.getBillRoom(mssv);
         return hopDongKTX;
     }
+
+//    @GetMapping("/bills/electric/{mssv}")
+//    public
 
 
 }

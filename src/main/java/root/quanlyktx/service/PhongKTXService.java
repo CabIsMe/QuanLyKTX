@@ -3,9 +3,10 @@ package root.quanlyktx.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.PhongKTXDTO;
-import root.quanlyktx.dto.ViewInforRoom;
+import root.quanlyktx.dto.StudentDto;
+import root.quanlyktx.entity.Student;
+import root.quanlyktx.model.ViewInforRoom;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.repository.LoaiKTXRepository;
@@ -27,6 +28,8 @@ public class PhongKTXService {
     HopDongKTXService hopDongKTXService;
     @Autowired
     LoaiKTXRepository loaiKTXRepository;
+    @Autowired
+    StudentService studentService;
 
     public String addPhongKTX(PhongKTXDTO phongKTXDTO){
 
@@ -53,7 +56,7 @@ public class PhongKTXService {
         if(phongKTXRepository.existsById(id)){
             try{
                 PhongKTX phongKTX_root= phongKTXRepository.findById(id).get();
-                phongKTX_root.setLoaiKTX(phongKTXDTO.getLoaiKTX());
+                phongKTX_root.setIdLoaiKTX(phongKTXDTO.getIdLoaiKTX());
            //     phongKTX_root.setHinhAnh(phongKTX.getHinhAnh());
                 phongKTXRepository.save(phongKTX_root);
                 return modelMapper.map(phongKTX_root, PhongKTXDTO.class);
@@ -81,9 +84,14 @@ public class PhongKTXService {
         return phongKTXList.stream().map(phongKTX -> modelMapper.map(phongKTX, PhongKTXDTO.class)).collect(Collectors.toList());
     }
 
-    public ViewInforRoom getViewInforRoom(Integer idPhongKTX){
+    public PhongKTXDTO findPhongKTXById(Integer idPhongKTX){
         PhongKTX phongKTX = phongKTXRepository.findPhongKTXById(idPhongKTX);
-        LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(phongKTX.getLoaiKTX());
-        return mapperToDTOService.mapperInforRoom(phongKTX,loaiKTX, hopDongKTXService.numBedEmpty(idPhongKTX));
+        return modelMapper.map(phongKTX,PhongKTXDTO.class);
     }
+
+//    public ViewInforRoom getViewInforRoom(Integer idPhongKTX){
+//        PhongKTXDTO phongKTXDTO = findPhongKTXById(idPhongKTX);
+//        LoaiKTX loaiKTX = phongKTXDTO.getLoaiKTX();
+//        return new ViewInforRoom(phongKTXDTO.getId(),loaiKTX,hopDongKTXService.numBedEmpty(idPhongKTX));
+//    }
 }

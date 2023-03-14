@@ -2,19 +2,19 @@ package root.quanlyktx.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import root.quanlyktx.entity.PhongKTX;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Data
-@Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class HopDongKTXDTO {
     private Integer id;
 
-    private Integer phongKTX;
+    private Integer idPhongKTX;
 
     private String MSSV;
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
@@ -25,5 +25,11 @@ public class HopDongKTXDTO {
     private Date ngayKetThuc;
 
     private boolean trangThai;
+    @JsonIgnore
+    private PhongKTXDTO phongKTX;
 
+    public HopDongKTXDTO(Integer idPhongKTX, String MSSV) {
+        this.idPhongKTX = idPhongKTX;
+        this.MSSV = MSSV;
+    }
 }

@@ -3,6 +3,7 @@ package root.quanlyktx.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,7 +19,7 @@ public class HopDongKTX {
     @Column(name = "id")
     private Integer id;
     @Column(name = "phong_KTX")
-    private Integer phongKTX;
+    private Integer idPhongKTX;
     @Column(name = "MSSV")
     private String MSSV;
     @Column(name = "ngay_lam_don")
@@ -33,6 +34,26 @@ public class HopDongKTX {
     @Column(name = "trang_thai")
     private boolean trangThai;
 
+    @ManyToOne
+    @JoinColumn(name = "phong_KTX",referencedColumnName = "id",updatable = false,insertable = false)
+    private PhongKTX phongKTX;
+
+    public Integer getIdPhongKTX() {
+        return idPhongKTX;
+    }
+
+    public void setIdPhongKTX(Integer idPhongKTX) {
+        this.idPhongKTX = idPhongKTX;
+    }
+
+    public PhongKTX getPhongKTX() {
+        return phongKTX;
+    }
+
+    public void setPhongKTX(PhongKTX phongKTX) {
+        this.phongKTX = phongKTX;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -41,13 +62,6 @@ public class HopDongKTX {
         this.id = id;
     }
 
-    public Integer getPhongKTX() {
-        return phongKTX;
-    }
-
-    public void setPhongKTX(Integer phongKTX) {
-        this.phongKTX = phongKTX;
-    }
 
     public String getMSSV() {
         return MSSV;
@@ -90,5 +104,14 @@ public class HopDongKTX {
     }
 
     public HopDongKTX() {
+    }
+
+    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, Date ngayHieuLuc, Date ngayKetThuc, boolean trangThai) {
+        this.idPhongKTX = idPhongKTX;
+        this.MSSV = MSSV;
+        this.ngayLamDon = ngayLamDon;
+        this.ngayHieuLuc = ngayHieuLuc;
+        this.ngayKetThuc = ngayKetThuc;
+        this.trangThai = trangThai;
     }
 }

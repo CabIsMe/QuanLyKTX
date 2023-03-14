@@ -1,6 +1,8 @@
 package root.quanlyktx.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class PhongKTX {
     private Integer id;
 //    @ManyToOne
     @Column(name = "loai_KTX")
-    private Integer loaiKTX;
+    private Integer idLoaiKTX;
 
 //    @Column(name = "hinh_anh")
 //    private String hinhAnh;
@@ -25,8 +27,14 @@ public class PhongKTX {
     @OneToMany(mappedBy = "maSoKTX")
     private List<PhieuNuocKTX> phieuNuocKTXList;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "phongKTX")
     private List<HopDongKTX> hopDongKTXList;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "loai_KTX",referencedColumnName = "id",insertable = false,updatable = false)
+    private LoaiKTX loaiKTX;
 
     public List<HopDongKTX> getHopDongKTXList() {
         return hopDongKTXList;
@@ -43,15 +51,6 @@ public class PhongKTX {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-
-    public Integer getLoaiKTX() {
-        return loaiKTX;
-    }
-
-    public void setLoaiKTX(Integer loaiKTX) {
-        this.loaiKTX = loaiKTX;
     }
 
 
@@ -72,5 +71,21 @@ public class PhongKTX {
     }
 
     public PhongKTX() {
+    }
+
+    public Integer getIdLoaiKTX() {
+        return idLoaiKTX;
+    }
+
+    public void setIdLoaiKTX(Integer idLoaiKTX) {
+        this.idLoaiKTX = idLoaiKTX;
+    }
+
+    public LoaiKTX getLoaiKTX() {
+        return loaiKTX;
+    }
+
+    public void setLoaiKTX(LoaiKTX loaiKTX) {
+        this.loaiKTX = loaiKTX;
     }
 }
