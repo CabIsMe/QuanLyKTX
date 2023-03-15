@@ -27,10 +27,10 @@ public class HopDongKTXController {
     public List<HopDongKTXDTO> getByIdPhongKTX(@PathVariable("idphongktx") Integer idphongktx){
         return hopDongKTXService.getByPhongKTX(idphongktx);
     }
-    @DeleteMapping("/xoahd")
-    public List<HopDongKTXDTO> xoaHopDongChuaDong(){
-        return hopDongKTXService.xoaHopDongChuaDongPhi();
-    }
+//    @DeleteMapping("/xoahd")
+//    public List<HopDongKTXDTO> xoaHopDongChuaDong(){
+//        return hopDongKTXService.xoaHopDongChuaDongPhi();
+//    }
 
     @GetMapping("/timkiem")
     public  HopDongKTXDTO search(@RequestParam Integer id){ return  hopDongKTXService.getById(id);}

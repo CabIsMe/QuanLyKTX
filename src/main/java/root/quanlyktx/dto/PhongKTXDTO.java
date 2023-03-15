@@ -1,5 +1,6 @@
 package root.quanlyktx.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,10 +12,8 @@ import java.util.List;
 
 @Data
 @ToString
-@Getter
-@Setter
-public class PhongKTXDTO {
 
+public class PhongKTXDTO {
     private Integer id;
     private Integer idLoaiKTX;
     private LoaiKTXDto loaiKTX;

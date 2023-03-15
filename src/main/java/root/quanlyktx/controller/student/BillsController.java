@@ -12,11 +12,11 @@ import root.quanlyktx.service.HopDongKTXService;
 public class BillsController {
     @Autowired
     HopDongKTXService hopDongKTXService;
-    @GetMapping("/room/{mssv}")
-    public ViewBillRoom getBillRoom(@PathVariable("mssv") String mssv) {
-        ViewBillRoom hopDongKTX = hopDongKTXService.getBillRoom(mssv);
-        return hopDongKTX;
-    }
+//    @GetMapping("/room/{mssv}")
+//    public ViewBillRoom getBillRoom(@PathVariable("mssv") String mssv) {
+//        ViewBillRoom hopDongKTX = hopDongKTXService.getBillRoom(mssv);
+//        return hopDongKTX;
+//    }
 
 //    @GetMapping("/bills/electric/{mssv}")
 //    public

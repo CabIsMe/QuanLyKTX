@@ -14,12 +14,8 @@ public class PhongKTX {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-//    @ManyToOne
     @Column(name = "loai_KTX")
     private Integer idLoaiKTX;
-
-//    @Column(name = "hinh_anh")
-//    private String hinhAnh;
 
     @OneToMany(mappedBy = "maSoKTX", fetch = FetchType.LAZY)
     private List<PhieuDienKTX> phieuDienKTXList;
@@ -31,7 +27,7 @@ public class PhongKTX {
     @OneToMany(mappedBy = "phongKTX")
     private List<HopDongKTX> hopDongKTXList;
 
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "loai_KTX",referencedColumnName = "id",insertable = false,updatable = false)
     private LoaiKTX loaiKTX;

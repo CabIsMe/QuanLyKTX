@@ -5,13 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.dto.LoaiKTXDto;
+import root.quanlyktx.dto.PhongKTXDTO;
+import root.quanlyktx.model.ThongTinPhong;
 import root.quanlyktx.model.ViewBillRoom;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.entity.Student;
 import root.quanlyktx.repository.HopDongKTXRepository;
-import root.quanlyktx.repository.LoaiKTXRepository;
+
 import root.quanlyktx.repository.PhongKTXRepository;
 import root.quanlyktx.repository.StudentRepository;
 
@@ -29,14 +31,13 @@ public class HopDongKTXService {
     HopDongKTXRepository hopDongKTXRepository;
     @Autowired
     ModelMapper modelMapper;
-    @Autowired
-    PhongKTXRepository phongKTXRepository;
-    @Autowired
-    LoaiKTXRepository loaiKTXRepository;
+
     @Autowired
     StudentRepository studentRepository;
     @Autowired
     MapperToDTOService mapperToDTOService;
+    @Autowired
+    LoaiKTXService loaiKTXService;
 
 
     public List<HopDongKTXDTO> getAll() {
@@ -51,35 +52,33 @@ public class HopDongKTXService {
     }
 
     public List<HopDongKTXDTO> getByPhongKTX(Integer idPhongKTX) {
-        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAllByPhongKTX(idPhongKTX);
+        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAllByIdPhongKTX(idPhongKTX);
         return hopDongKTXList.stream()
                 .map(hopDongKTX -> modelMapper.map(hopDongKTX, HopDongKTXDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public Integer countByPhongKTX(Integer idPhong) {
-        return hopDongKTXRepository.countHopDongKTXByPhongKTX(idPhong);
-    }
+//    public Integer countBedEmptyByPhongKTX(Integer idPhong) {
+//        return   hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndNgayKetThucAfter(idPhong,new Date());
+//    }
+//    public List<ThongTinPhong> thongTinPhongs(Integer idLoaiPhong){
+//        LoaiKTXDto loaiKTXDto=loaiKTXService.getSingleLoaiKTX(idLoaiPhong);
+//        List<PhongKTXDTO> phongKTXDTOList= phongKTXService.getAllByLoaiPhong(idLoaiPhong);
+//        List<ThongTinPhong> thongTinPhongList= new ArrayList<>();
+//        for (PhongKTXDTO phongKTXDTO: phongKTXDTOList) {
+//
+//            thongTinPhongList.add(new ThongTinPhong(phongKTXDTO.getId(),loaiKTXDto.getGiaPhong(),
+//                    loaiKTXDto.getSoGiuong()- countBedEmptyByPhongKTX(phongKTXDTO.getId())
+//                    ,loaiKTXDto.getImage()));
+//        }
+//        return thongTinPhongList;
+//    }
 
-    public Integer countByTrangThaiTrue() {
-        return hopDongKTXRepository.countHopDongKTXByTrangThaiTrue();
-    }
+//    public Integer countByTrangThaiTrue() {
+//        return hopDongKTXRepository.countHopDongKTXByTrangThaiTrue();
+//    }
 
-    public List<HopDongKTXDTO> xoaHopDongChuaDongPhi() {
-        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
-        Date date = new java.sql.Date(new java.util.Date().getTime());
-        System.out.println(date);
-        List<HopDongKTXDTO> hdXoa = new ArrayList<HopDongKTXDTO>();
-        for (HopDongKTX hd : hopDongKTXList) {
-            // hd day occurs before date
-            if (hd.getNgayHieuLuc().compareTo(date) < 0 && hd.isTrangThai() == false) {
-                hdXoa.add(modelMapper.map(hd, HopDongKTXDTO.class));
-                hopDongKTXRepository.delete(hd);
-            }
-        }
 
-        return hdXoa;
-    }
 
     public List<HopDongKTX> getHopDongTemp(String mssv) {
 
@@ -87,98 +86,100 @@ public class HopDongKTXService {
     }
 
 
-    public ViewBillRoom getBillRoom(String mssv) {
-        Student student = studentRepository.findByUsername(mssv);
-        HopDongKTX hopDongKTX = hopDongKTXRepository.findFirstByMSSVOrderByNgayLamDonDesc(mssv);
-        HopDongKTXDTO hopDongKTXDTO = modelMapper.map(hopDongKTX,HopDongKTXDTO.class);
-        if (hopDongKTX.getNgayKetThuc().getTime() > new Date().getTime() && hopDongKTX.isTrangThai() == false) {
-            return null;
-        } else {
-            LoaiKTXDto loaiKTXDto = hopDongKTXDTO.getPhongKTX().getLoaiKTX();
-            return new ViewBillRoom(hopDongKTXDTO,loaiKTXDto,student.getHoTen(),student.getSDT(),loaiKTXDto.getGiaPhong()*5);
-        }
-    }
+//    public ViewBillRoom getBillRoom(String mssv) {
+//        Student student = studentRepository.findByUsername(mssv);
+//        HopDongKTX hopDongKTX = hopDongKTXRepository.findFirstByMSSVOrderByNgayLamDonDesc(mssv);
+//        HopDongKTXDTO hopDongKTXDTO = modelMapper.map(hopDongKTX,HopDongKTXDTO.class);
+//        if (hopDongKTX.getNgayKetThuc().getTime() > new Date().getTime() && hopDongKTX.isTrangThai() == false) {
+//            return null;
+//        } else {
+//            LoaiKTXDto loaiKTXDto = hopDongKTXDTO.getPhongKTX().getLoaiKTX();
+//            return new ViewBillRoom(hopDongKTXDTO,loaiKTXDto,student.getHoTen(),student.getSDT(),loaiKTXDto.getGiaPhong()*5);
+//        }
+//    }
 
-    public Integer checkAddBillRoom(String mssv) {
-        HopDongKTX hopDongKTX = hopDongKTXRepository.findFirstByMSSVOrderByNgayLamDonDesc(mssv);
-        if (hopDongKTX==null) return 1;
-        else {
-            LocalDate oneWeek = LocalDate.now().plusDays(7);
-            //if status is paid, check datEnd to less than (current date plus 7 days)
-            if (hopDongKTX.isTrangThai()) {
-                if (hopDongKTX.getNgayHieuLuc().compareTo(Date.from(oneWeek.atStartOfDay(ZoneId.systemDefault()).toInstant())) <= 0) {
-                    return 1;
-                } else return 0;
-            } else {
-                // Room registration is not allowed if payment has not been made and the time has not expired
-                if (hopDongKTX.getNgayKetThuc().compareTo(new Date()) > 0) {
-                    return 0;
-                }
-                return 1;
-            }
+//    public Integer checkAddBillRoom(String mssv) {
+//        HopDongKTX hopDongKTX = hopDongKTXRepository.findFirstByMSSVOrderByNgayLamDonDesc(mssv);
+//        if (hopDongKTX==null) return 1;
+//        else {
+//            LocalDate oneWeek = LocalDate.now().plusDays(7);
+//            //if status is paid, check datEnd to less than (current date plus 7 days)
+//            if (hopDongKTX.isTrangThai()) {
+//                if (hopDongKTX.getNgayHieuLuc().compareTo(Date.from(oneWeek.atStartOfDay(ZoneId.systemDefault()).toInstant())) <= 0) {
+//                    return 1;
+//                } else return 0;
+//            } else {
+//                // Room registration is not allowed if payment has not been made and the time has not expired
+//                if (hopDongKTX.getNgayKetThuc().compareTo(new Date()) > 0) {
+//                    return 0;
+//                }
+//                return 1;
+//            }
+//
+//        }
+//    }
 
-        }
-    }
 
-    public Integer numBedEmpty(Integer phongKTX){
-        return hopDongKTXRepository.countHopDongKTXByPhongKTXAndNgayKetThucAfterAndTrangThaiFalse(phongKTX,new Date())+hopDongKTXRepository.countHopDongKTXByPhongKTXAndTrangThaiTrue(phongKTX);
-    }
+//    public Integer numBedEmpty(Integer phongKTX){
+//        return   hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndNgayKetThucAfter(phongKTX,new Date());
+////                +hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndTrangThaiTrue(phongKTX);
+//    }
 
-    public Integer checkNumBedEmpty(Integer phongKTX,Integer numBed){
-        Integer numBedEmpty = numBedEmpty(phongKTX);
-        if(numBedEmpty > numBed) return 0;
-        return 1;
-    }
+//    public Integer checkNumBedEmpty(Integer phongKTX,Integer numBed){
+//        Integer numBedEmpty = numBedEmpty(phongKTX);
+//        if(numBedEmpty > numBed) return 0;
+//        return 1;
+//    }
 
-    public String addBillRoom(String mssv, Integer phongKTX,Integer numBed) {
-        Integer checkAddBillRoom = checkAddBillRoom(mssv);
-        Integer checkNumBed = checkNumBedEmpty(phongKTX,numBed);
-        if (checkAddBillRoom == 0 || checkNumBed == 0) return "null";
-        else{
-            LocalDate paymentDueDate = LocalDate.now().plusDays(7);
+//    public String addBillRoom(String mssv, Integer phongKTX,Integer numBed) {
+//        Integer checkAddBillRoom = checkAddBillRoom(mssv);
+//        Integer checkNumBed = checkNumBedEmpty(phongKTX,numBed);
+//        if (checkAddBillRoom == 0 || checkNumBed == 0) return "null";
+//        else{
+//            LocalDate paymentDueDate = LocalDate.now().plusDays(7);
+//
+//            HopDongKTX hopDongKTX = new HopDongKTX(phongKTX,mssv,new Date(),Date.from(paymentDueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(paymentDueDate.plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant()),false);
+////            hopDongKTX.setMSSV(mssv);
+////            hopDongKTX.setIdPhongKTX(phongKTX);
+////            hopDongKTX.setNgayLamDon(new Date());
+////            hopDongKTX.setNgayKetThuc(Date.from(paymentDueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+////            hopDongKTX.setNgayHieuLuc(Date.from(paymentDueDate.plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+////            hopDongKTX.setTrangThai(false);
+//            try{
+//                hopDongKTXRepository.save(hopDongKTX);
+//                return "success";
+//            }catch (Exception e) {
+//                e.getStackTrace();
+//                return "error";
+//            }
+//        }
+//    }
 
-            HopDongKTX hopDongKTX = new HopDongKTX(phongKTX,mssv,new Date(),Date.from(paymentDueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(paymentDueDate.plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant()),false);
-//            hopDongKTX.setMSSV(mssv);
-//            hopDongKTX.setIdPhongKTX(phongKTX);
-//            hopDongKTX.setNgayLamDon(new Date());
-//            hopDongKTX.setNgayKetThuc(Date.from(paymentDueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-//            hopDongKTX.setNgayHieuLuc(Date.from(paymentDueDate.plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-//            hopDongKTX.setTrangThai(false);
-            try{
-                hopDongKTXRepository.save(hopDongKTX);
-                return "success";
-            }catch (Exception e) {
-                e.getStackTrace();
-                return "error";
-            }
-        }
-    }
-
-    public String addBillRoom(HopDongKTXDTO hopDongKTXDTO) {
-        System.out.println(hopDongKTXDTO.getIdPhongKTX());
-        System.out.println(hopDongKTXDTO.getMSSV());
-        Integer checkAddBillRoom = checkAddBillRoom(hopDongKTXDTO.getMSSV());
-        Integer checkNumBed = checkNumBedEmpty(hopDongKTXDTO.getIdPhongKTX(),phongKTXRepository.findPhongKTXById(hopDongKTXDTO.getId()).getLoaiKTX().getSoGiuong());
-        if (checkAddBillRoom == 0 || checkNumBed == 0) return "null";
-        else{
-            LocalDate paymentDueDate = LocalDate.now().plusDays(7);
-
-            HopDongKTX hopDongKTX = new HopDongKTX(hopDongKTXDTO.getIdPhongKTX(),hopDongKTXDTO.getMSSV(),new Date(),Date.from(paymentDueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(paymentDueDate.plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant()),false);
-//            hopDongKTX.setMSSV(mssv);
-//            hopDongKTX.setIdPhongKTX(phongKTX);
-//            hopDongKTX.setNgayLamDon(new Date());
-//            hopDongKTX.setNgayKetThuc(Date.from(paymentDueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
-//            hopDongKTX.setNgayHieuLuc(Date.from(paymentDueDate.plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-//            hopDongKTX.setTrangThai(false);
-            try{
-                hopDongKTXRepository.save(hopDongKTX);
-                return "success";
-            }catch (Exception e) {
-                e.getStackTrace();
-                return "error";
-            }
-        }
-    }
+//    public String addBillRoom(HopDongKTXDTO hopDongKTXDTO) {
+//        System.out.println(hopDongKTXDTO.getIdPhongKTX());
+//        System.out.println(hopDongKTXDTO.getMSSV());
+//        Integer checkAddBillRoom = checkAddBillRoom(hopDongKTXDTO.getMSSV());
+//        Integer checkNumBed = checkNumBedEmpty(hopDongKTXDTO.getIdPhongKTX(),phongKTXRepository.findPhongKTXById(hopDongKTXDTO.getId()).getLoaiKTX().getSoGiuong());
+//        if (checkAddBillRoom == 0 || checkNumBed == 0) return "null";
+//        else{
+//            LocalDate paymentDueDate = LocalDate.now().plusDays(7);
+//
+//            HopDongKTX hopDongKTX = new HopDongKTX(hopDongKTXDTO.getIdPhongKTX(),hopDongKTXDTO.getMSSV(),new Date(),Date.from(paymentDueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),Date.from(paymentDueDate.plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant()),false);
+////            hopDongKTX.setMSSV(mssv);
+////            hopDongKTX.setIdPhongKTX(phongKTX);
+////            hopDongKTX.setNgayLamDon(new Date());
+////            hopDongKTX.setNgayKetThuc(Date.from(paymentDueDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+////            hopDongKTX.setNgayHieuLuc(Date.from(paymentDueDate.plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+////            hopDongKTX.setTrangThai(false);
+//            try{
+//                hopDongKTXRepository.save(hopDongKTX);
+//                return "success";
+//            }catch (Exception e) {
+//                e.getStackTrace();
+//                return "error";
+//            }
+//        }
+//    }
 
 
     public String deleteBillRoom(Integer idBillRoom) {

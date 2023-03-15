@@ -80,8 +80,10 @@ public class PhongKTXService {
         return modelMapper.map(phongKTX, PhongKTXDTO.class);
     }
     public List<PhongKTXDTO> getAllByLoaiPhong(Integer id){
-        List<PhongKTX>phongKTXList=phongKTXRepository.findAllByLoaiKTX(id);
-        return phongKTXList.stream().map(phongKTX -> modelMapper.map(phongKTX, PhongKTXDTO.class)).collect(Collectors.toList());
+        List<PhongKTX>phongKTXList=phongKTXRepository.findAllByIdLoaiKTX(id);
+        return phongKTXList.stream()
+                .map(phongKTX -> modelMapper.map(phongKTX, PhongKTXDTO.class))
+                .collect(Collectors.toList());
     }
 
     public PhongKTXDTO findPhongKTXById(Integer idPhongKTX){

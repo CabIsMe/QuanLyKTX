@@ -5,10 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.LoaiKTXDto;
-import root.quanlyktx.dto.ViewBillRoomDTO;
-import root.quanlyktx.entity.HopDongKTX;
-import root.quanlyktx.entity.PhongKTX;
-import root.quanlyktx.entity.Role;
+
 import root.quanlyktx.entity.Student;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.PhongKTXRepository;
@@ -18,9 +15,7 @@ import root.quanlyktx.service.HopDongKTXService;
 import root.quanlyktx.service.LoaiKTXService;
 import root.quanlyktx.service.StudentService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)

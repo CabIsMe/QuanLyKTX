@@ -24,29 +24,31 @@ public class TT_PhongController {
     HopDongKTXService hopDongKTXService;
     @Autowired
     LoaiKTXService loaiKTXService;
-    @GetMapping("/loaiktx/{id}")
-    private List<ThongTinPhong> thongTinPhong(@PathVariable("id") Integer idLoaiPhong){
-        LoaiKTXDto loaiKTXDto=loaiKTXService.getSingleLoaiKTX(idLoaiPhong);
-        List<PhongKTXDTO> phongKTXDTOList= phongKTXService.getAllByLoaiPhong(idLoaiPhong);
-        List<ThongTinPhong> thongTinPhongs= new ArrayList<>();
-        for (PhongKTXDTO phongKTXDTO: phongKTXDTOList) {
-            thongTinPhongs.add(new ThongTinPhong(phongKTXDTO.getId(),loaiKTXDto.getGiaPhong(),
-                    loaiKTXDto.getSoGiuong()- hopDongKTXService.countByPhongKTX(phongKTXDTO.getId())
-                    ,loaiKTXDto.getImage()));
-
-        }
-        return thongTinPhongs;
-    }
+//    @GetMapping("/loaiktx/{id}")
+//    private List<ThongTinPhong> thongTinPhong(@PathVariable("id") Integer idLoaiPhong){
+//        LoaiKTXDto loaiKTXDto=loaiKTXService.getSingleLoaiKTX(idLoaiPhong);
+//        List<PhongKTXDTO> phongKTXDTOList= phongKTXService.getAllByLoaiPhong(idLoaiPhong);
+//        List<ThongTinPhong> thongTinPhongs= new ArrayList<>();
+//
+//        for (PhongKTXDTO phongKTXDTO: phongKTXDTOList) {
+//
+//            thongTinPhongs.add(new ThongTinPhong(phongKTXDTO.getId(),loaiKTXDto.getGiaPhong(),
+//                    loaiKTXDto.getSoGiuong()- hopDongKTXService.countByPhongKTX(phongKTXDTO.getId())
+//                    ,loaiKTXDto.getImage()));
+//
+//        }
+//        return hopDongKTXService.thongTinPhongs(idLoaiPhong);
+//    }
 
 //    @PostMapping("/{mssv}/{idphongktx}/{numbed}")
 //    private String registerRoom(@PathVariable("mssv") String mssv,@PathVariable("idphongktx") Integer idPhongKTX,@PathVariable("numbed") Integer numBed){
 //        return hopDongKTXService.addBillRoom(mssv,idPhongKTX,numBed);
 //    }
 
-    @PostMapping("/register/")
-    private String registerRoom(@RequestBody HopDongKTXDTO hopDongKTXDTO){
-        return hopDongKTXService.addBillRoom(hopDongKTXDTO);
-    }
+//    @PostMapping("/register/")
+//    private String registerRoom(@RequestBody HopDongKTXDTO hopDongKTXDTO){
+//        return hopDongKTXService.addBillRoom(hopDongKTXDTO);
+//    }
 
 //    @GetMapping("/inforRoom/{idphongktx}")
 //    private ViewInforRoom getViewInforRoom(@PathVariable("idphongktx") Integer idPhongKTX){

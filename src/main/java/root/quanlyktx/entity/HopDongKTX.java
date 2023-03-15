@@ -3,8 +3,6 @@ package root.quanlyktx.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.ToString;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.parameters.P;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -26,12 +24,6 @@ public class HopDongKTX {
     @Column(name = "ngay_lam_don")
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayLamDon;
-    @Column(name = "ngay_hieu_luc")
-    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
-    private Date ngayHieuLuc;
-    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
-    @Column(name = "ngay_ket_thuc")
-    private Date ngayKetThuc;
     @Column(name = "trang_thai")
     private boolean trangThai;
 
@@ -43,6 +35,10 @@ public class HopDongKTX {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "MSSV",referencedColumnName = "MSSV", insertable = false, updatable = false)
     Student student;
+
+    @ManyToOne
+    @JoinColumn(name = "id_term", referencedColumnName = "id", insertable = false, updatable = false)
+    Term term;
 
     public Integer getId() {
         return id;
@@ -76,21 +72,6 @@ public class HopDongKTX {
         this.ngayLamDon = ngayLamDon;
     }
 
-    public Date getNgayHieuLuc() {
-        return ngayHieuLuc;
-    }
-
-    public void setNgayHieuLuc(Date ngayHieuLuc) {
-        this.ngayHieuLuc = ngayHieuLuc;
-    }
-
-    public Date getNgayKetThuc() {
-        return ngayKetThuc;
-    }
-
-    public void setNgayKetThuc(Date ngayKetThuc) {
-        this.ngayKetThuc = ngayKetThuc;
-    }
 
     public boolean isTrangThai() {
         return trangThai;
@@ -118,12 +99,10 @@ public class HopDongKTX {
 
     public HopDongKTX(){}
 
-    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, Date ngayHieuLuc, Date ngayKetThuc, boolean trangThai) {
+    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, boolean trangThai) {
         this.idPhongKTX = idPhongKTX;
         this.MSSV = MSSV;
         this.ngayLamDon = ngayLamDon;
-        this.ngayHieuLuc = ngayHieuLuc;
-        this.ngayKetThuc = ngayKetThuc;
         this.trangThai = trangThai;
     }
 }
