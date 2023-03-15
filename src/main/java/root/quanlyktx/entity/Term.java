@@ -1,5 +1,7 @@
 package root.quanlyktx.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,10 +13,13 @@ public class Term {
     @Column(name = "id")
     Integer id;
     @Column(name = "ngay_mo_dang_ky")
+    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayMoDangKy;
     @Column(name = "ngay_ket_thuc_dang_ky")
+    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayKetThucDangKy;
     @Column(name = "ngay_ket_thuc")
+    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayKetThuc;
     @Column(name = "han_dong_phi")
     private Short hanDongPhi;
