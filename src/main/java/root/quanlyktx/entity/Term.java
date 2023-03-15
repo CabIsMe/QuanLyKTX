@@ -1,12 +1,14 @@
 package root.quanlyktx.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "term")
+@ToString
 public class Term {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

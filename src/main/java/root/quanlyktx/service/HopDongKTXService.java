@@ -6,17 +6,10 @@ import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.PhongKTXDTO;
+import root.quanlyktx.entity.*;
 import root.quanlyktx.model.ThongTinPhong;
 import root.quanlyktx.model.ViewBillRoom;
-import root.quanlyktx.entity.HopDongKTX;
-import root.quanlyktx.entity.LoaiKTX;
-import root.quanlyktx.entity.PhongKTX;
-import root.quanlyktx.entity.Student;
-import root.quanlyktx.repository.HopDongKTXRepository;
-
-import root.quanlyktx.repository.LoaiKTXRepository;
-import root.quanlyktx.repository.PhongKTXRepository;
-import root.quanlyktx.repository.StudentRepository;
+import root.quanlyktx.repository.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -42,6 +35,8 @@ public class HopDongKTXService {
     private LoaiKTXService loaiKTXService;
     @Autowired
     private LoaiKTXRepository loaiKTXRepository;
+    @Autowired
+    private TermRepository termRepository;
 
     public List<HopDongKTXDTO> getAll() {
         List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
@@ -62,7 +57,9 @@ public class HopDongKTXService {
     }
 
     public Integer countHopDongInPhong(Integer idPhong) {
-        return   hopDongKTXRepository.countHopDongKTXByIdPhongKTX(idPhong);
+        Date date= new Date();
+        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
+        return hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndTerm_Id(idPhong, term.getId());
     }
     public List<ThongTinPhong> thongTinPhongs(Integer idLoaiPhong){
         LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
