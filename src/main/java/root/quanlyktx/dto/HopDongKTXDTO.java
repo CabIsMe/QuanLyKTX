@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import root.quanlyktx.entity.PhongKTX;
+import root.quanlyktx.entity.Term;
 
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public class HopDongKTXDTO {
     private boolean trangThai;
     @JsonIgnore
     private PhongKTXDTO phongKTX;
+    private TermDTO termDTO;
 
     public HopDongKTXDTO(Integer idPhongKTX, String MSSV) {
         this.idPhongKTX = idPhongKTX;

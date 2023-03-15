@@ -34,11 +34,15 @@ public class HopDongKTX {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "MSSV",referencedColumnName = "MSSV", insertable = false, updatable = false)
-    Student student;
+    private Student student;
 
     @ManyToOne
     @JoinColumn(name = "id_term", referencedColumnName = "id", insertable = false, updatable = false)
-    Term term;
+    private Term term;
+
+    public Term getTerm() {
+        return term;
+    }
 
     public Integer getId() {
         return id;
@@ -91,10 +95,6 @@ public class HopDongKTX {
 
     public Student getStudent() {
         return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
     }
 
     public HopDongKTX(){}
