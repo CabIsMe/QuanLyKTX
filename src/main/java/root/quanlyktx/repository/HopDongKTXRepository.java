@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer> {
     List<HopDongKTX> findAllByIdPhongKTX(Integer idPhong);
-
+    Integer countHopDongKTXByIdPhongKTX(Integer idPhong);
     //    Integer countHopDongKTXByIdPhongKTXAndNgayKetThucAfter(Integer idPhong,Date currentDate);
 //    Integer countHopDongKTXByTrangThaiTrue();
     List <HopDongKTX> findAllByMSSV(String MSSV);

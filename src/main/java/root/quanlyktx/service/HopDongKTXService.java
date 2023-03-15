@@ -14,6 +14,7 @@ import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.entity.Student;
 import root.quanlyktx.repository.HopDongKTXRepository;
 
+import root.quanlyktx.repository.LoaiKTXRepository;
 import root.quanlyktx.repository.PhongKTXRepository;
 import root.quanlyktx.repository.StudentRepository;
 
@@ -28,17 +29,19 @@ import java.util.stream.Collectors;
 public class HopDongKTXService {
 
     @Autowired
-    HopDongKTXRepository hopDongKTXRepository;
+    private HopDongKTXRepository hopDongKTXRepository;
     @Autowired
-    ModelMapper modelMapper;
-
+    private ModelMapper modelMapper;
     @Autowired
-    StudentRepository studentRepository;
+    private PhongKTXRepository phongKTXRepository;
     @Autowired
-    MapperToDTOService mapperToDTOService;
+    private StudentRepository studentRepository;
     @Autowired
-    LoaiKTXService loaiKTXService;
-
+    private MapperToDTOService mapperToDTOService;
+    @Autowired
+    private LoaiKTXService loaiKTXService;
+    @Autowired
+    private LoaiKTXRepository loaiKTXRepository;
 
     public List<HopDongKTXDTO> getAll() {
         List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
@@ -58,21 +61,22 @@ public class HopDongKTXService {
                 .collect(Collectors.toList());
     }
 
-//    public Integer countBedEmptyByPhongKTX(Integer idPhong) {
-//        return   hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndNgayKetThucAfter(idPhong,new Date());
-//    }
-//    public List<ThongTinPhong> thongTinPhongs(Integer idLoaiPhong){
-//        LoaiKTXDto loaiKTXDto=loaiKTXService.getSingleLoaiKTX(idLoaiPhong);
-//        List<PhongKTXDTO> phongKTXDTOList= phongKTXService.getAllByLoaiPhong(idLoaiPhong);
-//        List<ThongTinPhong> thongTinPhongList= new ArrayList<>();
-//        for (PhongKTXDTO phongKTXDTO: phongKTXDTOList) {
-//
-//            thongTinPhongList.add(new ThongTinPhong(phongKTXDTO.getId(),loaiKTXDto.getGiaPhong(),
-//                    loaiKTXDto.getSoGiuong()- countBedEmptyByPhongKTX(phongKTXDTO.getId())
-//                    ,loaiKTXDto.getImage()));
-//        }
-//        return thongTinPhongList;
-//    }
+    public Integer countHopDongInPhong(Integer idPhong) {
+        return   hopDongKTXRepository.countHopDongKTXByIdPhongKTX(idPhong);
+    }
+    public List<ThongTinPhong> thongTinPhongs(Integer idLoaiPhong){
+        LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
+        List<PhongKTX> phongKTXDTOList=phongKTXRepository .findAllByIdLoaiKTX(idLoaiPhong);
+
+        List<ThongTinPhong> thongTinPhongList= new ArrayList<>();
+        for (PhongKTX phongKTX: phongKTXDTOList) {
+
+            thongTinPhongList.add(new ThongTinPhong(phongKTX.getId(),loaiKTX.getGiaPhong(),
+                    loaiKTX.getSoGiuong()- countHopDongInPhong(phongKTX.getId())
+                    ,loaiKTX.getImage()));
+        }
+        return thongTinPhongList;
+    }
 
 //    public Integer countByTrangThaiTrue() {
 //        return hopDongKTXRepository.countHopDongKTXByTrangThaiTrue();
