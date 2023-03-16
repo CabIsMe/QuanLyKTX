@@ -11,6 +11,5 @@ import java.util.List;
 @Repository
 public interface PhongKTXRepository extends JpaRepository<PhongKTX, Integer> {
     List<PhongKTX> findAllByIdLoaiKTX(Integer id);
-    PhongKTX findPhongKTXById(Integer id);
 
 }

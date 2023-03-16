@@ -1,12 +1,15 @@
 package root.quanlyktx.service;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.PhongKTXDTO;
 import root.quanlyktx.entity.*;
+import root.quanlyktx.jwt.AuthEntryPointJwt;
 import root.quanlyktx.model.ThongTinPhong;
 import root.quanlyktx.model.ViewBillRoom;
 import root.quanlyktx.repository.*;
@@ -16,6 +19,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +41,7 @@ public class HopDongKTXService {
     private LoaiKTXRepository loaiKTXRepository;
     @Autowired
     private TermRepository termRepository;
+    private static final Logger logger = LoggerFactory.getLogger(HopDongKTXService.class);
 
     public List<HopDongKTXDTO> getAll() {
         List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
@@ -59,7 +64,10 @@ public class HopDongKTXService {
     public Integer countHopDongInPhong(Integer idPhong) {
         Date date= new Date();
         Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
-        return hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndTerm_Id(idPhong, term.getId());
+        if(term == null){
+            return null;
+        }
+        return hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndIdTerm(idPhong, term.getId());
     }
     public List<ThongTinPhong> thongTinPhongs(Integer idLoaiPhong){
         LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
@@ -72,7 +80,58 @@ public class HopDongKTXService {
                     loaiKTX.getSoGiuong()- countHopDongInPhong(phongKTX.getId())
                     ,loaiKTX.getImage()));
         }
+        if(thongTinPhongList.isEmpty())
+            return null;
         return thongTinPhongList;
+    }
+    public ThongTinPhong thongTinPhong(Integer idLoaiPhong, Integer idPhong){
+        LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
+        Optional <PhongKTX> optional=phongKTXRepository.findById(idPhong);
+        if(optional.isEmpty())
+            return null;
+        PhongKTX phongKTX=optional.get();
+
+        return new ThongTinPhong(phongKTX.getId(),loaiKTX.getGiaPhong()
+                ,loaiKTX.getSoGiuong()-countHopDongInPhong(phongKTX.getId())
+                ,loaiKTX.getImage());
+    }
+    public boolean createHopDong(HopDongKTXDTO hopDongKTXDTO){
+        System.out.println(hopDongKTXDTO.toString());
+        Date date= new Date();
+        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
+        if(term == null){
+            return false;
+        }
+        if(hopDongKTXRepository.existsByIdTermAndMSSV(term.getId(),hopDongKTXDTO.getMSSV())){
+            logger.error("Contract already exists");
+            return false;
+        }
+
+        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findById(hopDongKTXDTO.getIdPhongKTX());
+        if(optionalPhongKTX.isEmpty())
+            return false;
+        PhongKTX phongKTX=optionalPhongKTX.get();
+        Integer idLoaiPhong=phongKTX.getIdLoaiKTX();
+        Optional<LoaiKTX> optional=loaiKTXRepository.findById(idLoaiPhong);
+        if(optional.isEmpty())
+            return false;
+        LoaiKTX loaiKTX=optional.get();
+        Integer countHopDong=hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndIdTerm(phongKTX.getId(), term.getId());
+        if(loaiKTX.getSoGiuong()-countHopDong<=0){
+            logger.error("No more beds available");
+            return false;
+        }
+
+        HopDongKTX hopDongKTX=new HopDongKTX(hopDongKTXDTO.getIdPhongKTX(), hopDongKTXDTO.getMSSV(),date, term.getId());
+        System.out.println(hopDongKTX.toString());
+        try{
+            hopDongKTXRepository.save(hopDongKTX);
+
+        }catch (Exception e){
+            logger.error("Save failed");
+            return false;
+        }
+        return true;
     }
 
 //    public Integer countByTrangThaiTrue() {

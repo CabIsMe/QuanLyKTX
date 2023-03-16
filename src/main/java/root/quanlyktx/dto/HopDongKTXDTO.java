@@ -10,18 +10,16 @@ import root.quanlyktx.entity.Term;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
+@ToString
 public class HopDongKTXDTO {
     private Integer id;
-
     private Integer idPhongKTX;
-
     private String MSSV;
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayLamDon;
-
     private boolean trangThai;
+    private Integer idTerm;
     @JsonIgnore
     private PhongKTXDTO phongKTX;
     private TermDTO termDTO;
@@ -30,4 +28,5 @@ public class HopDongKTXDTO {
         this.idPhongKTX = idPhongKTX;
         this.MSSV = MSSV;
     }
+
 }

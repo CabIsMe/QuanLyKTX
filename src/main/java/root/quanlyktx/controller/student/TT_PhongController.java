@@ -25,8 +25,12 @@ public class TT_PhongController {
     @Autowired
     LoaiKTXService loaiKTXService;
     @GetMapping("/loaiktx/{id}")
-    private List<ThongTinPhong> thongTinPhong(@PathVariable("id") Integer idLoaiPhong){
+    private List<ThongTinPhong> thongTinPhongList(@PathVariable("id") Integer idLoaiPhong){
         return hopDongKTXService.thongTinPhongs(idLoaiPhong);
+    }
+    @GetMapping("/loaiktx/{idLoaiPhong}/phongktx/{idPhong}")
+    private ThongTinPhong getThongTinPhong(@PathVariable("idLoaiPhong") Integer idLoaiPhong,@PathVariable("idPhong") Integer idPhong){
+        return hopDongKTXService.thongTinPhong(idLoaiPhong, idPhong);
     }
 
 //    @PostMapping("/{mssv}/{idphongktx}/{numbed}")

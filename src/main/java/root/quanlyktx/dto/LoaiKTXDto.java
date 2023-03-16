@@ -10,8 +10,6 @@ import java.util.List;
 
 @Data
 @ToString
-@Getter
-@Setter
 public class LoaiKTXDto {
     private Integer id;
     private Integer soGiuong;

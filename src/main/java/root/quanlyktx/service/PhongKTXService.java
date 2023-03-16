@@ -86,10 +86,6 @@ public class PhongKTXService {
                 .collect(Collectors.toList());
     }
 
-    public PhongKTXDTO findPhongKTXById(Integer idPhongKTX){
-        PhongKTX phongKTX = phongKTXRepository.findPhongKTXById(idPhongKTX);
-        return modelMapper.map(phongKTX,PhongKTXDTO.class);
-    }
 
 //    public ViewInforRoom getViewInforRoom(Integer idPhongKTX){
 //        PhongKTXDTO phongKTXDTO = findPhongKTXById(idPhongKTX);

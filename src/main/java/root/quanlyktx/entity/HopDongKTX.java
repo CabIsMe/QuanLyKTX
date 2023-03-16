@@ -26,6 +26,8 @@ public class HopDongKTX {
     private Date ngayLamDon;
     @Column(name = "trang_thai")
     private boolean trangThai;
+    @Column(name = "id_term")
+    private Integer idTerm;
 
     @ManyToOne
     @JoinColumn(name = "phong_KTX",referencedColumnName = "id",updatable = false,insertable = false)
@@ -42,6 +44,14 @@ public class HopDongKTX {
 
     public Term getTerm() {
         return term;
+    }
+
+    public Integer getIdTerm() {
+        return idTerm;
+    }
+
+    public void setIdTerm(Integer idTerm) {
+        this.idTerm = idTerm;
     }
 
     public Integer getId() {
@@ -99,10 +109,10 @@ public class HopDongKTX {
 
     public HopDongKTX(){}
 
-    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, boolean trangThai) {
+    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, Integer idTerm) {
         this.idPhongKTX = idPhongKTX;
         this.MSSV = MSSV;
         this.ngayLamDon = ngayLamDon;
-        this.trangThai = trangThai;
+        this.idTerm=idTerm;
     }
 }

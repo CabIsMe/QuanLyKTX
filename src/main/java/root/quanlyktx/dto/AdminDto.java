@@ -9,8 +9,6 @@ import root.quanlyktx.entity.Role;
 import java.sql.Date;
 
 @Data
-@Getter
-@Setter
 public class AdminDto {
     private String username;
     private String hoTen;

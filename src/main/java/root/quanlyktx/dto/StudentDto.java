@@ -10,8 +10,7 @@ import javax.persistence.Column;
 import java.sql.Date;
 
 @Data
-@Getter
-@Setter
+
 public class StudentDto {
     private String username;
     private String hoTen;
