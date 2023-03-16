@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import root.quanlyktx.entity.HopDongKTX;
 
 
+
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -15,5 +17,6 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     List <HopDongKTX> findAllByMSSV(String MSSV);
     HopDongKTX getHopDongKTXById(Integer id);
     boolean existsByIdTermAndMSSV(Integer idTerm, String MSSV);
-    
+    List <HopDongKTX> findAllByNgayLamDonBeforeAndTrangThaiFalse(Date date);
+    void deleteAllByNgayLamDonBeforeAndTrangThaiFalse(Date date);
 }

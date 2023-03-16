@@ -36,11 +36,7 @@ public class StudentService {
     private OtpService otpService;
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
-//    @PostConstruct
-//    public void handleOtpExpired() {
-//        // your initialization code here
-//        System.out.println("MyComponent initialized!");
-//    }
+
     public StudentDto getInfo(String username){
 
 //        HandleUserDetail userDetails =
