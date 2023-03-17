@@ -22,13 +22,13 @@ public class MyApplicationRunner implements ApplicationRunner {
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
         // Code to run after the application has started
-        Date date= new Date();
-        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
-        Date dateExpired= new Date(date.getTime()-(term.getHanDongPhi()*60*60*1000*24));
-        System.out.println(dateExpired);
-        if(hopDongKTXRepository.findAllByNgayLamDonBeforeAndTrangThaiFalse(dateExpired).isEmpty()){
-            return;
-        }
-        hopDongKTXRepository.deleteAllByNgayLamDonBeforeAndTrangThaiFalse(dateExpired);
+//        Date date= new Date();
+//        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
+//        Date dateExpired= new Date(date.getTime()-(term.getHanDongPhi()*60*60*1000*24));
+//        System.out.println(dateExpired);
+//        if(hopDongKTXRepository.findAllByNgayLamDonBeforeAndTrangThaiFalse(dateExpired).isEmpty()){
+//            return;
+//        }
+//        hopDongKTXRepository.deleteAllByNgayLamDonBeforeAndTrangThaiFalse(dateExpired);
     }
 }

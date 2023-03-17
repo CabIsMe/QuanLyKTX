@@ -3,7 +3,6 @@ package root.quanlyktx.controller.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import root.quanlyktx.model.ViewBillRoom;
 import root.quanlyktx.service.HopDongKTXService;
 
 @RestController

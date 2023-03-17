@@ -23,8 +23,6 @@ public class PhongKTXService {
     @Autowired
     PhongKTXRepository phongKTXRepository;
     @Autowired
-    MapperToDTOService mapperToDTOService;
-    @Autowired
     HopDongKTXService hopDongKTXService;
     @Autowired
     LoaiKTXRepository loaiKTXRepository;
