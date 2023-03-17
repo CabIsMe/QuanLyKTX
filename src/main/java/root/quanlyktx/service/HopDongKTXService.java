@@ -257,7 +257,12 @@ public class HopDongKTXService {
         Student student = studentRepository.findByUsername(mssv);
         int totalMonthPayment = (hopDongKTX.getTerm().getNgayKetThuc().getMonth()-hopDongKTX.getTerm().getNgayMoDangKy().getMonth())+1;
         Double total = loaiKTX.getGiaPhong()*totalMonthPayment;
-        ViewContractRoom viewContractRoom = new ViewContractRoom(modelMapper.map(hopDongKTX,HopDongKTXDTO.class),modelMapper.map(loaiKTX,LoaiKTXDto.class),modelMapper.map(student, StudentDto.class),new Date(hopDongKTX.getNgayLamDon().getTime()+hopDongKTX.getTerm().getHanDongPhi()*86400000),hopDongKTX.getTerm().getNgayKetThuc(),total);
+        ViewContractRoom viewContractRoom = new ViewContractRoom(modelMapper.map(hopDongKTX,HopDongKTXDTO.class),
+                                                                modelMapper.map(loaiKTX,LoaiKTXDto.class),
+                                                                modelMapper.map(student, StudentDto.class),
+                                                                new Date(hopDongKTX.getNgayLamDon().getTime()+hopDongKTX.getTerm().getHanDongPhi()*86400000),
+                                                                hopDongKTX.getTerm().getNgayKetThuc(),
+                                                                total);
         return viewContractRoom;
     }
 }

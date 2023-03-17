@@ -8,8 +8,6 @@ public class PhieuNuocKTXDTO {
     private Integer id;
 
     private Integer maSoKTX;
-
-    private GiaNuocTheoThangDTO giaNuocTheoThang;
 //    @Column(name = "id_don_gia")
 //    private Integer idDonGia;
 
@@ -17,5 +15,6 @@ public class PhieuNuocKTXDTO {
 
     private boolean trangThai;
 
+    private GiaNuocTheoThangDTO giaNuocTheoThang;
 
 }

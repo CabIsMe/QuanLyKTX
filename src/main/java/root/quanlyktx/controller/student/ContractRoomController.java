@@ -2,6 +2,7 @@ package root.quanlyktx.controller.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.model.ViewContractRoom;
@@ -20,7 +21,11 @@ public class ContractRoomController {
     }
 
     @GetMapping("/{mssv}")
-    public ViewContractRoom getViewContractRoom(@PathVariable("mssv") String mssv){
-        return hopDongKTXService.getViewContractRoom(mssv);
+    public ResponseEntity<ViewContractRoom> getViewContractRoom(@PathVariable("mssv") String mssv){
+        ViewContractRoom viewContractRoom = hopDongKTXService.getViewContractRoom(mssv);
+        if(viewContractRoom == null){
+            ResponseEntity.badRequest().body("Empty");
+        }
+        return ResponseEntity.ok().body(viewContractRoom);
     }
 }
