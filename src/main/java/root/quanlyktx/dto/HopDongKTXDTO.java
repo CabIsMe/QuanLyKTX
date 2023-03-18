@@ -24,6 +24,7 @@ public class HopDongKTXDTO {
     private PhongKTXDTO phongKTX;
     private TermDTO termDTO;
 
+    public HopDongKTXDTO(){}
     public HopDongKTXDTO(Integer idPhongKTX, String MSSV) {
         this.idPhongKTX = idPhongKTX;
         this.MSSV = MSSV;

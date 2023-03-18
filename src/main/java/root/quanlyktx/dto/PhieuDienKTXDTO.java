@@ -10,10 +10,10 @@ public class PhieuDienKTXDTO {
 
     private Integer maSoKTX;
 
-    private Integer idDonGia;
-
     private Integer soDienTieuThu;
 
     private boolean trangThai;
+
+    private GiaDienTheoThangDTO giaDienTheoThang;
 
 }

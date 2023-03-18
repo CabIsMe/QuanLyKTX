@@ -12,19 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.dto.LoaiKTXDto;
-import root.quanlyktx.dto.PhongKTXDTO;
+import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.*;
-import root.quanlyktx.jwt.AuthEntryPointJwt;
 import root.quanlyktx.model.ThongTinPhong;
-import root.quanlyktx.model.ViewBillRoom;
+import root.quanlyktx.model.ViewContractRoom;
 import root.quanlyktx.repository.*;
 
-import javax.annotation.PostConstruct;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,8 +32,6 @@ public class HopDongKTXService {
     private PhongKTXRepository phongKTXRepository;
     @Autowired
     private StudentRepository studentRepository;
-    @Autowired
-    private MapperToDTOService mapperToDTOService;
     @Autowired
     private LoaiKTXService loaiKTXService;
     @Autowired
@@ -272,5 +264,22 @@ public class HopDongKTXService {
             e.getStackTrace();
             return "error";
         }
+    }
+
+    public ViewContractRoom getViewContractRoom(String mssv) {
+        Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayKetThucAfter(mssv, new Date()));
+        if (optional.isEmpty()) return null;
+        HopDongKTX hopDongKTX =optional.get();
+        LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(hopDongKTX.getPhongKTX().getIdLoaiKTX());
+        Student student = studentRepository.findByUsername(mssv);
+        int totalMonthPayment = (hopDongKTX.getTerm().getNgayKetThuc().getMonth()-hopDongKTX.getTerm().getNgayMoDangKy().getMonth())+1;
+        Double total = loaiKTX.getGiaPhong()*totalMonthPayment;
+        ViewContractRoom viewContractRoom = new ViewContractRoom(modelMapper.map(hopDongKTX,HopDongKTXDTO.class),
+                                                                modelMapper.map(loaiKTX,LoaiKTXDto.class),
+                                                                modelMapper.map(student, StudentDto.class),
+                                                                new Date(hopDongKTX.getNgayLamDon().getTime()+hopDongKTX.getTerm().getHanDongPhi()*86400000),
+                                                                hopDongKTX.getTerm().getNgayKetThuc(),
+                                                                total);
+        return viewContractRoom;
     }
 }
