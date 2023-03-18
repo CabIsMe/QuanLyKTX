@@ -4,9 +4,12 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.PhongKTXDTO;
@@ -45,7 +48,19 @@ public class HopDongKTXService {
     private TermRepository termRepository;
     private static final Logger logger = LoggerFactory.getLogger(HopDongKTXService.class);
 
-
+    @Transactional
+//    @Scheduled(fixedRate = 2000)
+    public void runAuto() throws Exception {
+        // Code to run after the application has started
+        Date date= new Date();
+        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
+        Date dateExpired= new Date(date.getTime()-(term.getHanDongPhi()*60*60*1000*24));
+        logger.info(dateExpired.toString());
+        if(hopDongKTXRepository.findAllByNgayLamDonBeforeAndTrangThaiFalse(dateExpired).isEmpty()){
+            return;
+        }
+        hopDongKTXRepository.deleteAllByNgayLamDonBeforeAndTrangThaiFalse(dateExpired);
+    }
 
     public List<HopDongKTXDTO> getAll() {
         List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
