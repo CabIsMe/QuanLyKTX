@@ -26,6 +26,6 @@ public class ContractRoomController {
         if(viewContractRoom == null){
             ResponseEntity.badRequest().body("Empty");
         }
-        return ResponseEntity.ok().body(viewContractRoom);
+        return ResponseEntity.ok(viewContractRoom);
     }
 }
