@@ -26,16 +26,16 @@ public class BillsController {
     PhieuDienKTXService phieuDienKTXService;
 
     @GetMapping("/water/{mssv}")
-    public ResponseEntity<List<ViewBills>> getWaterBills(@PathVariable("mssv") String mssv){
+    public ResponseEntity<?> getWaterBills(@PathVariable("mssv") String mssv){
         List<ViewBills> viewBillsList = phieuNuocKTXService.getWaterBills(mssv);
-        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body(viewBillsList);
-        else return ResponseEntity.ok(phieuNuocKTXService.getWaterBills(mssv));
+        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
+        else return ResponseEntity.ok(viewBillsList);
     }
 
     @GetMapping("/electric/{mssv}")
-    public ResponseEntity<List<ViewBills>> getElectricBills(@PathVariable("mssv") String mssv){
+    public ResponseEntity<?> getElectricBills(@PathVariable("mssv") String mssv){
         List<ViewBills> viewBillsList = phieuDienKTXService.getElectricBills(mssv);
-        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body(viewBillsList);
-        else return ResponseEntity.ok(phieuDienKTXService.getElectricBills(mssv));
+        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
+        else return ResponseEntity.ok(viewBillsList);
     }
 }

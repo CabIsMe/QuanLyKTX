@@ -55,4 +55,12 @@ public class PhieuDienKTX {
 
     public PhieuDienKTX() {
     }
+
+    public GiaDienTheoThang getGiaDienTheoThang() {
+        return giaDienTheoThang;
+    }
+
+    public void setGiaDienTheoThang(GiaDienTheoThang giaDienTheoThang) {
+        this.giaDienTheoThang = giaDienTheoThang;
+    }
 }
