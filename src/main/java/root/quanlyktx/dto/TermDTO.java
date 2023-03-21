@@ -19,4 +19,6 @@ public class TermDTO {
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayKetThuc;
     private Short hanDongPhi;
+
+
 }

@@ -1,0 +1,43 @@
+package root.quanlyktx.controller.admin;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import root.quanlyktx.dto.TermDTO;
+import root.quanlyktx.service.TermService;
+
+import java.util.List;
+
+@RestController
+//@PreAuthorize("hasAuthority('student')")
+@RequestMapping("/api/term")
+@CrossOrigin(origins = "*", maxAge = 3600)
+public class TermController {
+    @Autowired
+    TermService termService;
+    @GetMapping("/")
+    public List<TermDTO> getAll(){
+        return termService.getAllTerm();
+    }
+
+    @GetMapping("/search/")
+    public TermDTO getSingle(@RequestParam Integer id){
+        return termService.getSingleTerm(id);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addTerm(@RequestBody TermDTO termDTO){
+        return termService.createTerm(termDTO);
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update_term(@PathVariable("id") Integer id, @RequestBody TermDTO termDTO){
+        return termService.updateTerm(id,termDTO);
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> removeTerm(@PathVariable("id") Integer id){
+        return termService.deleteTerm(id);
+    }
+
+}

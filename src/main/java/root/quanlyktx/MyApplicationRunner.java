@@ -3,6 +3,7 @@ package root.quanlyktx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.entity.HopDongKTX;
@@ -20,6 +21,7 @@ public class MyApplicationRunner implements ApplicationRunner {
     HopDongKTXRepository hopDongKTXRepository;
     @Override
     @Transactional
+//    @Scheduled(cron = "0 * * ? * *")
     public void run(ApplicationArguments args) throws Exception {
         // Code to run after the application has started
 //        Date date= new Date();
