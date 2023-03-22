@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.entity.OTP;
 import root.quanlyktx.entity.Student;
 import root.quanlyktx.model.AccountAndOtp;
+import root.quanlyktx.model.PasswordUpdating;
 import root.quanlyktx.service.OtpService;
 import root.quanlyktx.userdetail.HandleStudentDetail;
 import root.quanlyktx.jwt.JwtResponse;
@@ -108,5 +109,14 @@ public class AuthController {
            }
        }
        return ResponseEntity.ok(true);
+    }
+
+    @PostMapping("change-password")
+    public boolean changePass(@RequestBody PasswordUpdating passwordUpdating){
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(passwordUpdating.getUsername(), passwordUpdating.getOldPassword()));
+        if(!authentication.isAuthenticated())
+            return false;
+        return studentService.changePassword(passwordUpdating);
     }
 }

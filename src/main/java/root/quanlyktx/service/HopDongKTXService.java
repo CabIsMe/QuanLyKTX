@@ -145,9 +145,9 @@ public class HopDongKTXService {
         return true;
     }
 
-//    public Integer countByTrangThaiTrue() {
-//        return hopDongKTXRepository.countHopDongKTXByTrangThaiTrue();
-//    }
+    public boolean checkStatus(String MSSV) {
+        return hopDongKTXRepository.getHopDongKTXByMSSVAndTrangThaiTrue(MSSV);
+    }
 
 
 

@@ -1,5 +1,6 @@
 package root.quanlyktx.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +20,4 @@ public class StudentDto {
     private String CMND;
     private String SDT;
     private String mail;
-    private Role role;
 }
