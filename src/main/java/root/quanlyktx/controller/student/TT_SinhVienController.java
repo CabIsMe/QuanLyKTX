@@ -19,10 +19,13 @@ public class TT_SinhVienController {
     @Autowired
     HopDongKTXService hopDongKTXService;
     @GetMapping("/info/{MSSV}")
-    private ThongTinSV thongTinSV(@PathVariable("MSSV") String MSSV){
+    public ThongTinSV thongTinSV(@PathVariable("MSSV") String MSSV){
         Date date = Date.valueOf("2022-01-01");
-        return new ThongTinSV(studentService.getInfo(MSSV),date, Date.valueOf(""),false );
+        return new ThongTinSV(studentService.getInfo(MSSV),date, date,false );
     }
-
+    @GetMapping("/status-contract/{MSSV}")
+    public boolean checkStatusContract(@PathVariable("MSSV") String MSSV){
+        return hopDongKTXService.checkStatus(MSSV);
+    }
 
 }

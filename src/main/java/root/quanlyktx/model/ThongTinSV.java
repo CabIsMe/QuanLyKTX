@@ -9,7 +9,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThongTinSV {
-    private StudentDto studentDto;
+    private StudentDto personalInfo;
     private Date ngayBatDau;
     private Date ngayKetThuc;
     private Boolean trangThaiThanhToan;
