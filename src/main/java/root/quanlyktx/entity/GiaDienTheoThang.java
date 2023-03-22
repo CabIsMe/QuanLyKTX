@@ -19,8 +19,8 @@ public class GiaDienTheoThang {
     @Column(name = "gia_dien")
     private double giaDien;
 
-    @OneToMany(mappedBy = "idDonGia")
-    private List<PhieuDienKTX> phieuDienKTXList;
+//    @OneToMany(mappedBy = "idDonGia")
+//    private List<PhieuDienKTX> phieuDienKTXList;
 
     public Integer getId() {
         return id;
@@ -52,14 +52,6 @@ public class GiaDienTheoThang {
 
     public void setGiaDien(double giaDien) {
         this.giaDien = giaDien;
-    }
-
-    public List<PhieuDienKTX> getPhieuDienKTXList() {
-        return phieuDienKTXList;
-    }
-
-    public void setPhieuDienKTXList(List<PhieuDienKTX> phieuDienKTXList) {
-        this.phieuDienKTXList = phieuDienKTXList;
     }
 
     public GiaDienTheoThang() {
