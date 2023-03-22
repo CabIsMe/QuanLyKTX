@@ -1,6 +1,7 @@
 package root.quanlyktx.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.service.HopDongKTXService;
@@ -17,6 +18,11 @@ public class HopDongKTXController {
 
     @GetMapping("/")
     public List<HopDongKTXDTO> getAll(){ return hopDongKTXService.getAll();}
+
+    @GetMapping("/list")
+    public ResponseEntity<?> getViewContractRoomList(@RequestParam(name = "idphongktx") Integer idPhongKTX,@RequestParam(name = "idterm") Integer idTerm){
+        return hopDongKTXService.getViewContractRoomList(idPhongKTX,idTerm);
+    }
 
     @GetMapping("/{id}")
     public HopDongKTXDTO getById(@PathVariable("id") Integer id){

@@ -4,10 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.dto.HopDongKTXDTO;
@@ -16,6 +13,7 @@ import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.*;
 import root.quanlyktx.model.ThongTinPhong;
 import root.quanlyktx.model.ViewContractRoom;
+import root.quanlyktx.model.ViewContractRoomList;
 import root.quanlyktx.repository.*;
 
 import java.util.*;
@@ -266,9 +264,9 @@ public class HopDongKTXService {
         }
     }
 
-    public ViewContractRoom getViewContractRoom(String mssv) {
+    public ResponseEntity<?> getViewContractRoom(String mssv) {
         Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayKetThucAfter(mssv, new Date()));
-        if (optional.isEmpty()) return null;
+        if (optional.isEmpty()) return ResponseEntity.badRequest().body("Empty");
         HopDongKTX hopDongKTX =optional.get();
         LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(hopDongKTX.getPhongKTX().getIdLoaiKTX());
         Student student = studentRepository.findByUsername(mssv);
@@ -280,6 +278,29 @@ public class HopDongKTXService {
                                                                 new Date(hopDongKTX.getNgayLamDon().getTime()+hopDongKTX.getTerm().getHanDongPhi()*86400000),
                                                                 hopDongKTX.getTerm().getNgayKetThuc(),
                                                                 total);
-        return viewContractRoom;
+        return ResponseEntity.ok(viewContractRoom);
+    }
+
+    public ResponseEntity<?> getViewContractRoomList(Integer idPhongKTX,Integer idTerm) {
+        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAllByIdPhongKTXAndTerm_Id(idPhongKTX,idTerm);
+        List<HopDongKTXDTO> hopDongKTXDTOList = new ArrayList<>();
+        System.out.println("day la entity"+hopDongKTXList.get(0).getTerm().toString());
+        if (hopDongKTXList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
+        else{
+            hopDongKTXDTOList = hopDongKTXList.stream().map(hopDongKTX -> modelMapper.map(hopDongKTX,HopDongKTXDTO.class)).collect(Collectors.toList());
+            List<ViewContractRoomList> viewContractRoomList = new ArrayList<>();
+            String fullName = "";
+            Double total;
+            System.out.println("day la DTO"+hopDongKTXDTOList.get(0).getTerm().toString());
+            int totalMonthPayment;
+            for (HopDongKTXDTO hopDongKTXDTO : hopDongKTXDTOList){
+                fullName = studentRepository.findByUsername(hopDongKTXDTO.getMSSV()).getUsername();
+                System.out.println(fullName+"====="+hopDongKTXDTO.getMSSV()+"===="+studentRepository.findByUsername(hopDongKTXDTO.getMSSV()).getUsername());
+                totalMonthPayment = (hopDongKTXDTO.getTerm().getNgayKetThuc().getMonth()-hopDongKTXDTO.getTerm().getNgayMoDangKy().getMonth())+1;
+                total = hopDongKTXDTO.getPhongKTX().getLoaiKTX().getGiaPhong()*totalMonthPayment;
+                viewContractRoomList.add(new ViewContractRoomList(hopDongKTXDTO,fullName,total));
+            }
+            return ResponseEntity.ok(viewContractRoomList);
+        }
     }
 }

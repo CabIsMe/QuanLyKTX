@@ -22,7 +22,7 @@ public class HopDongKTXDTO {
     private Integer idTerm;
     @JsonIgnore
     private PhongKTXDTO phongKTX;
-    private TermDTO termDTO;
+    private TermDTO term;
 
     public HopDongKTXDTO(){}
     public HopDongKTXDTO(Integer idPhongKTX, String MSSV) {

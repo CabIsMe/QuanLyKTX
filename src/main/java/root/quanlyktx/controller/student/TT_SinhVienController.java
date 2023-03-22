@@ -1,6 +1,7 @@
 package root.quanlyktx.controller.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.model.ThongTinSV;
 import root.quanlyktx.service.HopDongKTXService;
@@ -24,5 +25,9 @@ public class TT_SinhVienController {
         return new ThongTinSV(studentService.getInfo(MSSV),date, Date.valueOf(""),false );
     }
 
+    @GetMapping("/{mssv}")
+    private ResponseEntity<?> getInfoStudent(@PathVariable("mssv") String mssv){
+        return ResponseEntity.ok(studentService.getStudentByUsername(mssv));
+    }
 
 }

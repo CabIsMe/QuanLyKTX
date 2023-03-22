@@ -22,4 +22,6 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     void deleteAllByNgayLamDonBeforeAndTrangThaiFalse(Date date);
     boolean existsByIdTerm(Integer idTerm);
     HopDongKTX findHopDongKTXByMSSVAndTerm_NgayKetThucAfter(String mssv,Date date);
+    List<HopDongKTX> findAllByTerm_Id(Integer idTerm);
+    List<HopDongKTX> findAllByIdPhongKTXAndTerm_Id(Integer idPhongKTX,Integer idTerm);
 }
