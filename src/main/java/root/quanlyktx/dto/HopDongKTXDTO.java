@@ -10,7 +10,8 @@ import root.quanlyktx.entity.Term;
 import java.util.Date;
 
 @Data
-//@AllArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class HopDongKTXDTO {
     private Integer id;
@@ -24,7 +25,6 @@ public class HopDongKTXDTO {
     private PhongKTXDTO phongKTX;
     private TermDTO term;
 
-    public HopDongKTXDTO(){}
     public HopDongKTXDTO(Integer idPhongKTX, String MSSV) {
         this.idPhongKTX = idPhongKTX;
         this.MSSV = MSSV;

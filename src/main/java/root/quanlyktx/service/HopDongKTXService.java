@@ -54,7 +54,7 @@ public class HopDongKTXService {
 
     public List<HopDongKTXDTO> getAll() {
         List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
-
+        logger.debug("OKLA");
         return hopDongKTXList.stream().map(hopDongKTX -> modelMapper.map(hopDongKTX, HopDongKTXDTO.class)).collect(Collectors.toList());
     }
 

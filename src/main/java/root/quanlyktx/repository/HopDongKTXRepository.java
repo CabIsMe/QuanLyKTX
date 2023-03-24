@@ -25,4 +25,5 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     List<HopDongKTX> findAllByTerm_Id(Integer idTerm);
     List<HopDongKTX> findAllByIdPhongKTXAndTerm_Id(Integer idPhongKTX,Integer idTerm);
     boolean getHopDongKTXByMSSVAndTrangThaiTrue(String MSSV);
+    boolean existsByMSSV(String MSSV);
 }

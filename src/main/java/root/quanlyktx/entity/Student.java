@@ -24,16 +24,17 @@ public class Student {
     private String SDT;
     private String mail;
     private String password;
-    @Column(name = "phan_quyen")
-    private Integer role_id;
+//    @Column(name = "phan_quyen")
+//    private Integer role_id;
     @Column(name = "trang_thai")
     private boolean status;
     @ManyToOne()
     @JoinColumn(name="phan_quyen", referencedColumnName = "id", insertable = false, updatable = false)
     private Role role;
 
+
     @JsonIgnore
-    @OneToMany()
+    @OneToMany(mappedBy = "student")
     private List<HopDongKTX> hopDongKTXList;
 
     public List<HopDongKTX> getHopDongKTXList() {
@@ -59,13 +60,13 @@ public class Student {
     public Role getRole() {
         return role;
     }
-    public Integer getRole_id() {
-        return role_id;
-    }
-
-    public void setRole_id(Integer role_id) {
-        this.role_id = role_id;
-    }
+//    public Integer getRole_id() {
+//        return role_id;
+//    }
+//
+//    public void setRole_id(Integer role_id) {
+//        this.role_id = role_id;
+//    }
     public Student() {
     }
 

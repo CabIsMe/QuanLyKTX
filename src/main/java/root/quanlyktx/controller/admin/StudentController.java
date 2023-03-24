@@ -6,6 +6,7 @@ import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.service.StudentService;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/student")
@@ -17,4 +18,9 @@ public class StudentController {
 
     @GetMapping("/search")
     public List<StudentDto> search(@RequestParam String keyWord){ return studentService.getListByTitle(keyWord);}
+
+    @GetMapping("/add-students")
+    public boolean addStudents() throws ExecutionException, InterruptedException{
+        return studentService.addNewStudent();
+    }
 }
