@@ -14,6 +14,7 @@ import root.quanlyktx.entity.OTP;
 import root.quanlyktx.entity.Student;
 import root.quanlyktx.model.AccountAndOtp;
 import root.quanlyktx.model.PasswordUpdating;
+import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.service.OtpService;
 import root.quanlyktx.userdetail.HandleStudentDetail;
 import root.quanlyktx.jwt.JwtResponse;
@@ -40,6 +41,9 @@ public class AuthController {
     @Autowired
     private OtpService otpService;
 
+    @Autowired
+    private HopDongKTXRepository hopDongKTXRepository;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody Student student) {
         Authentication authentication = authenticationManager.authenticate(
@@ -47,6 +51,10 @@ public class AuthController {
 
         Student student1=studentService.getStudentByUsername(student.getUsername());
         if(!student1.isStatus()){
+            if(hopDongKTXRepository.existsByMSSV(student1.getUsername())){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Account not accessible");
+            }
             try {
                 otpService.sendOTP(student1);
             } catch (Exception e) {

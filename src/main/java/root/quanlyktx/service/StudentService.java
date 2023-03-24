@@ -13,10 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.dto.StudentDto;
 
 import root.quanlyktx.entity.Student;
+import root.quanlyktx.firebase.FBStudentService;
 import root.quanlyktx.model.PasswordUpdating;
 import root.quanlyktx.repository.StudentRepository;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +32,8 @@ public class StudentService {
     private PasswordEncoder encoder;
     @Autowired
     private OtpService otpService;
+    @Autowired
+    private FBStudentService fbStudentService;
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
 
@@ -45,26 +50,26 @@ public class StudentService {
                  .collect(Collectors.toList());
      }
 
-     public StudentDto updateSinhVien(String MSSV, StudentDto studentDto){
-
-         if (studentRepository.existsById(MSSV)){
-             try{
-                 Student student_root = studentRepository.getReferenceById(MSSV);
-                 student_root.setHoTen(studentDto.getHoTen());
-                 student_root.setGioiTinh(studentDto.isGioiTinh());
-                 student_root.setNgaySinh(studentDto.getNgaySinh());
-                 student_root.setCMND(studentDto.getCMND());
-                 student_root.setSDT(studentDto.getSDT());
-                 student_root.setMail(studentDto.getMail());
-                 studentRepository.save(student_root);
-                 return modelMapper.map(student_root, StudentDto.class);
-             }
-             catch (Exception e){
-                 e.printStackTrace();
-             }
-         }
-         return null;
-     }
+//     public StudentDto updateSinhVien(String MSSV, StudentDto studentDto){
+//
+//         if (studentRepository.existsById(MSSV)){
+//             try{
+//                 Student student_root = studentRepository.getReferenceById(MSSV);
+//                 student_root.setHoTen(studentDto.getHoTen());
+//                 student_root.setGioiTinh(studentDto.isGioiTinh());
+//                 student_root.setNgaySinh(studentDto.getNgaySinh());
+//                 student_root.setCMND(studentDto.getCMND());
+//                 student_root.setSDT(studentDto.getSDT());
+//                 student_root.setMail(studentDto.getMail());
+//                 studentRepository.save(student_root);
+//                 return modelMapper.map(student_root, StudentDto.class);
+//             }
+//             catch (Exception e){
+//                 e.printStackTrace();
+//             }
+//         }
+//         return null;
+//     }
     @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public ResponseEntity<?> registerStudent(Student std) {
         if(studentRepository.existsById(std.getUsername())){
@@ -131,4 +136,26 @@ public class StudentService {
 //        }
         return students.stream().map(content -> modelMapper.map(content,StudentDto.class)).collect(Collectors.toList());
     }
+
+    public boolean addNewStudent() throws ExecutionException, InterruptedException {
+        if(fbStudentService.loadAllStudentFromFB().isEmpty()){
+            return false;
+        }
+        List<StudentDto> studentDtoList=fbStudentService.loadAllStudentFromFB();
+        List<Student> studentList= studentDtoList.stream()
+                .map(studentDto -> modelMapper.map(studentDto, Student.class))
+                .collect(Collectors.toList());
+        studentList.forEach(student ->
+        {
+//-------------Tạo data giả
+            student.setCMND("123456789");
+            student.setSDT("0123456789");
+            student.setNgaySinh(Date.valueOf("2001-02-02"));
+            student.setMail("n19dccn018@student.ptithcm.edu.vn");
+//-----------------------
+            studentRepository.save(student);
+        });
+        return true;
+    }
+
 }
