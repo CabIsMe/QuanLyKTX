@@ -182,9 +182,9 @@ public class HopDongKTXService {
         HopDongKTX hopDongKTX =optional.get();
         LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(hopDongKTX.getPhongKTX().getIdLoaiKTX());
         Student student = studentRepository.findByUsername(mssv);
-        LocalDate dataStart = hopDongKTX.getTerm().getNgayMoDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateStart = hopDongKTX.getTerm().getNgayMoDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateEnd = hopDongKTX.getTerm().getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        Period period = Period.between(dataStart,dateEnd);
+        Period period = Period.between(dateStart,dateEnd);
         int totalMonthPayment = period.getMonths()+1;
         Double total = loaiKTX.getGiaPhong()*totalMonthPayment;
         ViewContractRoom viewContractRoom = new ViewContractRoom(modelMapper.map(hopDongKTX,HopDongKTXDTO.class),
@@ -205,10 +205,16 @@ public class HopDongKTXService {
             List<ViewContractRoomList> viewContractRoomList = new ArrayList<>();
             String fullName = "";
             Double total;
+            LocalDate dateStart;
+            LocalDate dateEnd;
+            Period period;
             int totalMonthPayment;
             for (HopDongKTXDTO hopDongKTXDTO : hopDongKTXDTOList){
                 fullName = studentRepository.findByUsername(hopDongKTXDTO.getMSSV()).getUsername();
-                totalMonthPayment = (hopDongKTXDTO.getTerm().getNgayKetThuc().getMonth()-hopDongKTXDTO.getTerm().getNgayMoDangKy().getMonth())+1;
+                dateStart = hopDongKTXDTO.getTerm().getNgayMoDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                dateEnd = hopDongKTXDTO.getTerm().getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                period = Period.between(dateStart,dateEnd);
+                totalMonthPayment = period.getMonths()+1;
                 total = hopDongKTXDTO.getPhongKTX().getLoaiKTX().getGiaPhong()*totalMonthPayment;
                 viewContractRoomList.add(new ViewContractRoomList(hopDongKTXDTO,fullName,total));
             }
