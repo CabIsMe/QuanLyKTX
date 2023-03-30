@@ -1,26 +1,40 @@
 package root.quanlyktx.firebase;
 
+import org.apache.commons.io.IOUtils;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.Student;
+import root.quanlyktx.service.HopDongKTXService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.util.concurrent.ExecutionException;
 
 @RestController
+@RequestMapping("/firebase/")
 public class FBController {
+    private static final Logger logger = LoggerFactory.getLogger(FBController.class);
+
     @Autowired
     FBStudentService fbStudentService;
-    @PostMapping("/createInFirebase")
+
+    @Autowired
+    IImageService imageService;
+    @PostMapping("createInFirebase")
     public String createPatient(@RequestBody Student student ) throws InterruptedException, ExecutionException {
         try{
             Firestore dbFirestore = FirestoreClient.getFirestore();
@@ -32,7 +46,7 @@ public class FBController {
         }
     }
 
-    @GetMapping("/getFirebase")
+    @GetMapping("getFirebase")
 
     public Student getStudentInFB() throws InterruptedException, ExecutionException{
         Firestore dbFirestore = FirestoreClient.getFirestore();
@@ -52,4 +66,28 @@ public class FBController {
     List<StudentDto> loadAllStudent() throws InterruptedException, ExecutionException{
        return fbStudentService.loadAllStudentFromFB();
     }
+
+    @PostMapping("upload-image")
+    public ResponseEntity<?> create(@RequestParam(name = "file") MultipartFile[] files) {
+
+        for (MultipartFile file : files) {
+
+            try {
+
+                String fileName = imageService.save(file);
+
+                String imageUrl = imageService.getImageUrl(fileName);
+                System.out.println(imageUrl);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return ResponseEntity.ok().build();
+    }
+//    @GetMapping("getlink-image")
+//    public String getLinkImg(){
+//        return imageService.getImageUrl()
+//    }
 }
