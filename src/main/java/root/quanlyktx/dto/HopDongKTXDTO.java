@@ -19,10 +19,12 @@ public class HopDongKTXDTO {
     private String MSSV;
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayLamDon;
+    private Double total;
     private boolean trangThai;
     private Integer idTerm;
     @JsonIgnore
     private PhongKTXDTO phongKTX;
+    @JsonIgnore
     private TermDTO term;
 
     public HopDongKTXDTO(Integer idPhongKTX, String MSSV) {
