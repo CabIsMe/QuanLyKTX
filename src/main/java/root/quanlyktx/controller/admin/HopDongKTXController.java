@@ -19,9 +19,14 @@ public class HopDongKTXController {
     @GetMapping("/")
     public List<HopDongKTXDTO> getAll(){ return hopDongKTXService.getAll();}
 
-    @GetMapping("/list")
-    public ResponseEntity<?> getViewContractRoomList(@RequestParam(name = "idphongktx") Integer idPhongKTX,@RequestParam(name = "idterm") Integer idTerm){
-        return hopDongKTXService.getViewContractRoomList(idPhongKTX,idTerm);
+    @GetMapping("/list/{numpage}")
+    public ResponseEntity<?> getViewContractRoomList(@PathVariable("numpage") Integer numPage,@RequestParam(name = "idphongktx") Integer idPhongKTX,@RequestParam(name = "idterm") Integer idTerm){
+        return hopDongKTXService.getViewContractRoomList(numPage,idPhongKTX,idTerm);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<?> updateStatusContract(@RequestParam Integer idHopDong){
+        return hopDongKTXService.updateStatusContract(idHopDong);
     }
 
     @GetMapping("/{id}")
