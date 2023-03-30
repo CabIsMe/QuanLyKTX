@@ -11,7 +11,6 @@ import root.quanlyktx.service.HopDongKTXService;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @EnableScheduling
-
 //@SpringBootApplication
 public class QuanLyKtxApplication {
     public static void main(String[] args) {
