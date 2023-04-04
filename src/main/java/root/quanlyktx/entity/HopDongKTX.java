@@ -117,11 +117,10 @@ public class HopDongKTX {
 
     public HopDongKTX(){}
 
-    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, Double tongTien, Integer idTerm) {
+    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, Integer idTerm) {
         this.idPhongKTX = idPhongKTX;
         this.MSSV = MSSV;
         this.ngayLamDon = ngayLamDon;
-        this.tongTien = tongTien;
         this.idTerm=idTerm;
     }
 
