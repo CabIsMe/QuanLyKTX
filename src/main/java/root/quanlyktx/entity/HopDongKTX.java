@@ -23,6 +23,8 @@ public class HopDongKTX {
     @Column(name = "ngay_lam_don")
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayLamDon;
+    @Column(name = "total")
+    private Double total;
     @Column(name = "trang_thai")
     private boolean trangThai;
     @Column(name = "id_term")
@@ -85,6 +87,13 @@ public class HopDongKTX {
         this.ngayLamDon = ngayLamDon;
     }
 
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
 
     public boolean isTrangThai() {
         return trangThai;
@@ -108,10 +117,11 @@ public class HopDongKTX {
 
     public HopDongKTX(){}
 
-    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, Integer idTerm) {
+    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon,Double total, Integer idTerm) {
         this.idPhongKTX = idPhongKTX;
         this.MSSV = MSSV;
         this.ngayLamDon = ngayLamDon;
+        this.total = total;
         this.idTerm=idTerm;
     }
 
