@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.entity.OTP;
 import root.quanlyktx.entity.Student;
 import root.quanlyktx.model.AccountAndOtp;
-import root.quanlyktx.model.PasswordUpdating;
+import root.quanlyktx.model.PasswordEditing;
 
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.service.OtpService;
@@ -121,11 +121,11 @@ public class AuthController {
     }
 
     @PostMapping("change-password")
-    public boolean changePass(@RequestBody PasswordUpdating passwordUpdating){
+    public boolean changePass(@RequestBody PasswordEditing passwordEditing){
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(passwordUpdating.getUsername(), passwordUpdating.getOldPassword()));
+                new UsernamePasswordAuthenticationToken(passwordEditing.getUsername(), passwordEditing.getOldPassword()));
         if(!authentication.isAuthenticated())
             return false;
-        return studentService.changePassword(passwordUpdating);
+        return studentService.changePassword(passwordEditing);
     }
 }

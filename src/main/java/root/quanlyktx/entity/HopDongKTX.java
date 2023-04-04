@@ -12,7 +12,6 @@ import java.util.Date;
 @Table(name = "hop_dong_KTX")
 @ToString
 public class HopDongKTX {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -114,5 +113,10 @@ public class HopDongKTX {
         this.MSSV = MSSV;
         this.ngayLamDon = ngayLamDon;
         this.idTerm=idTerm;
+    }
+
+    public HopDongKTX(String MSSV, Integer idTerm) {
+        this.MSSV = MSSV;
+        this.idTerm = idTerm;
     }
 }

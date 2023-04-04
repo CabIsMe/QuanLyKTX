@@ -51,14 +51,7 @@ public class PhongKTXController {
         }
         return ResponseEntity.ok().body(phongKTXService.getAllByLoaiPhong(id));
     }
-//    @GetMapping("/{id}/lastmonth")
-//    PhongKTX fndByIdLastMonth(@PathVariable("id") Integer id){
-//        PhongKTX phongKTX_root =phongKTXService.findById(id);
-//        PhieuNuocKTX phieuNuocKTX =
-//        phongKTX_root.setPhieuNuocKTXList();
-//
-//        return phongKTXService.findById(id);
-//    }
+
 
     @GetMapping("/timkiem")
     public PhongKTXDTO search(@RequestParam Integer id){ return  phongKTXService.getById(id);}

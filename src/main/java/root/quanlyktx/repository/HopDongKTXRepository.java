@@ -21,13 +21,14 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     List <HopDongKTX> findAllByMSSV(String MSSV);
     HopDongKTX getHopDongKTXById(Integer id);
     boolean existsByIdTermAndMSSV(Integer idTerm, String MSSV);
+    boolean existsByIdTermAndMSSVAndTrangThaiTrue(Integer idTerm, String MSSV);
     boolean existsById(Integer idHopDong);
     List <HopDongKTX> findAllByNgayLamDonBeforeAndTrangThaiFalse(Date date);
-    void deleteAllByNgayLamDonBeforeAndTrangThaiFalse(Date date);
     boolean existsByIdTerm(Integer idTerm);
     HopDongKTX findHopDongKTXByMSSVAndTerm_NgayKetThucAfter(String mssv,Date date);
     List<HopDongKTX> findAllByTerm_Id(Integer idTerm);
     List<HopDongKTX> findByIdPhongKTXAndTerm_IdOrderByNgayLamDonDesc(Integer idPhongKTX, Integer idTerm, Pageable pageable);
     boolean getHopDongKTXByMSSVAndTrangThaiTrue(String MSSV);
     boolean existsByMSSV(String MSSV);
+    boolean existsByIdPhongKTXAndIdTermAndTrangThaiTrue(Integer idPhong, Integer idTerm);
 }

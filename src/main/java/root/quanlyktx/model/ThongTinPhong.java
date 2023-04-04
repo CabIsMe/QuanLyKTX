@@ -6,6 +6,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ThongTinPhong {
     //bo sung them ten loai phong
     private Integer id;

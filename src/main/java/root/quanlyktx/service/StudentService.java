@@ -14,7 +14,7 @@ import root.quanlyktx.dto.StudentDto;
 
 import root.quanlyktx.entity.Student;
 import root.quanlyktx.firebase.FBStudentService;
-import root.quanlyktx.model.PasswordUpdating;
+import root.quanlyktx.model.PasswordEditing;
 import root.quanlyktx.repository.StudentRepository;
 
 import java.sql.Date;
@@ -102,11 +102,11 @@ public class StudentService {
             e.printStackTrace();
         }
     }
-    public boolean changePassword(PasswordUpdating passwordUpdating){
-        Student student1=studentRepository.findByUsername(passwordUpdating.getUsername());
-        if(passwordUpdating.getNewPassword()==null)
+    public boolean changePassword(PasswordEditing passwordEditing){
+        Student student1=studentRepository.findByUsername(passwordEditing.getUsername());
+        if(passwordEditing.getNewPassword()==null)
             return false;
-        student1.setPassword(encoder.encode(passwordUpdating.getNewPassword()));
+        student1.setPassword(encoder.encode(passwordEditing.getNewPassword()));
         studentRepository.save(student1);
         return true;
     }
