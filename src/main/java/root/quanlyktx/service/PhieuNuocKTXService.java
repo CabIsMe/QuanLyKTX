@@ -4,10 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-//import root.quanlyktx.entity.GiaNuocTheoThang;
 import root.quanlyktx.dto.GiaNuocTheoThangDTO;
 import root.quanlyktx.dto.PhieuNuocKTXDTO;
 import root.quanlyktx.entity.*;
@@ -18,11 +15,8 @@ import root.quanlyktx.repository.PhieuNuocKTXRepository;
 
 import java.time.YearMonth;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 @Service
-@EnableScheduling
 public class PhieuNuocKTXService {
 
     @Autowired
@@ -40,20 +34,6 @@ public class PhieuNuocKTXService {
     public List<PhieuNuocKTX> getAll(){return phieuNuocKTXRepository.findAll();}
     public PhieuNuocKTX findById(Integer id){ return phieuNuocKTXRepository.findById(id).get();}
 
-//    public ResponseEntity<?> addPhieuNuocKTX(PhieuNuocKTXDTO phieuNuocKTXDTO){
-//        GiaNuocTheoThang giaNuocTheoThang = new GiaNuocTheoThang(phieuNuocKTXDTO.getGiaNuocTheoThang().getThang(),
-//                                                                phieuNuocKTXDTO.getGiaNuocTheoThang().getNam(),
-//                                                                phieuNuocKTXDTO.getGiaNuocTheoThang().getGiaNuoc());
-//        try {
-//            giaNuocTheoThangRepository.save(giaNuocTheoThang);
-//            PhieuNuocKTX phieuNuocKTX = new PhieuNuocKTX(phieuNuocKTXDTO.getMaSoKTX(),giaNuocTheoThang,phieuNuocKTXDTO.getLuongNuocTieuThu(),false);
-//            phieuNuocKTXRepository.save(phieuNuocKTX);
-//            return ResponseEntity.ok().body("success");
-//        }catch (Exception e){
-//            e.getStackTrace();
-//            return ResponseEntity.badRequest().body("error, save fail");
-//        }
-//    }
     public ResponseEntity<?> updatePhieuNuocKTX(PhieuNuocKTXDTO phieuNuocKTXDTO){
         if(!phieuNuocKTXDTO.isTrangThai()) phieuNuocKTXDTO.setTrangThai(true);
         else{
@@ -69,25 +49,6 @@ public class PhieuNuocKTXService {
             return ResponseEntity.badRequest().body("save fail");
         }
     }
-
-//    public List<ViewBills> getWaterBills(String mssv){
-//        Optional<HopDongKTX> hopDongKTX = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTrangThaiTrue(mssv));
-//        if(hopDongKTX.isEmpty()) return Collections.emptyList();
-//        Date dateStart = hopDongKTX.get().getNgayLamDon();
-//        Integer month = dateStart.getMonth()+1;
-//        Integer year = dateStart.getYear()+1900;
-//        List<PhieuNuocKTX> phieuNuocKTXList = phieuNuocKTXRepository.findAllByMaSoKTXAndGiaNuocTheoThang_ThangGreaterThanEqualAndGiaNuocTheoThang_NamGreaterThanEqual(hopDongKTX.get().getIdPhongKTX(),month,year);
-////        List<PhieuNuocKTX> phieuNuocKTXList = hopDongKTX.get().getPhongKTX().getPhieuNuocKTXList();
-//        if(phieuNuocKTXList.isEmpty()) return Collections.emptyList();
-//        List<PhieuNuocKTXDTO> phieuNuocKTXDTOList = phieuNuocKTXList.stream().map(phieuNuocKTX -> modelMapper.map(phieuNuocKTX,PhieuNuocKTXDTO.class)).collect(Collectors.toList());
-//        List<Optional<PhieuNuocKTXDTO>> optionalPhieuNuocKTXDTOList = phieuNuocKTXDTOList.stream().map(phieuNuocKTXDTO -> Optional.ofNullable(phieuNuocKTXDTO)).collect(Collectors.toList());
-////        Double total = phieuNuocKTXDTO.getGiaNuocTheoThang().getGiaNuoc()*phieuNuocKTXDTO;
-//        List<ViewBills> viewBillsList = new ArrayList<>();
-//        for(Optional<PhieuNuocKTXDTO> phieuNuocKTXDTO: optionalPhieuNuocKTXDTOList){
-//            viewBillsList.add(new ViewBills(phieuNuocKTXDTO,phieuNuocKTXDTO.get().getGiaNuocTheoThang().getGiaNuoc()*phieuNuocKTXDTO.get().getLuongNuocTieuThu()));
-//        }
-//        return viewBillsList;
-//    }
 
     public ResponseEntity<?> getWaterBills(String mssv){
         Date currentDate = new Date();
@@ -118,7 +79,7 @@ public class PhieuNuocKTXService {
     }
 
     public ResponseEntity<?> getPhieuNuocList(Integer idPhongKTX, Integer year) {
-        List<PhieuNuocKTX> phieuNuocKTXList = phieuNuocKTXRepository.findAllByMaSoKTXAndAndGiaNuocTheoThang_NamOrderByGiaNuocTheoThang_ThangDesc(idPhongKTX,year);
+        List<PhieuNuocKTX> phieuNuocKTXList = phieuNuocKTXRepository.findAllByMaSoKTXAndGiaNuocTheoThang_NamOrderByGiaNuocTheoThang_ThangDesc(idPhongKTX,year);
         if (phieuNuocKTXList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("empty");
         else{
             List<PhieuNuocKTXDTO> phieuNuocKTXDTOList = new ArrayList<>();
@@ -136,16 +97,5 @@ public class PhieuNuocKTXService {
         }
     }
 
-    @Scheduled(cron = "0 0 0 2 * ?")
-    public ResponseEntity<?> addPhieuNuoc() throws ExecutionException,InterruptedException {
-        List<PhieuNuocKTXDTO> phieuNuocKTXDTOList = fbPhieuDienNuocService.loadAllPhieuNuocFromFB();
-        if (phieuNuocKTXDTOList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("empty");
-        else {
-            List<PhieuNuocKTX> phieuNuocKTX = phieuNuocKTXDTOList.stream()
-                    .map(phieuNuocKTXDTO -> modelMapper.map(phieuNuocKTXDTO,PhieuNuocKTX.class))
-                    .collect(Collectors.toList());
-            phieuNuocKTX.forEach(phieuNuocKTX1 -> phieuNuocKTXRepository.save(phieuNuocKTX1));
-            return ResponseEntity.ok().body("success");
-        }
-    }
+
 }

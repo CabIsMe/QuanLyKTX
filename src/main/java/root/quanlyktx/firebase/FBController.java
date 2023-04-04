@@ -17,6 +17,7 @@ import root.quanlyktx.entity.Student;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.Student;
+import root.quanlyktx.model.InputBillPerMonth;
 import root.quanlyktx.model.ThongTinPhong;
 import root.quanlyktx.service.HopDongKTXService;
 
@@ -85,14 +86,6 @@ public class FBController {
        return fbStudentService.loadAllStudentFromFB();
     }
 
-    @GetMapping("getAllPhieuNuocÌnFB")
-    List<PhieuNuocKTXDTO> loadAllPhieuNuoc() throws InterruptedException,ExecutionException{
-        return fbPhieuDienNuocService.loadAllPhieuNuocFromFB();
-    }
-    @GetMapping("getAllPhieuDienInFB")
-    List<PhieuDienKTXDTO> loadAllPhieuDien() throws InterruptedException,ExecutionException{
-        return fbPhieuDienNuocService.loadAllPhieuDienFromFB();
-    }
     @PostMapping("upload-image")
     public ResponseEntity<?> create(@ModelAttribute ThongTinPhong thongTinPhong, @RequestParam(name = "files") MultipartFile[] files) {
         System.out.println(thongTinPhong.toString());

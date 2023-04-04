@@ -25,8 +25,8 @@ public class PhieuDienKTXController {
         return phieuDienKTXService.updateStatus(phieuDienKTXDTO);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addPhieuDien() throws ExecutionException, InterruptedException {
-        return phieuDienKTXService.addPhieuDien();
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity<?> addPhieuDien() throws ExecutionException, InterruptedException {
+//        return phieuDienKTXService.addPhieuDien();
+//    }
 }

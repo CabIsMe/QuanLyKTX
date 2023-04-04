@@ -5,24 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.GiaDienTheoThangDTO;
-import root.quanlyktx.dto.GiaNuocTheoThangDTO;
 import root.quanlyktx.dto.PhieuDienKTXDTO;
-import root.quanlyktx.dto.PhieuNuocKTXDTO;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.PhieuDienKTX;
-import root.quanlyktx.entity.PhieuNuocKTX;
 import root.quanlyktx.firebase.FBPhieuDienNuocService;
-import root.quanlyktx.model.ViewBills;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.PhieuDienKTXRepository;
 
 import java.time.YearMonth;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -96,19 +89,6 @@ public class PhieuDienKTXService {
         }catch (Exception e){
             e.getStackTrace();
             return ResponseEntity.badRequest().body("save fail");
-        }
-    }
-
-    @Scheduled(cron = "0 0 0 2 * ?")
-    public ResponseEntity<?> addPhieuDien() throws ExecutionException,InterruptedException {
-        List<PhieuDienKTXDTO> phieuDienKTXDTOList = fbPhieuDienNuocService.loadAllPhieuDienFromFB();
-        if (phieuDienKTXDTOList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("empty");
-        else {
-            List<PhieuDienKTX> phieuDienKTX = phieuDienKTXDTOList.stream()
-                    .map(phieuDienKTXDTO -> modelMapper.map(phieuDienKTXDTO,PhieuDienKTX.class))
-                    .collect(Collectors.toList());
-            phieuDienKTX.forEach(phieuDienKTX1 -> phieuDienKTXRepository.save(phieuDienKTX1));
-            return ResponseEntity.ok().body("success");
         }
     }
 }

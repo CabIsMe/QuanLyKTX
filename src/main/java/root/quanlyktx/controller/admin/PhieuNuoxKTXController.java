@@ -25,11 +25,6 @@ public class PhieuNuoxKTXController {
         return phieuNuocKTXService.getPhieuNuocList(idPhongKTX,year);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addPhieuNuoc() throws ExecutionException, InterruptedException {
-        return phieuNuocKTXService.addPhieuNuoc();
-    }
-
     @PostMapping("/")
         public ResponseEntity<?> updateStatus(@RequestBody PhieuNuocKTXDTO phieuNuocKTXDTO){
         return phieuNuocKTXService.updatePhieuNuocKTX(phieuNuocKTXDTO);
