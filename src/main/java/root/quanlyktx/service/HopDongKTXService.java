@@ -4,12 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.dto.HopDongKTXDTO;
@@ -168,28 +166,29 @@ public class HopDongKTXService {
 
 
 
-    public List<HopDongKTX> getHopDongTemp(String mssv) {
-
-        return hopDongKTXRepository.findAllByMSSV(mssv);
-    }
+//    public ResponseEntity<?> getHopDongTemp(HopDongKTXDTO hopDongKTXDTO) {
+//        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAllByMSSV(hopDongKTXDTO.getMSSV());
+//        System.out.println(hopDongKTXList.stream().toString());
+//        return ResponseEntity.ok(hopDongKTXList);
+//    }
 
     public ResponseEntity<?> getViewContractRoom(String mssv) {
-        Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayKetThucAfter(mssv, new Date()));
+        Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayMoDangKyBeforeAndTerm_NgayKetThucAfter(mssv, new Date(),new Date()));
         if (optional.isEmpty()) return ResponseEntity.badRequest().body("Empty");
         HopDongKTX hopDongKTX =optional.get();
         LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(hopDongKTX.getPhongKTX().getIdLoaiKTX());
         Student student = studentRepository.findByUsername(mssv);
-//        LocalDate dateStart = hopDongKTX.getTerm().getNgayMoDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        LocalDate dateEnd = hopDongKTX.getTerm().getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        Period period = Period.between(dateStart,dateEnd);
-//        int totalMonthPayment = period.getMonths()+1;
-//        Double total = loaiKTX.getGiaPhong()*totalMonthPayment;
+        LocalDate dateStart = hopDongKTX.getTerm().getNgayMoDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateEnd = hopDongKTX.getTerm().getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Period period = Period.between(dateStart,dateEnd);
+        int totalMonthPayment = period.getMonths()+1;
+        loaiKTX.setGiaPhong(hopDongKTX.getTongTien()/totalMonthPayment);
         ViewContractRoom viewContractRoom = new ViewContractRoom(modelMapper.map(hopDongKTX,HopDongKTXDTO.class),
                                                                 modelMapper.map(loaiKTX,LoaiKTXDto.class),
                                                                 modelMapper.map(student, StudentDto.class),
                                                                 new Date(hopDongKTX.getNgayLamDon().getTime()+hopDongKTX.getTerm().getHanDongPhi()*86400000),
                                                                 hopDongKTX.getTerm().getNgayKetThuc(),
-                                                                hopDongKTX.getTotal());
+                                                                hopDongKTX.getTongTien());
         return ResponseEntity.ok(viewContractRoom);
     }
 
@@ -214,17 +213,18 @@ public class HopDongKTXService {
 //                totalMonthPayment = period.getMonths()+1;
 //                total = hopDongKTXDTO.getPhongKTX().getLoaiKTX().getGiaPhong()*totalMonthPayment;
                 datePayment = new Date(hopDongKTXDTO.getNgayLamDon().getTime()+hopDongKTXDTO.getTerm().getHanDongPhi()*86400000);
-                viewContractRoomList.add(new ViewContractRoomList(hopDongKTXDTO,fullName,datePayment,hopDongKTXDTO.getTotal()));
+                viewContractRoomList.add(new ViewContractRoomList(hopDongKTXDTO,fullName,datePayment,hopDongKTXDTO.getTongTien()));
             }
             return ResponseEntity.ok(viewContractRoomList);
         }
     }
 
     public ResponseEntity<?> updateStatusContract(Integer idHopDong) {
-        if(!hopDongKTXRepository.existsById(idHopDong))
+        Optional<HopDongKTX> hopDongKTXOptional = Optional.ofNullable(hopDongKTXRepository.getHopDongKTXById(idHopDong));
+        if(!hopDongKTXOptional.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception, Not Found");
         else {
-            HopDongKTX hopDongKTX = hopDongKTXRepository.getHopDongKTXById(idHopDong);
+            HopDongKTX hopDongKTX = hopDongKTXOptional.get();
             Date datePayment = new Date(hopDongKTX.getNgayLamDon().getTime()+hopDongKTX.getTerm().getHanDongPhi()*86400000);
             if(new Date().compareTo(datePayment)>=0) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No edit contract status allow,because current date >= date payment");
             else

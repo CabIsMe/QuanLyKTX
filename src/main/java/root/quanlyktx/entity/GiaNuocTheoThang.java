@@ -63,6 +63,13 @@ public class GiaNuocTheoThang {
 //        this.phieuNuocKTXList = phieuNuocKTXList;
 //    }
 
+
+    public GiaNuocTheoThang(Integer thang, Integer nam, double giaNuoc) {
+        this.thang = thang;
+        this.nam = nam;
+        this.giaNuoc = giaNuoc;
+    }
+
     public GiaNuocTheoThang() {
     }
 }

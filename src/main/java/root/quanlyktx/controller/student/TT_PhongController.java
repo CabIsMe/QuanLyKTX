@@ -2,16 +2,11 @@ package root.quanlyktx.controller.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import root.quanlyktx.dto.HopDongKTXDTO;
-import root.quanlyktx.dto.LoaiKTXDto;
-import root.quanlyktx.dto.PhongKTXDTO;
-import root.quanlyktx.model.ViewInforRoom;
 import root.quanlyktx.model.ThongTinPhong;
 import root.quanlyktx.service.HopDongKTXService;
 import root.quanlyktx.service.LoaiKTXService;
 import root.quanlyktx.service.PhongKTXService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("api/student")

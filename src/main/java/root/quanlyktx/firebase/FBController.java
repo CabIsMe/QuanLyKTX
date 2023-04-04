@@ -1,6 +1,5 @@
 package root.quanlyktx.firebase;
 
-import org.apache.commons.io.IOUtils;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -10,16 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import root.quanlyktx.dto.PhieuDienKTXDTO;
+import root.quanlyktx.dto.PhieuNuocKTXDTO;
 import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.Student;
-import root.quanlyktx.service.HopDongKTXService;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 import java.util.concurrent.ExecutionException;
@@ -31,6 +25,8 @@ public class FBController {
 
     @Autowired
     FBStudentService fbStudentService;
+    @Autowired
+    FBPhieuDienNuocService fbPhieuDienNuocService;
 
     @Autowired
     IImageService imageService;
@@ -67,6 +63,14 @@ public class FBController {
        return fbStudentService.loadAllStudentFromFB();
     }
 
+    @GetMapping("getAllPhieuNuocÌnFB")
+    List<PhieuNuocKTXDTO> loadAllPhieuNuoc() throws InterruptedException,ExecutionException{
+        return fbPhieuDienNuocService.loadAllPhieuNuocFromFB();
+    }
+    @GetMapping("getAllPhieuDienInFB")
+    List<PhieuDienKTXDTO> loadAllPhieuDien() throws InterruptedException,ExecutionException{
+        return fbPhieuDienNuocService.loadAllPhieuDienFromFB();
+    }
     @PostMapping("upload-image")
     public ResponseEntity<?> create(@RequestParam(name = "file") MultipartFile[] files) {
 

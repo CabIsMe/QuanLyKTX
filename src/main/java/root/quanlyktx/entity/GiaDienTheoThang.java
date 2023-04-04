@@ -54,6 +54,12 @@ public class GiaDienTheoThang {
         this.giaDien = giaDien;
     }
 
+    public GiaDienTheoThang(Integer thang, Integer nam, double giaDien) {
+        this.thang = thang;
+        this.nam = nam;
+        this.giaDien = giaDien;
+    }
+
     public GiaDienTheoThang() {
     }
 }
