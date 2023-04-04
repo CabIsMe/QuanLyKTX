@@ -8,8 +8,6 @@ public class PhieuNuocKTXDTO {
     private Integer id;
 
     private Integer maSoKTX;
-//    @Column(name = "id_don_gia")
-//    private Integer idDonGia;
 
     private Integer luongNuocTieuThu;
 

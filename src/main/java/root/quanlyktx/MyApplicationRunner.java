@@ -32,5 +32,6 @@ public class MyApplicationRunner implements ApplicationRunner {
 //            return;
 //        }
 //        hopDongKTXRepository.deleteAllByNgayLamDonBeforeAndTrangThaiFalse(dateExpired);
+
     }
 }

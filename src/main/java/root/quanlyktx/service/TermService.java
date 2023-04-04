@@ -10,6 +10,7 @@ import root.quanlyktx.entity.Term;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.TermRepository;
 
+import javax.annotation.PostConstruct;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +53,9 @@ public class TermService {
         }
         if(termRepository.existsByNgayKetThucDangKyAfter(termDTO.getNgayMoDangKy())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid");
+        }
+        if(termRepository.existsByNgayKetThucAfter(termDTO.getNgayKetThucDangKy())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid, 2 terms at the same time");
         }
         Term term=new Term(termDTO.getNgayMoDangKy(),termDTO.getNgayKetThucDangKy(),termDTO.getNgayKetThuc(),termDTO.getHanDongPhi());
         try{

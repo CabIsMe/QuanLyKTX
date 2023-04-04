@@ -14,6 +14,19 @@ import root.quanlyktx.dto.PhieuNuocKTXDTO;
 import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.Student;
 
+import root.quanlyktx.dto.LoaiKTXDto;
+import root.quanlyktx.dto.StudentDto;
+import root.quanlyktx.entity.Student;
+import root.quanlyktx.model.ThongTinPhong;
+import root.quanlyktx.service.HopDongKTXService;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.concurrent.ExecutionException;
@@ -30,6 +43,10 @@ public class FBController {
 
     @Autowired
     IImageService imageService;
+
+    @Autowired
+    FBBillService fbBillService;
+
     @PostMapping("createInFirebase")
     public String createPatient(@RequestBody Student student ) throws InterruptedException, ExecutionException {
         try{
@@ -41,6 +58,11 @@ public class FBController {
             return e.getMessage();
         }
     }
+
+//    @GetMapping("createAutoBills")
+//    public boolean createAutoBills() throws InterruptedException, ExecutionException{
+//        return fbBillService.createNewBillInFB();
+//    }
 
     @GetMapping("getFirebase")
 
@@ -72,10 +94,9 @@ public class FBController {
         return fbPhieuDienNuocService.loadAllPhieuDienFromFB();
     }
     @PostMapping("upload-image")
-    public ResponseEntity<?> create(@RequestParam(name = "file") MultipartFile[] files) {
-
+    public ResponseEntity<?> create(@ModelAttribute ThongTinPhong thongTinPhong, @RequestParam(name = "files") MultipartFile[] files) {
+        System.out.println(thongTinPhong.toString());
         for (MultipartFile file : files) {
-
             try {
 
                 String fileName = imageService.save(file);
@@ -90,6 +111,7 @@ public class FBController {
 
         return ResponseEntity.ok().build();
     }
+
 //    @GetMapping("getlink-image")
 //    public String getLinkImg(){
 //        return imageService.getImageUrl()
