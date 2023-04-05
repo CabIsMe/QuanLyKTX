@@ -17,13 +17,15 @@ public interface TermRepository extends JpaRepository<Term, Integer> {
     boolean existsByNgayKetThucDangKyAfter(Date d1);
     boolean existsByNgayKetThucAfter(Date date);
     Integer countByNgayKetThucDangKyAfter(Date d);
-    @Query("SELECT new root.quanlyktx.model.StudentInTerm(t.id,t.ngayMoDangKy,t.ngayKetThuc,COUNT(hd.id)) " +
-            "FROM HopDongKTX hd " +
-            "join Term t " +
-            "on hd.idTerm=t.id " +
-            "where hd.trangThai = true " +
-            "group by t.id,t.ngayMoDangKy,t.ngayKetThuc")
-    List<StudentInTerm> countStudentInTerm();
+    List<Term> findAllByNgayKetThucGreaterThanEqualAndAndNgayKetThucDangKyBefore(Date dateEnd,Date newDate);
+
+//    @Query("SELECT new root.quanlyktx.model.StudentInTerm(t.id,t.ngayMoDangKy,t.ngayKetThuc,COUNT(hd.id)) " +
+//            "FROM HopDongKTX hd " +
+//            "join Term t " +
+//            "on hd.idTerm=t.id " +
+//            "where hd.trangThai = true " +
+//            "group by t.id,t.ngayMoDangKy,t.ngayKetThuc")
+//    List<StudentInTerm> countStudentInTerm();
 
     default Term getTheNextTerm(){
         Date date=new Date();
