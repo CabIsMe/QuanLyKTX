@@ -300,4 +300,11 @@ public class HopDongKTXService {
             }
         }
     }
+
+    public ResponseEntity<?> getAmountStudentInTerm() {
+        List<StudentInTerm> studentInTerms = termRepository.countStudentInTerm();
+        studentInTerms.forEach(o-> System.out.println(o.getIdTerm()+o.getDateStart().toString()+o.getDateEnd().toString()+o.getAmountStudent()));
+        if(studentInTerms.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("empty");
+        else return ResponseEntity.ok(studentInTerms);
+    }
 }
