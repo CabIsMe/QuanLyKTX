@@ -20,15 +20,15 @@ import java.util.*;
 public class PhieuNuocKTXService {
 
     @Autowired
-    FBPhieuDienNuocService fbPhieuDienNuocService;
+    private FBPhieuDienNuocService fbPhieuDienNuocService;
     @Autowired
-    HopDongKTXRepository hopDongKTXRepository;
+    private HopDongKTXRepository hopDongKTXRepository;
     @Autowired
-    PhieuNuocKTXRepository phieuNuocKTXRepository;
+    private PhieuNuocKTXRepository phieuNuocKTXRepository;
     @Autowired
-    GiaNuocTheoThangRepository giaNuocTheoThangRepository;
+    private GiaNuocTheoThangRepository giaNuocTheoThangRepository;
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
 
     public List<PhieuNuocKTX> getAll(){return phieuNuocKTXRepository.findAll();}

@@ -13,9 +13,9 @@ import root.quanlyktx.service.PhongKTXService;
 @RequestMapping("api/thongke")
 public class ThongKeController {
     @Autowired
-    HopDongKTXService hopDongKTXService;
+    private HopDongKTXService hopDongKTXService;
     @Autowired
-    PhongKTXService phongKTXService;
+    private PhongKTXService phongKTXService;
 
     @GetMapping("/studentInTerm")
     public ResponseEntity<?> getAmountStudentInTerm(){

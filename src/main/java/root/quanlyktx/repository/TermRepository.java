@@ -25,6 +25,7 @@ public interface TermRepository extends JpaRepository<Term, Integer> {
             "group by t.id,t.ngayMoDangKy,t.ngayKetThuc")
     List<StudentInTerm> countStudentInTerm();
 
+
     default Term getTheNextTerm(){
         Date date=new Date();
         List<Term> terms= findAllByNgayMoDangKyAfter(date);

@@ -14,7 +14,7 @@ import root.quanlyktx.service.HopDongKTXService;
 @RequestMapping("api/student/contract")
 public class ContractRoomController {
     @Autowired
-    HopDongKTXService hopDongKTXService;
+    private HopDongKTXService hopDongKTXService;
 
     @PostMapping("/create")
     public boolean registerDormitory(@RequestBody InputContract inputContract){

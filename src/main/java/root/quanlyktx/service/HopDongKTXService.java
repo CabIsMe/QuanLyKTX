@@ -8,8 +8,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.dto.HopDongKTXDTO;
@@ -19,7 +17,6 @@ import root.quanlyktx.entity.*;
 import root.quanlyktx.model.*;
 import root.quanlyktx.repository.*;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -37,8 +34,6 @@ public class HopDongKTXService {
     private PhongKTXRepository phongKTXRepository;
     @Autowired
     private StudentRepository studentRepository;
-    @Autowired
-    private LoaiKTXService loaiKTXService;
     @Autowired
     private LoaiKTXRepository loaiKTXRepository;
     @Autowired
@@ -81,52 +76,16 @@ public class HopDongKTXService {
                 .collect(Collectors.toList());
     }
 
-    public Integer countHopDongInPhong(Integer idPhong) {
-        Date date= new Date();
-        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
-        if(term == null){
-            return -1;
-        }
-        return hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndIdTerm(idPhong, term.getId());
+
+
+
+    public Double amountTotal(Term term,LoaiKTX loaiKTX){
+        LocalDate dateStart = term.getNgayKetThucDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateEnd = term.getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Period period = Period.between(dateStart,dateEnd);
+        int totalMonthPayment = period.getMonths()+1;
+        return loaiKTX.getGiaPhong()*totalMonthPayment;
     }
-    public List<ThongTinPhong> thongTinPhongs(Integer idLoaiPhong){
-        LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
-        List<PhongKTX> phongKTXDTOList=phongKTXRepository .findAllByIdLoaiKTX(idLoaiPhong);
-
-        List<ThongTinPhong> thongTinPhongList= new ArrayList<>();
-        if(countHopDongInPhong(phongKTXDTOList.get(0).getId())==-1){
-            return null;
-        }
-        for (PhongKTX phongKTX: phongKTXDTOList) {
-
-            thongTinPhongList.add(new ThongTinPhong(phongKTX.getId(),loaiKTX.getGiaPhong(),
-                    loaiKTX.getSoGiuong()- countHopDongInPhong(phongKTX.getId())
-                    ,loaiKTX.getImage()));
-        }
-        if(thongTinPhongList.isEmpty())
-            return null;
-        return thongTinPhongList;
-    }
-    public ThongTinPhong thongTinPhong(Integer idLoaiPhong, Integer idPhong){
-        LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
-        Optional <PhongKTX> optional=phongKTXRepository.findById(idPhong);
-        if(optional.isEmpty())
-            return null;
-        PhongKTX phongKTX=optional.get();
-
-        return new ThongTinPhong(phongKTX.getId(),loaiKTX.getGiaPhong()
-                ,loaiKTX.getSoGiuong()-countHopDongInPhong(phongKTX.getId())
-                ,loaiKTX.getImage());
-    }
-
-
-//    public Double amountTotal(HopDongKTXDTO hopDongKTXDTO,LoaiKTX loaiKTX){
-//        LocalDate dateStart = hopDongKTXDTO.getTerm().getNgayMoDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        LocalDate dateEnd = hopDongKTXDTO.getTerm().getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        Period period = Period.between(dateStart,dateEnd);
-//        int totalMonthPayment = period.getMonths()+1;
-//        return loaiKTX.getGiaPhong()*totalMonthPayment;
-//    }
 
     public boolean createContract(InputContract inputContract){
         Date date= new Date();
@@ -140,7 +99,7 @@ public class HopDongKTXService {
             return false;
         }
         logger.info("check Room And Bed");
-        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findById(inputContract.getIdPhongKTX());
+        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findByIdAndTrangThaiTrue(inputContract.getIdPhongKTX());
         if(optionalPhongKTX.isEmpty())
             return false;
         PhongKTX phongKTX=optionalPhongKTX.get();
@@ -154,8 +113,8 @@ public class HopDongKTXService {
             logger.error("No more beds available");
             return false;
         }
-
-        HopDongKTX hopDongKTX=new HopDongKTX(inputContract.getIdPhongKTX(), inputContract.getMSSV(),date, term.getId());
+        Double total= amountTotal(term, loaiKTX);
+        HopDongKTX hopDongKTX=new HopDongKTX(inputContract.getIdPhongKTX(), inputContract.getMSSV(),date, term.getId(), total);
 
 //        Double total = amountTotal(hopDongKTXDTO,loaiKTX);
 //        HopDongKTX hopDongKTX=new HopDongKTX(hopDongKTXDTO.getIdPhongKTX(), hopDongKTXDTO.getMSSV(),date,total,term.getId());
@@ -167,6 +126,7 @@ public class HopDongKTXService {
             logger.error("Save failed");
             return false;
         }
+
         return true;
     }
 
@@ -180,7 +140,7 @@ public class HopDongKTXService {
             return ResponseEntity.badRequest().body("Students are not allowed to extend the contract");
         }
         // Check Exist contract at current Term of Student
-        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findById(inputContract.getIdPhongKTX());
+        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findByIdAndTrangThaiTrue(inputContract.getIdPhongKTX());
         if(optionalPhongKTX.isEmpty())
             return ResponseEntity.badRequest().body("This room didn't exist");
         // Check exist room
@@ -204,7 +164,8 @@ public class HopDongKTXService {
             return ResponseEntity.badRequest().body("Can't register at this time (3)");
         }
         // Check that the registration date is valid.
-        HopDongKTX hopDongKTX=new HopDongKTX(inputContract.getIdPhongKTX(), inputContract.getMSSV(),current, newTerm.getId());
+        Double total= amountTotal(newTerm, loaiKTX);
+        HopDongKTX hopDongKTX=new HopDongKTX(inputContract.getIdPhongKTX(), inputContract.getMSSV(),current, newTerm.getId(), total);
         try{
             hopDongKTXRepository.save(hopDongKTX);
 
@@ -214,8 +175,8 @@ public class HopDongKTXService {
         return ResponseEntity.ok(true);
     }
 
-    public boolean cancelContract(HopDongKTXDTO hopDongKTXDTO){
-
+    public boolean cancelContract(InputContract inputContract){
+//        HopDongKTX hopDongKTX= hopDongKTXRepository.findBy
         return true;
     }
 
