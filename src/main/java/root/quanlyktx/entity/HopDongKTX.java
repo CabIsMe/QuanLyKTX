@@ -125,6 +125,13 @@ public class HopDongKTX {
         this.idTerm=idTerm;
     }
 
+    public HopDongKTX(Integer idPhongKTX, String MSSV, Date ngayLamDon, Integer idTerm) {
+        this.idPhongKTX = idPhongKTX;
+        this.MSSV = MSSV;
+        this.ngayLamDon = ngayLamDon;
+        this.idTerm = idTerm;
+    }
+
     public HopDongKTX(String MSSV, Integer idTerm) {
         this.MSSV = MSSV;
         this.idTerm = idTerm;
