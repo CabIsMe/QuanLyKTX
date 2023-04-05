@@ -17,7 +17,7 @@ public class PhongKTX {
     @Column(name = "loai_KTX")
     private Integer idLoaiKTX;
     @Column(name = "trang_thai")
-    private boolean trang_thai;
+    private boolean trangThai;
 
     @OneToMany(mappedBy = "maSoKTX", fetch = FetchType.LAZY)
     private List<PhieuDienKTX> phieuDienKTXList;
@@ -88,11 +88,11 @@ public class PhongKTX {
         this.loaiKTX = loaiKTX;
     }
 
-    public boolean isTrang_thai() {
-        return trang_thai;
+    public boolean isTrangThai() {
+        return trangThai;
     }
 
-    public void setTrang_thai(boolean trang_thai) {
-        this.trang_thai = trang_thai;
+    public void setTrangThai(boolean trangThai) {
+        this.trangThai = trangThai;
     }
 }

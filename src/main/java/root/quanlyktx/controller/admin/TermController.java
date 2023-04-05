@@ -22,6 +22,11 @@ public class TermController {
         return termService.getAllTerm();
     }
 
+    @GetMapping("/combobox")
+    public List<TermDTO> comboboxTermHaveContract(@RequestParam(name = "status") boolean status){
+        return termService.getAllTermAccordingToStatusContract(status);
+    }
+
     @GetMapping("/search/")
     public TermDTO getSingle(@RequestParam Integer id){
         return termService.getSingleTerm(id);

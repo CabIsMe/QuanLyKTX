@@ -2,12 +2,18 @@ package root.quanlyktx.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.PhongKTXDTO;
+import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.repository.LoaiKTXRepository;
 import root.quanlyktx.repository.PhongKTXRepository;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,6 +84,25 @@ public class PhongKTXService {
         return phongKTXList.stream()
                 .map(phongKTX -> modelMapper.map(phongKTX, PhongKTXDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public List<Integer> getAllPhongHaveStudents(boolean status) {
+        List<PhongKTX> phongKTXList = phongKTXRepository.findAllByTrangThaiTrue();
+        List<Integer> idPhong = new ArrayList<>();
+        if (phongKTXList.isEmpty()){
+            idPhong.add(0);
+            return idPhong;
+        }
+        for(PhongKTX phongKTX : phongKTXList){
+            for (HopDongKTX hopDongKTX : phongKTX.getHopDongKTXList()){
+                if(hopDongKTX.isTrangThai()==status){
+                    idPhong.add(phongKTX.getId());
+                    break;
+                }
+            }
+        }
+        if (idPhong.isEmpty()) idPhong.add(0);
+        return idPhong;
     }
 
 

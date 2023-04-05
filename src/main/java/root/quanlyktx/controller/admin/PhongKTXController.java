@@ -39,6 +39,11 @@ public class PhongKTXController {
     @GetMapping("/")
     public List <PhongKTXDTO> getAll() { return phongKTXService.getALL();}
 
+    @GetMapping("/combobox")
+    public List<Integer> comboboxPhongHaveStudents(@RequestParam("status") boolean status) {
+        return phongKTXService.getAllPhongHaveStudents(status);
+    }
+
     @GetMapping("/{id}")
     public PhongKTXDTO getById(@PathVariable("id") Integer id){
         return phongKTXService.getById(id);

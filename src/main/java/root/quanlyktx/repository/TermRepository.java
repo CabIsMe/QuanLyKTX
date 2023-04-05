@@ -14,6 +14,7 @@ public interface TermRepository extends JpaRepository<Term, Integer> {
     Term getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(Date date, Date date1);
     Term getByNgayKetThucDangKyBeforeAndNgayKetThucAfter(Date date, Date date1);
     List<Term> findAllByNgayMoDangKyAfter(Date d);
+    List<Term> findAllByNgayMoDangKyBefore(Date d);
     boolean existsByNgayKetThucDangKyAfter(Date d1);
     boolean existsByNgayKetThucAfter(Date date);
     Integer countByNgayKetThucDangKyAfter(Date d);
