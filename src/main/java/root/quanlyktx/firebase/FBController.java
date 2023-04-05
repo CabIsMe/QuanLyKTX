@@ -9,25 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import root.quanlyktx.dto.PhieuDienKTXDTO;
-import root.quanlyktx.dto.PhieuNuocKTXDTO;
 import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.Student;
 
-import root.quanlyktx.dto.LoaiKTXDto;
-import root.quanlyktx.dto.StudentDto;
-import root.quanlyktx.entity.Student;
-import root.quanlyktx.model.InputBillPerMonth;
-import root.quanlyktx.model.ThongTinPhong;
-import root.quanlyktx.service.HopDongKTXService;
+import root.quanlyktx.model.RoomDetails;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 import java.util.concurrent.ExecutionException;
@@ -81,14 +67,14 @@ public class FBController {
             return null;
         }
     }
-    @GetMapping("getAllStudentInFB")
-    List<StudentDto> loadAllStudent() throws InterruptedException, ExecutionException{
-       return fbStudentService.loadAllStudentFromFB();
-    }
+//    @GetMapping("getAllStudentInFB")
+//    List<StudentDto> loadAllStudent() throws InterruptedException, ExecutionException{
+//       return fbStudentService.loadAllStudentFromFB();
+//    }
 
     @PostMapping("upload-image")
-    public ResponseEntity<?> create(@ModelAttribute ThongTinPhong thongTinPhong, @RequestParam(name = "files") MultipartFile[] files) {
-        System.out.println(thongTinPhong.toString());
+    public ResponseEntity<?> create(@ModelAttribute RoomDetails roomDetails, @RequestParam(name = "files") MultipartFile[] files) {
+        System.out.println(roomDetails.toString());
         for (MultipartFile file : files) {
             try {
 

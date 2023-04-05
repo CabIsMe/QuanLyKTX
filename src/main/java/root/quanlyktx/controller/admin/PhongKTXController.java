@@ -18,7 +18,9 @@ import java.util.List;
 public class PhongKTXController {
 
     @Autowired
-    PhongKTXService phongKTXService;
+    private PhongKTXService phongKTXService;
+
+
     @PostMapping("/add")
     public String addPhongKTX(@RequestBody PhongKTXDTO phongKTXDTO){
         return phongKTXService.addPhongKTX(phongKTXDTO);

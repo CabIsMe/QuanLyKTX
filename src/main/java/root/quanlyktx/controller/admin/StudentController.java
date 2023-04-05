@@ -14,7 +14,7 @@ import java.util.concurrent.ExecutionException;
 public class StudentController {
 
     @Autowired
-    StudentService studentService;
+    private StudentService studentService;
 
     @GetMapping("/search")
     public List<StudentDto> search(@RequestParam String keyWord){ return studentService.getListByTitle(keyWord);}

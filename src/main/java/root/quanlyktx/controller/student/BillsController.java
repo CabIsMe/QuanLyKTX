@@ -16,8 +16,7 @@ import java.util.List;
 @RequestMapping("api/bills")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class BillsController {
-    @Autowired
-    HopDongKTXService hopDongKTXService;
+
     @Autowired
     PhongKTXService phongKTXService;
     @Autowired

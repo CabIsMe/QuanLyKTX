@@ -33,4 +33,5 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     HopDongKTX findHopDongKTXByMSSVAndTerm_NgayMoDangKyBeforeAndTerm_NgayKetThucAfter(String mssv,Date date1,Date date2);
     HopDongKTX findHopDongKTXByMSSV(String mssv);
     boolean existsByIdPhongKTXAndIdTermAndTrangThaiTrue(Integer idPhong, Integer idTerm);
+//    Integer countAllByTrangThaiTrueAndTerm_Id(Integer idTerm);
 }

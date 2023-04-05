@@ -74,9 +74,9 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-//                .antMatchers("/api/test/**").permitAll()
+                .antMatchers("/api/admin/**").permitAll()
 //                .anyRequest().authenticated();
-                // 2 dòng trên để filter url, dòng dưới để tắt đi cho dễ test
+                // dòng trên để filter url, dòng dưới để tắt đi cho dễ test
                 .antMatchers("/api/**").permitAll();
 
         http.authenticationProvider(authenticationProvider());

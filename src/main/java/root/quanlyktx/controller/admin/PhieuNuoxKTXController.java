@@ -17,8 +17,9 @@ import java.util.concurrent.ExecutionException;
 public class PhieuNuoxKTXController {
 
     @Autowired
-    PhieuNuocKTXService phieuNuocKTXService;
-    GiaNuocTheoThangSerive giaNuocTheoThangSerive;
+    private PhieuNuocKTXService phieuNuocKTXService;
+    @Autowired
+    private GiaNuocTheoThangSerive giaNuocTheoThangSerive;
 
     @GetMapping("/")
     public ResponseEntity<?> getPhieuNuocList(@RequestParam(name = "idphongktx") Integer idPhongKTX,@RequestParam(name = "year") Integer year){

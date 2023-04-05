@@ -32,10 +32,7 @@ public class FBBillService {
 
     @Autowired
     private TermRepository termRepository;
-//    public static Integer generateRandomNumber() {
-//        Random rand = new Random();
-//        return rand.nextInt(41) + 10;
-//    }
+
 
 //    @Scheduled(fixedRate = 2000)
 //    @Scheduled(cron = "0 0 0 1 * ?")
@@ -58,9 +55,6 @@ public class FBBillService {
 
                 }
             }
-
-
-
         }
         catch (Exception e){
             e.printStackTrace();

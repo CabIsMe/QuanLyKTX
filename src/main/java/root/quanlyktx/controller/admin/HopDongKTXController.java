@@ -9,12 +9,12 @@ import root.quanlyktx.service.HopDongKTXService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/hopdong")
+@RequestMapping("/api/contract")
 @CrossOrigin(origins = "*", maxAge = 3600)
 
 public class HopDongKTXController {
     @Autowired
-    HopDongKTXService hopDongKTXService;
+    private HopDongKTXService hopDongKTXService;
 
     @GetMapping("/")
     public List<HopDongKTXDTO> getAll(){ return hopDongKTXService.getAll();}

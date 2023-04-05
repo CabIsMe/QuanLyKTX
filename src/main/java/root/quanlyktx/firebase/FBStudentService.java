@@ -8,6 +8,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.StudentDto;
+import root.quanlyktx.entity.Student;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -26,7 +28,11 @@ public class FBStudentService {
             ApiFuture<DocumentSnapshot> future=documentReference1.get();
             try {
                 DocumentSnapshot snapshot=future.get();
-                students.add(snapshot.toObject(StudentDto.class));
+                StudentDto studentDto=snapshot.toObject(StudentDto.class);
+                if (studentDto != null) {
+                    studentDto.setUsername(snapshot.getId());
+                }
+                students.add(studentDto);
 
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();

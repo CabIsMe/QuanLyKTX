@@ -16,7 +16,7 @@ public class ThongKeController {
     @Autowired
     ThongKeService thongKeService;
     @Autowired
-    PhongKTXService phongKTXService;
+    private PhongKTXService phongKTXService;
 
     @GetMapping("/studentInTerm")
     public ResponseEntity<?> getAmountStudentInTerm(@RequestParam(name = "idTerm") Integer idTerm){

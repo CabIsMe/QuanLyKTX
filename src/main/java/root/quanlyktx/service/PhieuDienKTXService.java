@@ -21,13 +21,13 @@ import java.util.*;
 @EnableScheduling
 public class PhieuDienKTXService {
     @Autowired
-    FBPhieuDienNuocService fbPhieuDienNuocService;
+    private FBPhieuDienNuocService fbPhieuDienNuocService;
     @Autowired
-    HopDongKTXRepository hopDongKTXRepository;
+    private HopDongKTXRepository hopDongKTXRepository;
     @Autowired
-    PhieuDienKTXRepository phieuDienKTXRepository;
+    private PhieuDienKTXRepository phieuDienKTXRepository;
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
 
     public ResponseEntity<?> getElectricBills(String mssv) {
         Date currentDate = new Date();
