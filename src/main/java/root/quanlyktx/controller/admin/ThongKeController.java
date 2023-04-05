@@ -8,18 +8,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import root.quanlyktx.service.HopDongKTXService;
 import root.quanlyktx.service.PhongKTXService;
+import root.quanlyktx.service.ThongKeService;
 
 @RestController
 @RequestMapping("api/thongke")
 public class ThongKeController {
     @Autowired
-    private HopDongKTXService hopDongKTXService;
+    ThongKeService thongKeService;
     @Autowired
     private PhongKTXService phongKTXService;
 
     @GetMapping("/studentInTerm")
-    public ResponseEntity<?> getAmountStudentInTerm(){
-        return hopDongKTXService.getAmountStudentInTerm();
+    public ResponseEntity<?> getAmountStudentInTerm(@RequestParam(name = "idTerm") Integer idTerm){
+        return thongKeService.getAmountStudentInTerm(idTerm);
     }
 
 //    @GetMapping("/totalMoneyIn")
