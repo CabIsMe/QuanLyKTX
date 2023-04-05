@@ -22,13 +22,14 @@ public class HopDongKTXController {
     @GetMapping("/list/{numpage}")
     public ResponseEntity<?> getViewContractRoomList(@PathVariable("numpage") Integer numPage,
           @RequestParam(name = "idphongktx") Integer idPhongKTX,
-          @RequestParam(name = "idterm") Integer idTerm){
-        return hopDongKTXService.getViewContractRoomList(numPage,idPhongKTX,idTerm);
+          @RequestParam(name = "idterm") Integer idTerm,
+          @RequestParam(name = "status") boolean status){
+        return hopDongKTXService.getViewContractRoomList(numPage,idPhongKTX,idTerm,status);
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> updateStatusContract(@RequestParam Integer idHopDong){
-        return hopDongKTXService.updateStatusContract(idHopDong);
+    public ResponseEntity<?> updateStatusContract(@RequestParam(name = "idHopDong") Integer idHopDong,@RequestParam(name = "idTerm") Integer idTerm){
+        return hopDongKTXService.updateStatusContract(idHopDong,idTerm);
     }
 
     @GetMapping("/{id}")

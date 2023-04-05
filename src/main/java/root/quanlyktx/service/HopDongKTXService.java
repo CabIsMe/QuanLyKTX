@@ -251,9 +251,15 @@ public class HopDongKTXService {
         return ResponseEntity.ok(viewContractRoom);
     }
 
-    public ResponseEntity<?> getViewContractRoomList(Integer numPage,Integer idPhongKTX,Integer idTerm) {
+    public Date calculateDatePayment(Date date,Short numDatePayments){
+        LocalDate datePay = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        datePay = datePay.plusDays(numDatePayments);
+        return Date.from(datePay.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
+    public ResponseEntity<?> getViewContractRoomList(Integer numPage,Integer idPhongKTX,Integer idTerm,boolean status) {
         Pageable pageable = PageRequest.of(0*numPage,9*numPage);
-        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findByIdPhongKTXAndTerm_IdOrderByNgayLamDonDesc(idPhongKTX,idTerm,pageable);
+        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findByIdPhongKTXAndTerm_IdAndTrangThaiOrderByNgayLamDonDesc(idPhongKTX,idTerm,status,pageable);
         if (hopDongKTXList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
         else{
             List<HopDongKTXDTO> hopDongKTXDTOList = hopDongKTXList.stream().map(hopDongKTX -> modelMapper.map(hopDongKTX,HopDongKTXDTO.class)).collect(Collectors.toList());
@@ -271,20 +277,21 @@ public class HopDongKTXService {
 //                period = Period.between(dateStart,dateEnd);
 //                totalMonthPayment = period.getMonths()+1;
 //                total = hopDongKTXDTO.getPhongKTX().getLoaiKTX().getGiaPhong()*totalMonthPayment;
-                datePayment = new Date(hopDongKTXDTO.getNgayLamDon().getTime()+hopDongKTXDTO.getTerm().getHanDongPhi()*86400000);
+                datePayment = calculateDatePayment(hopDongKTXDTO.getNgayLamDon(),hopDongKTXDTO.getTerm().getHanDongPhi());
                 viewContractRoomList.add(new ViewContractRoomList(hopDongKTXDTO,fullName,datePayment,hopDongKTXDTO.getTongTien()));
             }
             return ResponseEntity.ok(viewContractRoomList);
         }
     }
 
-    public ResponseEntity<?> updateStatusContract(Integer idHopDong) {
+    public ResponseEntity<?> updateStatusContract(Integer idHopDong,Integer idTerm) {
         Optional<HopDongKTX> hopDongKTXOptional = Optional.ofNullable(hopDongKTXRepository.getHopDongKTXById(idHopDong));
-        if(!hopDongKTXOptional.isEmpty())
+        if(hopDongKTXOptional.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception, Not Found");
         else {
             HopDongKTX hopDongKTX = hopDongKTXOptional.get();
-            Date datePayment = new Date(hopDongKTX.getNgayLamDon().getTime()+hopDongKTX.getTerm().getHanDongPhi()*86400000);
+            Date datePayment = calculateDatePayment(hopDongKTX.getNgayLamDon(),hopDongKTX.getTerm().getHanDongPhi());
+            if(idTerm != termRepository.getCurrentTerm()) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No edit contract status allow,contracts of the past period cannot be modified");
             if(new Date().compareTo(datePayment)>=0) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No edit contract status allow,because current date >= date payment");
             else
             {
