@@ -56,6 +56,13 @@ public class PhieuDienKTX {
     public PhieuDienKTX() {
     }
 
+    public PhieuDienKTX(Integer maSoKTX, GiaDienTheoThang giaDienTheoThang, Integer soDienTieuThu, boolean trangThai) {
+        this.maSoKTX = maSoKTX;
+        this.giaDienTheoThang = giaDienTheoThang;
+        this.soDienTieuThu = soDienTieuThu;
+        this.trangThai = trangThai;
+    }
+
     public GiaDienTheoThang getGiaDienTheoThang() {
         return giaDienTheoThang;
     }

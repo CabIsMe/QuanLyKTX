@@ -1,6 +1,5 @@
 package root.quanlyktx.firebase;
 
-import org.apache.commons.io.IOUtils;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -10,9 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import root.quanlyktx.dto.PhieuDienKTXDTO;
+import root.quanlyktx.dto.PhieuNuocKTXDTO;
+import root.quanlyktx.dto.StudentDto;
+import root.quanlyktx.entity.Student;
+
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.Student;
+import root.quanlyktx.model.InputBillPerMonth;
 import root.quanlyktx.model.ThongTinPhong;
 import root.quanlyktx.service.HopDongKTXService;
 
@@ -34,6 +39,8 @@ public class FBController {
 
     @Autowired
     FBStudentService fbStudentService;
+    @Autowired
+    FBPhieuDienNuocService fbPhieuDienNuocService;
 
     @Autowired
     IImageService imageService;

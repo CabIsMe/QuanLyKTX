@@ -16,6 +16,8 @@ public class PhongKTX {
     private Integer id;
     @Column(name = "loai_KTX")
     private Integer idLoaiKTX;
+    @Column(name = "trang_thai")
+    private boolean trang_thai;
 
     @OneToMany(mappedBy = "maSoKTX", fetch = FetchType.LAZY)
     private List<PhieuDienKTX> phieuDienKTXList;
@@ -28,6 +30,7 @@ public class PhongKTX {
     private List<HopDongKTX> hopDongKTXList;
 
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "loai_KTX",referencedColumnName = "id",insertable = false,updatable = false)
     private LoaiKTX loaiKTX;
@@ -83,5 +86,13 @@ public class PhongKTX {
 
     public void setLoaiKTX(LoaiKTX loaiKTX) {
         this.loaiKTX = loaiKTX;
+    }
+
+    public boolean isTrang_thai() {
+        return trang_thai;
+    }
+
+    public void setTrang_thai(boolean trang_thai) {
+        this.trang_thai = trang_thai;
     }
 }
