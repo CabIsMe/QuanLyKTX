@@ -24,4 +24,5 @@ public class PhieuNuoxKTXController {
         return phieuNuocKTXService.addPhieuNuocKTX(phieuNuocKTX);
     }
 
+
 }

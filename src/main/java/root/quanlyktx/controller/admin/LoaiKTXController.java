@@ -1,8 +1,10 @@
 package root.quanlyktx.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.service.LoaiKTXService;
@@ -10,7 +12,7 @@ import root.quanlyktx.service.LoaiKTXService;
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasAuthority('student')")
+//@PreAuthorize("hasAuthority('student')")
 @RequestMapping("/api/loaiktx")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class LoaiKTXController {
@@ -28,20 +30,18 @@ public class LoaiKTXController {
     }
 
     @PostMapping("/add")
-    String addLoaiKTX(@RequestBody LoaiKTXDto loaiKTXDto){
-        return loaiKTXService.addLoaiKTX(loaiKTXDto);
+    ResponseEntity<?> addLoaiKTX(@RequestParam("file") MultipartFile file, @ModelAttribute LoaiKTXDto loaiKTXDto){
+        return loaiKTXService.addLoaiKTX(file,loaiKTXDto);
     }
 
 
     @DeleteMapping("/remove/{id}")
-    String deleteLoaiKTX(@PathVariable("id") Integer id){
-        if(loaiKTXService.deleteLoaiKTX(id)){
-            return "remove success";
-        }
-        return "remove fail";
+    ResponseEntity<?> deleteLoaiKTX(@PathVariable("id") Integer id){
+
+        return loaiKTXService.deleteLoaiKTX(id);
     }
     @PutMapping("/update/{id}")
-    private LoaiKTXDto updateLoaiKTX(@PathVariable("id") Integer id, @RequestBody LoaiKTXDto loaiKTXDto){
+    ResponseEntity<?> updateLoaiKTX(@PathVariable("id") Integer id, @RequestBody LoaiKTXDto loaiKTXDto){
         return loaiKTXService.updateLoaiKTX(id, loaiKTXDto);
     }
 

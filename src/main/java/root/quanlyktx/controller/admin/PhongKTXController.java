@@ -20,19 +20,17 @@ public class PhongKTXController {
     @Autowired
     PhongKTXService phongKTXService;
     @PostMapping("/add")
-    public String addPhongKTX(@RequestBody PhongKTXDTO phongKTXDTO){
+    public ResponseEntity<?> addPhongKTX(@RequestBody PhongKTXDTO phongKTXDTO){
         return phongKTXService.addPhongKTX(phongKTXDTO);
     }
+
     @DeleteMapping("/remove/{id}")
-    public String deletePhongKTX(@PathVariable("id") Integer id){
-        if(phongKTXService.deletePhongKTX(id)){
-            return "remove success";
-        }
-        return "remove fail";
+    public ResponseEntity<?> deletePhongKTX(@PathVariable("id") Integer id) {
+        return phongKTXService.deletePhongKTX(id);
     }
 
     @PutMapping("/update/{id}")
-    public PhongKTXDTO updatePhongKTX(@PathVariable("id") Integer id, @RequestBody PhongKTXDTO phongKTXDTO){
+    public ResponseEntity<?> updatePhongKTX(@PathVariable("id") Integer id, @RequestBody PhongKTXDTO phongKTXDTO){
         return phongKTXService.updatePhongKTX(id, phongKTXDTO);
     }
 
