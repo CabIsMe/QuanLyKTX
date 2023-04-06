@@ -3,6 +3,8 @@ package root.quanlyktx.controller.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import root.quanlyktx.dto.LoaiKTXDto;
@@ -18,9 +20,12 @@ import java.util.List;
 public class LoaiKTXController {
     @Autowired
     LoaiKTXService loaiKTXService;
+
+
     
     @GetMapping("/")
     List <LoaiKTXDto> getAll(){
+
         return loaiKTXService.getAll();
     }
 

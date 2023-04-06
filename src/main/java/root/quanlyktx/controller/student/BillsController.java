@@ -16,8 +16,7 @@ import java.util.List;
 @RequestMapping("api/bills")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class BillsController {
-    @Autowired
-    HopDongKTXService hopDongKTXService;
+
     @Autowired
     PhongKTXService phongKTXService;
     @Autowired
@@ -27,15 +26,17 @@ public class BillsController {
 
     @GetMapping("/water/{mssv}")
     public ResponseEntity<?> getWaterBills(@PathVariable("mssv") String mssv){
-        List<ViewBills> viewBillsList = phieuNuocKTXService.getWaterBills(mssv);
-        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
-        else return ResponseEntity.ok(viewBillsList);
+//        List<ViewBills> viewBillsList = phieuNuocKTXService.getWaterBills(mssv);
+//        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
+//        else return ResponseEntity.ok(viewBillsList);
+        return phieuNuocKTXService.getWaterBills(mssv);
     }
 
     @GetMapping("/electric/{mssv}")
     public ResponseEntity<?> getElectricBills(@PathVariable("mssv") String mssv){
-        List<ViewBills> viewBillsList = phieuDienKTXService.getElectricBills(mssv);
-        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
-        else return ResponseEntity.ok(viewBillsList);
+//        List<ViewBills> viewBillsList = phieuDienKTXService.getElectricBills(mssv);
+//        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
+//        else return ResponseEntity.ok(viewBillsList);
+        return phieuDienKTXService.getElectricBills(mssv);
     }
 }

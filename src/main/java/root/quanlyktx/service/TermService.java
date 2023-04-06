@@ -6,10 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.TermDTO;
+import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.Term;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.TermRepository;
 
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +55,9 @@ public class TermService {
         }
         if(termRepository.existsByNgayKetThucDangKyAfter(termDTO.getNgayMoDangKy())){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid");
+        }
+        if(termRepository.existsByNgayKetThucAfter(termDTO.getNgayKetThucDangKy())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid, 2 terms at the same time");
         }
         Term term=new Term(termDTO.getNgayMoDangKy(),termDTO.getNgayKetThucDangKy(),termDTO.getNgayKetThuc(),termDTO.getHanDongPhi());
         try{
@@ -108,5 +114,28 @@ public class TermService {
                     .body("Delete term failed");
         }
         return ResponseEntity.ok(true);
+    }
+
+    public List<TermDTO> getAllTermAccordingToStatusContract(boolean status) {
+        List<Term> termList = termRepository.findAllByNgayMoDangKyBefore(new Date());
+        List<TermDTO> termDTOList = new ArrayList<>();
+        if (termList.isEmpty()) {
+            Date date = new Date();
+            termDTOList.add(new TermDTO(0,date,date));
+            return termDTOList;
+        }
+        for (Term term:termList){
+            for(HopDongKTX hopDongKTX : term.getHopDongKTXList()){
+                if(hopDongKTX.isTrangThai()==status){
+                    termDTOList.add(modelMapper.map(term,TermDTO.class));
+                    break;
+                }
+            }
+        }
+        if (termDTOList.isEmpty()) {
+            Date date = new Date();
+            termDTOList.add(new TermDTO(0,date,date));
+        }
+        return termDTOList;
     }
 }

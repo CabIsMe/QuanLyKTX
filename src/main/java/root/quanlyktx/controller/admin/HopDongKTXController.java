@@ -9,24 +9,27 @@ import root.quanlyktx.service.HopDongKTXService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/hopdong")
+@RequestMapping("/api/contract")
 @CrossOrigin(origins = "*", maxAge = 3600)
 
 public class HopDongKTXController {
     @Autowired
-    HopDongKTXService hopDongKTXService;
+    private HopDongKTXService hopDongKTXService;
 
     @GetMapping("/")
     public List<HopDongKTXDTO> getAll(){ return hopDongKTXService.getAll();}
 
     @GetMapping("/list/{numpage}")
-    public ResponseEntity<?> getViewContractRoomList(@PathVariable("numpage") Integer numPage,@RequestParam(name = "idphongktx") Integer idPhongKTX,@RequestParam(name = "idterm") Integer idTerm){
-        return hopDongKTXService.getViewContractRoomList(numPage,idPhongKTX,idTerm);
+    public ResponseEntity<?> getViewContractRoomList(@PathVariable("numpage") Integer numPage,
+          @RequestParam(name = "idphongktx") Integer idPhongKTX,
+          @RequestParam(name = "idterm") Integer idTerm,
+          @RequestParam(name = "status") boolean status){
+        return hopDongKTXService.getViewContractRoomList(numPage,idPhongKTX,idTerm,status);
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> updateStatusContract(@RequestParam Integer idHopDong){
-        return hopDongKTXService.updateStatusContract(idHopDong);
+    public ResponseEntity<?> updateStatusContract(@RequestParam(name = "idHopDong") Integer idHopDong,@RequestParam(name = "idTerm") Integer idTerm){
+        return hopDongKTXService.updateStatusContract(idHopDong,idTerm);
     }
 
     @GetMapping("/{id}")

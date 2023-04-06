@@ -4,6 +4,7 @@ package root.quanlyktx.controller.student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.entity.OTP;
 import root.quanlyktx.entity.Student;
 import root.quanlyktx.model.AccountAndOtp;
-import root.quanlyktx.model.PasswordUpdating;
+import root.quanlyktx.model.PasswordEditing;
 
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.service.OtpService;
@@ -120,12 +121,19 @@ public class AuthController {
        return ResponseEntity.ok(true);
     }
 
+    @PreAuthorize("hasAuthority('student')")
     @PostMapping("change-password")
-    public boolean changePass(@RequestBody PasswordUpdating passwordUpdating){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(passwordUpdating.getUsername(), passwordUpdating.getOldPassword()));
+    public boolean changePass(@RequestBody PasswordEditing passwordEditing){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authentication.getName(), passwordEditing.getOldPassword()));
+        }catch (Exception e){
+            return false;
+        }
         if(!authentication.isAuthenticated())
             return false;
-        return studentService.changePassword(passwordUpdating);
+
+        return studentService.changePassword(authentication.getName(), passwordEditing.getNewPassword());
     }
 }

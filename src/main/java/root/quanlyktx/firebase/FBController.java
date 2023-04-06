@@ -1,6 +1,5 @@
 package root.quanlyktx.firebase;
 
-import org.apache.commons.io.IOUtils;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
@@ -12,14 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.Student;
-import root.quanlyktx.service.HopDongKTXService;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.ArrayList;
+import root.quanlyktx.model.RoomDetails;
+
 import java.util.List;
 
 import java.util.concurrent.ExecutionException;
@@ -31,9 +25,15 @@ public class FBController {
 
     @Autowired
     FBStudentService fbStudentService;
+    @Autowired
+    FBPhieuDienNuocService fbPhieuDienNuocService;
 
     @Autowired
     IImageService imageService;
+
+    @Autowired
+    FBBillService fbBillService;
+
     @PostMapping("createInFirebase")
     public String createPatient(@RequestBody Student student ) throws InterruptedException, ExecutionException {
         try{
@@ -45,6 +45,11 @@ public class FBController {
             return e.getMessage();
         }
     }
+
+//    @GetMapping("createAutoBills")
+//    public boolean createAutoBills() throws InterruptedException, ExecutionException{
+//        return fbBillService.createNewBillInFB();
+//    }
 
     @GetMapping("getFirebase")
 
@@ -62,16 +67,15 @@ public class FBController {
             return null;
         }
     }
-    @GetMapping("getAllStudentInFB")
-    List<StudentDto> loadAllStudent() throws InterruptedException, ExecutionException{
-       return fbStudentService.loadAllStudentFromFB();
-    }
+//    @GetMapping("getAllStudentInFB")
+//    List<StudentDto> loadAllStudent() throws InterruptedException, ExecutionException{
+//       return fbStudentService.loadAllStudentFromFB();
+//    }
 
     @PostMapping("upload-image")
-    public ResponseEntity<?> create(@RequestParam(name = "file") MultipartFile[] files) {
-
+    public ResponseEntity<?> create(@ModelAttribute RoomDetails roomDetails, @RequestParam(name = "files") MultipartFile[] files) {
+        System.out.println(roomDetails.toString());
         for (MultipartFile file : files) {
-
             try {
 
                 String fileName = imageService.save(file);
@@ -86,6 +90,7 @@ public class FBController {
 
         return ResponseEntity.ok().build();
     }
+
 //    @GetMapping("getlink-image")
 //    public String getLinkImg(){
 //        return imageService.getImageUrl()

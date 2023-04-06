@@ -71,6 +71,13 @@ public class PhieuNuocKTX {
         this.trangThai = trangThai;
     }
 
+    public PhieuNuocKTX(Integer maSoKTX, GiaNuocTheoThang giaNuocTheoThang, Integer luongNuocTieuThu, boolean trangThai) {
+        this.maSoKTX = maSoKTX;
+        this.giaNuocTheoThang = giaNuocTheoThang;
+        this.luongNuocTieuThu = luongNuocTieuThu;
+        this.trangThai = trangThai;
+    }
+
     public PhieuNuocKTX() {
     }
 }

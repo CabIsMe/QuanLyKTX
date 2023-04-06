@@ -4,4 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import root.quanlyktx.entity.GiaDienTheoThang;
 
 public interface GiaDienTheoThangRepository extends JpaRepository<GiaDienTheoThang, Integer> {
+    GiaDienTheoThang findGiaDienTheoThangByNamAndThang(Integer nam, Integer thang);
 }

@@ -18,7 +18,9 @@ import java.util.List;
 public class PhongKTXController {
 
     @Autowired
-    PhongKTXService phongKTXService;
+    private PhongKTXService phongKTXService;
+
+
     @PostMapping("/add")
     public ResponseEntity<?> addPhongKTX(@RequestBody PhongKTXDTO phongKTXDTO){
         return phongKTXService.addPhongKTX(phongKTXDTO);
@@ -37,6 +39,11 @@ public class PhongKTXController {
     @GetMapping("/")
     public List <PhongKTXDTO> getAll() { return phongKTXService.getALL();}
 
+    @GetMapping("/combobox")
+    public List<Integer> comboboxPhongHaveStudents(@RequestParam("status") boolean status) {
+        return phongKTXService.getAllPhongHaveStudents(status);
+    }
+
     @GetMapping("/{id}")
     public PhongKTXDTO getById(@PathVariable("id") Integer id){
         return phongKTXService.getById(id);
@@ -49,14 +56,7 @@ public class PhongKTXController {
         }
         return ResponseEntity.ok().body(phongKTXService.getAllByLoaiPhong(id));
     }
-//    @GetMapping("/{id}/lastmonth")
-//    PhongKTX fndByIdLastMonth(@PathVariable("id") Integer id){
-//        PhongKTX phongKTX_root =phongKTXService.findById(id);
-//        PhieuNuocKTX phieuNuocKTX =
-//        phongKTX_root.setPhieuNuocKTXList();
-//
-//        return phongKTXService.findById(id);
-//    }
+
 
     @GetMapping("/timkiem")
     public PhongKTXDTO search(@RequestParam Integer id){ return  phongKTXService.getById(id);}

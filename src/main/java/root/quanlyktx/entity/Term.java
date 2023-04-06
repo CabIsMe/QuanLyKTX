@@ -1,10 +1,12 @@
 package root.quanlyktx.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "term")
@@ -25,6 +27,14 @@ public class Term {
     private Date ngayKetThuc;
     @Column(name = "han_dong_phi")
     private Short hanDongPhi;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "term")
+    private List<HopDongKTX> hopDongKTXList;
+
+    public List<HopDongKTX> getHopDongKTXList() {
+        return hopDongKTXList;
+    }
 
     public Term() {
     }

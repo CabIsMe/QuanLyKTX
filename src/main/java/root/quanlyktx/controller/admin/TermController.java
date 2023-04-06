@@ -16,10 +16,15 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class TermController {
     @Autowired
-    TermService termService;
+    private TermService termService;
     @GetMapping("/")
     public List<TermDTO> getAll(){
         return termService.getAllTerm();
+    }
+
+    @GetMapping("/combobox")
+    public List<TermDTO> comboboxTermHaveContract(@RequestParam(name = "status") boolean status){
+        return termService.getAllTermAccordingToStatusContract(status);
     }
 
     @GetMapping("/search/")

@@ -3,7 +3,7 @@ package root.quanlyktx.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 

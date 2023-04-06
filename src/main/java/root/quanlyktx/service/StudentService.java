@@ -12,12 +12,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.dto.StudentDto;
 
+import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.Student;
 import root.quanlyktx.firebase.FBStudentService;
-import root.quanlyktx.model.PasswordUpdating;
+import root.quanlyktx.model.PasswordEditing;
+import root.quanlyktx.model.StudentDetails;
+import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.StudentRepository;
 
-import java.sql.Date;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -25,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
     @Autowired
-    StudentRepository studentRepository;
+    private StudentRepository studentRepository;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -34,12 +38,24 @@ public class StudentService {
     private OtpService otpService;
     @Autowired
     private FBStudentService fbStudentService;
+    @Autowired
+    private HopDongKTXRepository hopDongKTXRepository;
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
 
-    public StudentDto getInfo(String username){
+    public StudentDetails getInfo(String username){
             Student student = studentRepository.findByUsername(username);
-            return modelMapper.map(student, StudentDto.class);
+            if(student!=null){
+                Date date= new Date();
+                HopDongKTX hopDongKTX= hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayMoDangKyBeforeAndTerm_NgayKetThucAfter(student.getUsername(),date,date);
+                StudentDto studentDto= modelMapper.map(student, StudentDto.class);
+                StudentDetails studentDetails= new StudentDetails(studentDto, hopDongKTX.getNgayLamDon(),
+                        hopDongKTX.getTerm().getNgayKetThucDangKy(),hopDongKTX.getTerm().getNgayKetThuc(),
+                        hopDongKTX.getIdPhongKTX(), hopDongKTX.isTrangThai());
+                return studentDetails;
+            }
+
+            return null;
 
     }
      public List<StudentDto> getAll(){
@@ -50,26 +66,6 @@ public class StudentService {
                  .collect(Collectors.toList());
      }
 
-//     public StudentDto updateSinhVien(String MSSV, StudentDto studentDto){
-//
-//         if (studentRepository.existsById(MSSV)){
-//             try{
-//                 Student student_root = studentRepository.getReferenceById(MSSV);
-//                 student_root.setHoTen(studentDto.getHoTen());
-//                 student_root.setGioiTinh(studentDto.isGioiTinh());
-//                 student_root.setNgaySinh(studentDto.getNgaySinh());
-//                 student_root.setCMND(studentDto.getCMND());
-//                 student_root.setSDT(studentDto.getSDT());
-//                 student_root.setMail(studentDto.getMail());
-//                 studentRepository.save(student_root);
-//                 return modelMapper.map(student_root, StudentDto.class);
-//             }
-//             catch (Exception e){
-//                 e.printStackTrace();
-//             }
-//         }
-//         return null;
-//     }
     @Transactional(rollbackFor = {Exception.class, Throwable.class})
     public ResponseEntity<?> registerStudent(Student std) {
         if(studentRepository.existsById(std.getUsername())){
@@ -102,11 +98,11 @@ public class StudentService {
             e.printStackTrace();
         }
     }
-    public boolean changePassword(PasswordUpdating passwordUpdating){
-        Student student1=studentRepository.findByUsername(passwordUpdating.getUsername());
-        if(passwordUpdating.getNewPassword()==null)
+    public boolean changePassword(String username, String password){
+        Student student1=studentRepository.findByUsername(username);
+        if(password==null)
             return false;
-        student1.setPassword(encoder.encode(passwordUpdating.getNewPassword()));
+        student1.setPassword(encoder.encode(password));
         studentRepository.save(student1);
         return true;
     }
@@ -138,10 +134,10 @@ public class StudentService {
     }
 
     public boolean addNewStudent() throws ExecutionException, InterruptedException {
-        if(fbStudentService.loadAllStudentFromFB().isEmpty()){
-            return false;
-        }
         List<StudentDto> studentDtoList=fbStudentService.loadAllStudentFromFB();
+        if(studentDtoList.isEmpty())
+            return false;
+
         List<Student> studentList= studentDtoList.stream()
                 .map(studentDto -> modelMapper.map(studentDto, Student.class))
                 .collect(Collectors.toList());
@@ -150,7 +146,10 @@ public class StudentService {
 //-------------Tạo data giả
             student.setCMND("123456789");
             student.setSDT("0123456789");
-            student.setNgaySinh(Date.valueOf("2001-02-02"));
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(2001, Calendar.FEBRUARY, 2);
+            Date date = calendar.getTime();
+            student.setNgaySinh(date);
             student.setMail("n19dccn018@student.ptithcm.edu.vn");
 //-----------------------
             studentRepository.save(student);

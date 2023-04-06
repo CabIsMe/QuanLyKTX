@@ -8,8 +8,6 @@ public class PhieuNuocKTXDTO {
     private Integer id;
 
     private Integer maSoKTX;
-//    @Column(name = "id_don_gia")
-//    private Integer idDonGia;
 
     private Integer luongNuocTieuThu;
 
@@ -17,4 +15,17 @@ public class PhieuNuocKTXDTO {
 
     private GiaNuocTheoThangDTO giaNuocTheoThang;
 
+    private Double total;
+
+    public PhieuNuocKTXDTO(Integer id, Integer maSoKTX, Integer luongNuocTieuThu, boolean trangThai, GiaNuocTheoThangDTO giaNuocTheoThang, Double total) {
+        this.id = id;
+        this.maSoKTX = maSoKTX;
+        this.luongNuocTieuThu = luongNuocTieuThu;
+        this.trangThai = trangThai;
+        this.giaNuocTheoThang = giaNuocTheoThang;
+        this.total = total;
+    }
+
+    public PhieuNuocKTXDTO() {
+    }
 }

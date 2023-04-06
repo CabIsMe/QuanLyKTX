@@ -1,6 +1,9 @@
 package root.quanlyktx.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.entity.GiaNuocTheoThang;
 import root.quanlyktx.repository.GiaNuocTheoThangRepository;
@@ -11,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@EnableScheduling
 public class GiaNuocTheoThangSerive {
 
 //    @Autowired
@@ -42,5 +46,27 @@ public class GiaNuocTheoThangSerive {
             id = (month-1)*10000+year;
         }
         return giaNuocTheoThangRepository.findById(id).get();
+    }
+
+    @Scheduled(cron = "0 0 0 1 * ?")
+    public ResponseEntity<?> addGiaNuocNextMonth(){
+        LocalDate currentDate = LocalDate.now();
+        int month = currentDate.getMonth().getValue();
+        int year = currentDate.getYear();
+
+        GiaNuocTheoThang giaNuocTheoThang = giaNuocTheoThangRepository.findGiaNuocTheoThangByNamAndThang(month,year);
+        Double giaThangTruoc = giaNuocTheoThang.getGiaNuoc();
+        if(month==12){
+            month=1;
+            year+=1;
+        }
+        giaNuocTheoThang = new GiaNuocTheoThang(month,year,giaThangTruoc);
+        try {
+            giaNuocTheoThangRepository.save(giaNuocTheoThang);
+            return ResponseEntity.ok().body("success");
+        }catch (Exception e){
+            e.getStackTrace();
+            return ResponseEntity.badRequest().body("save fail");
+        }
     }
 }
