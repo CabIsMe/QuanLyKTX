@@ -26,7 +26,9 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     List <HopDongKTX> findAllByNgayLamDonBeforeAndTrangThaiFalse(Date date);
     boolean existsByIdTerm(Integer idTerm);
     HopDongKTX findHopDongKTXByMSSVAndTerm_NgayKetThucAfter(String mssv,Date date);
-    List<HopDongKTX> findAllByTerm_Id(Integer idTerm);
+    List<HopDongKTX> findAllByTrangThai(boolean status,Pageable pageable);
+    List<HopDongKTX> findAllByIdPhongKTXAndTrangThai(Integer idPhongKTX,boolean status,Pageable pageable);
+    List<HopDongKTX> findAllByTerm_IdAndTrangThai(Integer idTerm,boolean status,Pageable pageable);
     List<HopDongKTX> findByIdPhongKTXAndTerm_IdAndTrangThaiOrderByNgayLamDonDesc(Integer idPhongKTX, Integer idTerm,boolean status, Pageable pageable);
     boolean getHopDongKTXByMSSVAndTrangThaiTrue(String MSSV);
     boolean existsByMSSV(String MSSV);
