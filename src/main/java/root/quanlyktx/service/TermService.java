@@ -25,6 +25,15 @@ public class TermService {
     @Autowired
     private ModelMapper modelMapper;
 
+    public TermDTO getTermForReg(){
+        Date date= new Date();
+        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date, date);
+        if(term == null)
+            return null;
+        return modelMapper.map(term, TermDTO.class);
+    }
+
+
     public List<TermDTO> getAllTerm(){
         List <Term> terms= termRepository.findAll();
         if(terms.isEmpty())

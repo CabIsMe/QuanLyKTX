@@ -10,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class StudentDetails {
     private StudentDto personalInfo;
+
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date ngayLamDon;
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")

@@ -12,7 +12,7 @@ import root.quanlyktx.service.PhongKTXService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/phongktx")
+@RequestMapping("/api/room")
 @CrossOrigin(origins = "*", maxAge = 3600)
 
 public class PhongKTXController {
@@ -55,6 +55,6 @@ public class PhongKTXController {
     }
 
 
-    @GetMapping("/timkiem")
+    @GetMapping("/search")
     public PhongKTXDTO search(@RequestParam Integer id){ return  phongKTXService.getById(id);}
 }

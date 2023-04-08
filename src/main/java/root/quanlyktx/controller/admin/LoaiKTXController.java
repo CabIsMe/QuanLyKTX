@@ -12,8 +12,7 @@ import root.quanlyktx.service.LoaiKTXService;
 import java.util.List;
 
 @RestController
-@PreAuthorize("hasAuthority('student')")
-@RequestMapping("/api/loaiktx")
+@RequestMapping("/api/room-type")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class LoaiKTXController {
     @Autowired
@@ -23,12 +22,11 @@ public class LoaiKTXController {
     
     @GetMapping("/")
     List <LoaiKTXDto> getAll(){
-
         return loaiKTXService.getAll();
     }
 
     @GetMapping("/{id}")
-    private LoaiKTXDto getSingleLoaiKTX(@PathVariable("id") Integer id){
+    LoaiKTXDto getSingleLoaiKTX(@PathVariable("id") Integer id){
         return loaiKTXService.getSingleLoaiKTX(id);
     }
 

@@ -13,6 +13,7 @@ import root.quanlyktx.repository.LoaiKTXRepository;
 import root.quanlyktx.repository.PhongKTXRepository;
 import root.quanlyktx.repository.TermRepository;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -83,47 +84,55 @@ public class PhongKTXService {
         return modelMapper.map(phongKTX, PhongKTXDTO.class);
     }
     public List<PhongKTXDTO> getAllByLoaiPhong(Integer id){
-        List<PhongKTX>phongKTXList=phongKTXRepository.findAllByIdLoaiKTX(id);
+        List<PhongKTX>phongKTXList=phongKTXRepository.findAllByIdLoaiKTXAndTrangThaiTrue(id);
         return phongKTXList.stream()
                 .map(phongKTX -> modelMapper.map(phongKTX, PhongKTXDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public Integer countHopDongInPhong(Integer idPhong) {
+    private Integer countHopDongInPhong(Integer idPhong) {
         Date date= new Date();
         Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
         if(term == null){
-            return -1;
+            return null;
         }
         return hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndIdTerm(idPhong, term.getId());
     }
-    public List<RoomDetails> roomInfoList(Integer idLoaiPhong){
+
+    public List<RoomDetails> roomDetailsList(Integer idLoaiPhong){
         LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
-        List<PhongKTX> phongKTXDTOList=phongKTXRepository .findAllByIdLoaiKTX(idLoaiPhong);
+        List<PhongKTX> phongKTXDTOList=phongKTXRepository .findAllByIdLoaiKTXAndTrangThaiTrue(idLoaiPhong);
+        if(loaiKTX==null || phongKTXDTOList.isEmpty()){
+            System.out.println("List Room is Empty (1)");
+            return null;
+        }
 
         List<RoomDetails> roomDetailsList = new ArrayList<>();
-        if(countHopDongInPhong(phongKTXDTOList.get(0).getId())==-1){
-            return null;
-        }
         for (PhongKTX phongKTX: phongKTXDTOList) {
 
-            roomDetailsList.add(new RoomDetails(phongKTX.getId(),loaiKTX.getGiaPhong(),
+            roomDetailsList.add(new RoomDetails(phongKTX.getId(), loaiKTX.getTenLoai(),loaiKTX.getGiaPhong(),
                     loaiKTX.getSoGiuong()- countHopDongInPhong(phongKTX.getId())
-                    ,loaiKTX.getImage()));
+                    ,loaiKTX.getImage(),loaiKTX.getDescription()));
         }
-        if(roomDetailsList.isEmpty())
+        if(roomDetailsList.isEmpty()){
+            System.out.println("List Room is Empty (3)");
             return null;
+        }
+
         return roomDetailsList;
     }
     public RoomDetails roomInfo(Integer idLoaiPhong, Integer idPhong){
         LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
         Optional<PhongKTX> optional=phongKTXRepository.findById(idPhong);
-        if(optional.isEmpty())
+        if(optional.isEmpty()){
+            System.out.println("List Room is Empty (1)");
             return null;
+        }
+
         PhongKTX phongKTX=optional.get();
 
-        return new RoomDetails(phongKTX.getId(),loaiKTX.getGiaPhong()
+        return new RoomDetails(phongKTX.getId(),loaiKTX.getTenLoai(),loaiKTX.getGiaPhong()
                 ,loaiKTX.getSoGiuong()-countHopDongInPhong(phongKTX.getId())
-                ,loaiKTX.getImage());
+                ,loaiKTX.getImage(), loaiKTX.getDescription());
     }
 }

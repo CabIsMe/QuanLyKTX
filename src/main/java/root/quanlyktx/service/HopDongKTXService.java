@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.StudentDto;
+import root.quanlyktx.dto.TermDTO;
 import root.quanlyktx.entity.*;
 import root.quanlyktx.model.*;
 import root.quanlyktx.repository.*;
@@ -54,6 +55,9 @@ public class HopDongKTXService {
 //        hopDongKTXRepository.deleteAllByNgayLamDonBeforeAndTrangThaiFalse(dateExpired);
     }
 
+
+
+
     public List<HopDongKTXDTO> getAll() {
         List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
 //        logger.info("OKLA");
@@ -79,13 +83,14 @@ public class HopDongKTXService {
 
 
 
-    public Double amountTotal(Term term,LoaiKTX loaiKTX){
+    public Double amountTotal(Term term, LoaiKTX loaiKTX){
         LocalDate dateStart = term.getNgayKetThucDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateEnd = term.getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         Period period = Period.between(dateStart,dateEnd);
         int totalMonthPayment = period.getMonths()+1;
         return loaiKTX.getGiaPhong()*totalMonthPayment;
     }
+
 
     public boolean createContract(InputContract inputContract){
         Date date= new Date();
@@ -207,10 +212,12 @@ public class HopDongKTXService {
                                                                 modelMapper.map(loaiKTX,LoaiKTXDto.class),
                                                                 modelMapper.map(student, StudentDto.class),
                                                                 new Date(hopDongKTX.getNgayLamDon().getTime()+hopDongKTX.getTerm().getHanDongPhi()*86400000),
-                                                                hopDongKTX.getTerm().getNgayKetThuc(),
+                                                                hopDongKTX.getTerm().getNgayKetThucDangKy(), hopDongKTX.getTerm().getNgayKetThuc(),
                                                                 hopDongKTX.getTongTien());
         return ResponseEntity.ok(viewContractRoom);
     }
+
+
 
     public Date calculateDatePayment(Date date,Short numDatePayments){
         LocalDate datePay = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

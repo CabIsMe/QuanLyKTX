@@ -43,16 +43,12 @@ public class StudentService {
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
 
-    public StudentDetails getInfo(String username){
+    public StudentDto getInfo(String username){
+
             Student student = studentRepository.findByUsername(username);
             if(student!=null){
-                Date date= new Date();
-                HopDongKTX hopDongKTX= hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayMoDangKyBeforeAndTerm_NgayKetThucAfter(student.getUsername(),date,date);
                 StudentDto studentDto= modelMapper.map(student, StudentDto.class);
-                StudentDetails studentDetails= new StudentDetails(studentDto, hopDongKTX.getNgayLamDon(),
-                        hopDongKTX.getTerm().getNgayKetThucDangKy(),hopDongKTX.getTerm().getNgayKetThuc(),
-                        hopDongKTX.getIdPhongKTX(), hopDongKTX.isTrangThai());
-                return studentDetails;
+                return studentDto;
             }
 
             return null;
