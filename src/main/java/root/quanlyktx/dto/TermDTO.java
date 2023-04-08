@@ -21,4 +21,12 @@ public class TermDTO {
     private Short hanDongPhi;
 
 
+    public TermDTO(Integer id, Date ngayKetThucDangKy, Date ngayKetThuc) {
+        this.id = id;
+        this.ngayKetThucDangKy = ngayKetThucDangKy;
+        this.ngayKetThuc = ngayKetThuc;
+    }
+
+    public TermDTO() {
+    }
 }

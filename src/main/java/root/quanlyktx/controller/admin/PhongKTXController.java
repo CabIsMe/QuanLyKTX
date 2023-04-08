@@ -22,24 +22,27 @@ public class PhongKTXController {
 
 
     @PostMapping("/add")
-    public String addPhongKTX(@RequestBody PhongKTXDTO phongKTXDTO){
+    public ResponseEntity<?> addPhongKTX(@RequestBody PhongKTXDTO phongKTXDTO){
         return phongKTXService.addPhongKTX(phongKTXDTO);
     }
+
     @DeleteMapping("/remove/{id}")
-    public String deletePhongKTX(@PathVariable("id") Integer id){
-        if(phongKTXService.deletePhongKTX(id)){
-            return "remove success";
-        }
-        return "remove fail";
+    public ResponseEntity<?> deletePhongKTX(@PathVariable("id") Integer id) {
+        return phongKTXService.deletePhongKTX(id);
     }
 
     @PutMapping("/update/{id}")
-    public PhongKTXDTO updatePhongKTX(@PathVariable("id") Integer id, @RequestBody PhongKTXDTO phongKTXDTO){
+    public ResponseEntity<?> updatePhongKTX(@PathVariable("id") Integer id, @RequestBody PhongKTXDTO phongKTXDTO){
         return phongKTXService.updatePhongKTX(id, phongKTXDTO);
     }
 
     @GetMapping("/")
     public List <PhongKTXDTO> getAll() { return phongKTXService.getALL();}
+
+    @GetMapping("/combobox")
+    public List<Integer> comboboxPhongHaveStudents(@RequestParam("status") boolean status) {
+        return phongKTXService.getAllPhongHaveStudents(status);
+    }
 
     @GetMapping("/{id}")
     public PhongKTXDTO getById(@PathVariable("id") Integer id){

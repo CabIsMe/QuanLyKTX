@@ -52,6 +52,13 @@ public class PhongKTX {
         this.id = id;
     }
 
+    public Boolean getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(Boolean trangThai) {
+        this.trangThai = trangThai;
+    }
 
     public List<PhieuDienKTX> getPhieuDienKTXList() {
         return phieuDienKTXList;
@@ -88,11 +95,11 @@ public class PhongKTX {
         this.loaiKTX = loaiKTX;
     }
 
-    public boolean isTrang_thai() {
+    public boolean isTrangThai() {
         return trangThai;
     }
 
-    public void setTrang_thai(boolean trang_thai) {
-        this.trangThai = trang_thai;
+    public void setTrangThai(boolean trangThai) {
+        this.trangThai = trangThai;
     }
 }

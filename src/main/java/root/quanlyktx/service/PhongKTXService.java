@@ -2,8 +2,18 @@ package root.quanlyktx.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import root.quanlyktx.dto.PhongKTXDTO;
+
+import root.quanlyktx.entity.LoaiKTX;
+import root.quanlyktx.entity.PhongKTX;
+import root.quanlyktx.entity.Term;
+import org.springframework.security.core.parameters.P;
+import org.springframework.stereotype.Service;
+import root.quanlyktx.dto.PhongKTXDTO;
+import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.entity.Term;
@@ -12,8 +22,6 @@ import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.LoaiKTXRepository;
 import root.quanlyktx.repository.PhongKTXRepository;
 import root.quanlyktx.repository.TermRepository;
-
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,45 +40,65 @@ public class PhongKTXService {
     @Autowired
     private LoaiKTXRepository loaiKTXRepository;
     @Autowired
-    private TermRepository termRepository;
+    TermRepository termRepository;
 
-
-    public String addPhongKTX(PhongKTXDTO phongKTXDTO){
-
-        try{
-            phongKTXRepository.save(modelMapper.map(phongKTXDTO, PhongKTX.class));
-            return "success";
-        }catch (Exception e){
-            e.getStackTrace();
-            return "error";
+    public ResponseEntity<?> addPhongKTX(PhongKTXDTO phongKTXDTO){
+        Optional<LoaiKTX> optional = loaiKTXRepository.findById(phongKTXDTO.getIdLoaiKTX());
+        if(optional.isEmpty())
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("loaiKTX invalid");
         }
-    }
-
-
-    public boolean deletePhongKTX(Integer id){
-        PhongKTX phongKTX=phongKTXRepository.findById(id).get();
-        if(phongKTXRepository.findById(id).isPresent()){
-            phongKTXRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
-    public PhongKTXDTO updatePhongKTX(Integer id, PhongKTXDTO phongKTXDTO){
-        if(phongKTXRepository.existsById(id)){
             try{
-                PhongKTX phongKTX_root= phongKTXRepository.findById(id).get();
-                phongKTX_root.setIdLoaiKTX(phongKTXDTO.getIdLoaiKTX());
-           //     phongKTX_root.setHinhAnh(phongKTX.getHinhAnh());
-                phongKTXRepository.save(phongKTX_root);
-                return modelMapper.map(phongKTX_root, PhongKTXDTO.class);
+                phongKTXRepository.save(modelMapper.map(phongKTXDTO, PhongKTX.class));
+            return ResponseEntity.ok(true);
+            }catch (Exception e){
+                e.getStackTrace();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Add phongktx fialed");
             }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+    }
 
+
+    public ResponseEntity<?> deletePhongKTX(Integer id){
+        Date date = new Date();
+        if(termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date, date) != null)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid");
         }
-        return null;
+        Optional<PhongKTX> optional = phongKTXRepository.findById(id);
+        if(optional.isEmpty())
+        {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PhongKTX invalid");
+        }
+        PhongKTX phongKTX = optional.get();
+                phongKTX.setTrangThai(false);
+                phongKTXRepository.save(phongKTX);
+                return ResponseEntity.ok(true);
+    }
+
+    public ResponseEntity<?> updatePhongKTX(Integer id, PhongKTXDTO phongKTXDTO){
+        Date date = new Date();
+        if(termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date, date) != null)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid");
+        }
+        Optional<PhongKTX> optional = phongKTXRepository.findById(id);
+        if(optional.isEmpty())
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PhongKTX invalid");
+        }
+
+                try{
+                    PhongKTX phongKTX_root= optional.get();
+                    phongKTX_root.setIdLoaiKTX(phongKTXDTO.getIdLoaiKTX());
+                    phongKTX_root.setTrangThai(phongKTXDTO.getTrangThai());
+                    //     phongKTX_root.setHinhAnh(phongKTX.getHinhAnh());
+                    phongKTXRepository.save(phongKTX_root);
+                    return ResponseEntity.ok(true);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("update phongKTX failed");
+                }
     }
 
 
@@ -90,7 +118,34 @@ public class PhongKTXService {
                 .collect(Collectors.toList());
     }
 
-    private Integer countHopDongInPhong(Integer idPhong) {
+
+    public List<Integer> getAllPhongHaveStudents(boolean status) {
+        List<PhongKTX> phongKTXList = phongKTXRepository.findAllByTrangThaiTrue();
+        List<Integer> idPhong = new ArrayList<>();
+        if (phongKTXList.isEmpty()){
+            idPhong.add(0);
+            return idPhong;
+        }
+        for(PhongKTX phongKTX : phongKTXList){
+            for (HopDongKTX hopDongKTX : phongKTX.getHopDongKTXList()){
+                if(hopDongKTX.isTrangThai()==status){
+                    idPhong.add(phongKTX.getId());
+                    break;
+                }
+            }
+        }
+        if (idPhong.isEmpty()) idPhong.add(0);
+        return idPhong;
+    }
+
+//    public ViewInforRoom getViewInforRoom(Integer idPhongKTX){
+//        PhongKTXDTO phongKTXDTO = findPhongKTXById(idPhongKTX);
+//        LoaiKTX loaiKTX = phongKTXDTO.getLoaiKTX();
+//        return new ViewInforRoom(phongKTXDTO.getId(),loaiKTX,hopDongKTXService.numBedEmpty(idPhongKTX));
+//    }
+
+
+    public Integer countHopDongInPhong(Integer idPhong) {
         Date date= new Date();
         Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
         if(term == null){

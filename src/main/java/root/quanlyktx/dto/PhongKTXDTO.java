@@ -15,6 +15,7 @@ import java.util.List;
 public class PhongKTXDTO {
     private Integer id;
     private Integer idLoaiKTX;
+    private Boolean trangThai;
     private LoaiKTXDto loaiKTX;
 //    private List<HopDongKTX> hopDongKTXList;
 //    private String hinhAnh;

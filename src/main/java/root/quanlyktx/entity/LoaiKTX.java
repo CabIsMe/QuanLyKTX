@@ -57,14 +57,6 @@ public class LoaiKTX {
         return id;
     }
 
-    public Integer getSoNguoi() {
-        return soGiuong;
-    }
-
-    public void setSoNguoi(Integer soNguoi) {
-        this.soGiuong = soNguoi;
-    }
-
     public Double getGiaPhong() {
         return giaPhong;
     }
