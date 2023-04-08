@@ -54,7 +54,7 @@ public class AuthController {
         Student student1=studentService.getStudentByUsername(student.getUsername());
         if(!student1.isStatus()){
             if(hopDongKTXRepository.existsByMSSV(student1.getUsername())){
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Account not accessible");
             }
             try {
@@ -81,19 +81,6 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody Student student) {
         return studentService.registerStudent(student);
 
-    }
-    @PutMapping("/verify-again")
-    public ResponseEntity<?> resetOTP(@RequestBody AccountAndOtp accountAndOtp){
-        OTP otp= otpService.getOtpByUsername(accountAndOtp.getUsername());
-        Student student1=studentService.getStudentByUsername(accountAndOtp.getUsername());
-        if( !student1.isStatus()){
-            if(accountAndOtp.getOTP().equals(otp.getOtpCode())&& new Date().getTime() - (otp.getTimeGenerate()) < (otpExp*60*1000)){
-                studentService.updateStatus(accountAndOtp.getUsername(),true);
-                return ResponseEntity.ok(true);
-            }
-            return ResponseEntity.badRequest().body("OTP expired or incorrect!");
-        }
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Status is True");
     }
     @PostMapping("/two-factor-auth")
     public ResponseEntity<?> verifyStudent(@RequestBody AccountAndOtp accountAndOtp){

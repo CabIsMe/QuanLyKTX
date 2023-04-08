@@ -8,10 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class RoomDetails {
-    //bo sung them ten loai phong
     private Integer id;
-    private Double giaPhong;
-    private Integer soGiuongTrong;
+    private String nameTypeRoom;
+    private Double cost;
+    private Integer emptyBed;
     private String image;
+    private String desc;
 
 }

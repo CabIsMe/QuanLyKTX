@@ -16,6 +16,8 @@ public class HopDongKTXController {
     @Autowired
     private HopDongKTXService hopDongKTXService;
 
+
+
     @GetMapping("/")
     public List<HopDongKTXDTO> getAll(){ return hopDongKTXService.getAll();}
 

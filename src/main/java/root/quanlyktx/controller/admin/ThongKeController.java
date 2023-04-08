@@ -11,12 +11,11 @@ import root.quanlyktx.service.PhongKTXService;
 import root.quanlyktx.service.ThongKeService;
 
 @RestController
-@RequestMapping("api/thongke")
+@RequestMapping("api/analysis ")
 public class ThongKeController {
     @Autowired
     ThongKeService thongKeService;
-    @Autowired
-    private PhongKTXService phongKTXService;
+
 
     @GetMapping("/studentInTerm")
     public ResponseEntity<?> getAmountStudentInTerm(@RequestParam(name = "idTerm") Integer idTerm){

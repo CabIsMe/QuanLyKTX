@@ -17,6 +17,7 @@ public interface TermRepository extends JpaRepository<Term, Integer> {
     List<Term> findAllByNgayMoDangKyBefore(Date d);
     boolean existsByNgayKetThucDangKyAfter(Date d1);
     boolean existsByNgayKetThucAfter(Date date);
+    boolean existsByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(Date d1, Date d2);
     Integer countByNgayKetThucDangKyAfter(Date d);
     List<Term> findAllByNgayKetThucGreaterThanEqualAndAndNgayKetThucDangKyBefore(Date dateEnd,Date newDate);
 
@@ -59,4 +60,9 @@ public interface TermRepository extends JpaRepository<Term, Integer> {
             return term.getId();
         return null;
     }
+    default boolean getTimeAllowedForRegistration(){
+        Date date=new Date();
+        return existsByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date, date);
+    }
+
 }

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface PhongKTXRepository extends JpaRepository<PhongKTX, Integer> {
+    List<PhongKTX> findAllByIdLoaiKTXAndTrangThaiTrue(Integer id);
     List<PhongKTX> findAllByIdLoaiKTX(Integer id);
     List<PhongKTX> findAllByTrangThaiTrue();
     Optional<PhongKTX> findByIdAndTrangThaiTrue(Integer id);
