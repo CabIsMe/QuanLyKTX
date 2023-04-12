@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,16 +45,18 @@ public class StudentService {
     private HopDongKTXRepository hopDongKTXRepository;
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
-
-    public StudentDto getInfo(String username){
-
-            Student student = studentRepository.findByUsername(username);
+    @PreAuthorize("hasAuthority('student')")
+    public StudentDto getInfo(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.isAuthenticated()){
+            Student student = studentRepository.findByUsername(authentication.getName());
             if(student!=null){
-                StudentDto studentDto= modelMapper.map(student, StudentDto.class);
-                return studentDto;
+                return modelMapper.map(student, StudentDto.class);
             }
+        }
 
-            return null;
+
+        return null;
 
     }
      public List<StudentDto> getAll(){

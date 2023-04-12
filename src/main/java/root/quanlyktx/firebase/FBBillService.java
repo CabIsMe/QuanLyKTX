@@ -42,7 +42,7 @@ public class FBBillService {
             if(currentTerm==null)
                 return false;
 
-            List<PhongKTX> phongKTXList= phongKTXRepository.findAll();
+            List<PhongKTX> phongKTXList= phongKTXRepository.findAllByTrangThaiTrue();
             for (PhongKTX phongKTX: phongKTXList){
 
                 if(hopDongKTXRepository.existsByIdPhongKTXAndIdTermAndTrangThaiTrue(phongKTX.getId(), currentTerm)){

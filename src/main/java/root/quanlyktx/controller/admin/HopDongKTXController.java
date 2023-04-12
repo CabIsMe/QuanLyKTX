@@ -1,12 +1,17 @@
 package root.quanlyktx.controller.admin;
 
+import org.apache.http.annotation.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.HopDongKTXDTO;
+import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.service.HopDongKTXService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/contract")
@@ -50,4 +55,18 @@ public class HopDongKTXController {
 
     @GetMapping("/timkiem")
     public  HopDongKTXDTO search(@RequestParam Integer id){ return  hopDongKTXService.getById(id);}
+
+    @GetMapping("/searching")
+    public List<HopDongKTXDTO> getContracts(
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) Integer idPhong,
+            @RequestParam(required = false) String MSSV
+    ) {
+        List <HopDongKTXDTO> contracts= hopDongKTXService.getAll();
+        return contracts.stream()
+                .filter(c -> id == null || c.getId().equals(id))
+                .filter(c -> idPhong == null || c.getIdPhongKTX().equals(idPhong))
+                .filter(c -> MSSV == null || c.getMSSV().equals(MSSV))
+                .collect(Collectors.toList());
+    }
 }

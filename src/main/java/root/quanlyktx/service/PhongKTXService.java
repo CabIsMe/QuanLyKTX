@@ -10,13 +10,7 @@ import root.quanlyktx.dto.PhongKTXDTO;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.entity.Term;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Service;
-import root.quanlyktx.dto.PhongKTXDTO;
 import root.quanlyktx.entity.HopDongKTX;
-import root.quanlyktx.entity.LoaiKTX;
-import root.quanlyktx.entity.PhongKTX;
-import root.quanlyktx.entity.Term;
 import root.quanlyktx.model.RoomDetails;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.LoaiKTXRepository;
@@ -41,6 +35,8 @@ public class PhongKTXService {
     private LoaiKTXRepository loaiKTXRepository;
     @Autowired
     TermRepository termRepository;
+
+
 
     public ResponseEntity<?> addPhongKTX(PhongKTXDTO phongKTXDTO){
         Optional<LoaiKTX> optional = loaiKTXRepository.findById(phongKTXDTO.getIdLoaiKTX());

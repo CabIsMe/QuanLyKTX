@@ -3,47 +3,52 @@ package root.quanlyktx.controller.student;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.dto.TermDTO;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.Term;
-import root.quanlyktx.model.InputContract;
+import root.quanlyktx.model.ViewContractRoom;
 import root.quanlyktx.service.HopDongKTXService;
 import root.quanlyktx.service.TermService;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("api/student/contract")
+@PreAuthorize("hasAuthority('student')")
 public class ContractRoomController {
     @Autowired
     private HopDongKTXService hopDongKTXService;
     @Autowired
     TermService termService;
 
-    @GetMapping("/get-term")
-    public TermDTO getTermToRegister(){
-        return termService.getTermForReg();
+    @GetMapping("/check-registration")
+    public boolean checkTimeAllow(){
+        return hopDongKTXService.checkConditionToRegistration();
     }
 
-    @PostMapping("/create")
-    public boolean registerDormitory(@RequestBody InputContract inputContract){
-
-        return hopDongKTXService.createContract(inputContract);
-    }
-    @PostMapping("/extend")
-    public ResponseEntity<?> extendDorm(@RequestBody InputContract inputContract){
-        return hopDongKTXService.contractExtension(inputContract);
+    @GetMapping("/view-create/{idPhong}")
+    public ViewContractRoom getViewCreateContract(@PathVariable("idPhong") Integer idPhong){
+        return hopDongKTXService.getViewBeforeCreateContract(idPhong);
     }
 
-    @GetMapping("/{mssv}")
-    public ResponseEntity<?> getViewContractRoom(@PathVariable("mssv") String mssv){
-        return hopDongKTXService.getViewContractRoom(mssv);
+    @GetMapping("/create/{idPhong}")
+    public boolean registerDormitory(@PathVariable("idPhong") Integer idPhong){
+
+        return hopDongKTXService.createContract(idPhong);
     }
-    @PostMapping("/cancel")
-    public void cancellation(@RequestBody HopDongKTXDTO hopDongKTXDTO){
+    @GetMapping("/extend/{idPhong}")
+    public ResponseEntity<?> extendDorm(@PathVariable("idPhong") Integer idPhong){
+        return hopDongKTXService.contractExtension(idPhong);
+    }
 
-        System.out.println(hopDongKTXDTO.toString());
-
+    @GetMapping("/")
+    public ResponseEntity<?> getViewContractRoomCreated(){
+        return hopDongKTXService.getViewContractRoom();
+    }
+    @GetMapping("/cancel")
+    public ResponseEntity<?> cancellation(){
+        return hopDongKTXService.cancelContract();
     }
 }

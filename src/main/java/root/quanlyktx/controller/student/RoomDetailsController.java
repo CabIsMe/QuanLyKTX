@@ -21,8 +21,10 @@ public class RoomDetailsController {
     private PhongKTXService phongKTXService;
     @Autowired
     private LoaiKTXService loaiKTXService;
-    @Autowired
-    private TermRepository termRepository;
+
+
+
+
     @GetMapping("/room-type")
     public List <LoaiKTXDto> getAllListLoaiKTX(){
         return loaiKTXService.getAll();
@@ -31,10 +33,7 @@ public class RoomDetailsController {
     public LoaiKTXDto getOneLoaiKTX(@PathVariable("id") Integer id){
         return loaiKTXService.getSingleLoaiKTX(id);
     }
-    @GetMapping("/check-registration")
-    public boolean checkTimeAllow(){
-        return termRepository.getTimeAllowedForRegistration();
-    }
+
 
     @GetMapping("/room-details/{id}")
     public List<RoomDetails> getRoomDetailsListById(@PathVariable("id") Integer idLoaiPhong){
