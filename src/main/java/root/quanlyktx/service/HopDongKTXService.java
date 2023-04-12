@@ -295,7 +295,19 @@ public class HopDongKTXService {
 
     public ResponseEntity<?> getViewContractRoomList(Integer numPage,Integer idPhongKTX,Integer idTerm,boolean status) {
         Pageable pageable = PageRequest.of(0*numPage,9*numPage);
-        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findByIdPhongKTXAndTerm_IdAndTrangThaiOrderByNgayLamDonDesc(idPhongKTX,idTerm,status,pageable);
+        List<HopDongKTX> hopDongKTXList = new ArrayList<>();
+        if(idPhongKTX==0) {
+            hopDongKTXList = hopDongKTXRepository.findAllByTerm_IdAndTrangThai(idTerm,status,pageable);
+        }
+        else if (idTerm==0){
+            hopDongKTXList = hopDongKTXRepository.findAllByIdPhongKTXAndTrangThai(idPhongKTX,status,pageable);
+        }
+        else if(idPhongKTX==0&&idTerm==0){
+            hopDongKTXList = hopDongKTXRepository.findAllByTrangThai(status,pageable);
+        }
+        else{
+            hopDongKTXList = hopDongKTXRepository.findByIdPhongKTXAndTerm_IdAndTrangThaiOrderByNgayLamDonDesc(idPhongKTX,idTerm,status,pageable);
+        }
         if (hopDongKTXList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
         else{
             List<HopDongKTXDTO> hopDongKTXDTOList = hopDongKTXList.stream().map(hopDongKTX -> modelMapper.map(hopDongKTX,HopDongKTXDTO.class)).collect(Collectors.toList());

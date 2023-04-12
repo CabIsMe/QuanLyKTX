@@ -28,9 +28,9 @@ public class HopDongKTXController {
 
     @GetMapping("/list/{numpage}")
     public ResponseEntity<?> getViewContractRoomList(@PathVariable("numpage") Integer numPage,
-          @RequestParam(name = "idphongktx") Integer idPhongKTX,
-          @RequestParam(name = "idterm") Integer idTerm,
-          @RequestParam(name = "status") boolean status){
+          @RequestParam(name = "idphongktx",defaultValue = "0") Integer idPhongKTX,
+          @RequestParam(name = "idterm",defaultValue = "0") Integer idTerm,
+          @RequestParam(name = "status",defaultValue = "false") boolean status){
         return hopDongKTXService.getViewContractRoomList(numPage,idPhongKTX,idTerm,status);
     }
 
