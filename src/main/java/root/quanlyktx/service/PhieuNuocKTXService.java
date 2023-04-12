@@ -53,28 +53,24 @@ public class PhieuNuocKTXService {
     public ResponseEntity<?> getWaterBills(String mssv){
         Date currentDate = new Date();
         Optional<HopDongKTX> hopDongKTX = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayMoDangKyBeforeAndTerm_NgayKetThucAfter(mssv,currentDate,currentDate));
-        if (hopDongKTX.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empty");
         if(!hopDongKTX.get().isTrangThai()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empty");
         else{
-            Date dateStart = hopDongKTX.get().getNgayLamDon();
+            Date dateStart = hopDongKTX.get().getTerm().getNgayMoDangKy();
             Integer month = dateStart.getMonth()+1;
             Integer year = dateStart.getYear()+1900;
             List<PhieuNuocKTX> phieuNuocKTXList = phieuNuocKTXRepository.findAllByMaSoKTXAndGiaNuocTheoThang_ThangGreaterThanEqualAndGiaNuocTheoThang_NamGreaterThanEqual(hopDongKTX.get().getIdPhongKTX(),month,year);
-            if (phieuNuocKTXList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("empty");
-            else {
-                List<PhieuNuocKTXDTO> phieuNuocKTXDTOList = new ArrayList<>();
-                Double total;
-                for(PhieuNuocKTX phieuNuocKTX: phieuNuocKTXList){
-                    total = phieuNuocKTX.getLuongNuocTieuThu()*phieuNuocKTX.getGiaNuocTheoThang().getGiaNuoc();
-                    phieuNuocKTXDTOList.add(new PhieuNuocKTXDTO(phieuNuocKTX.getId(),
-                                                                phieuNuocKTX.getMaSoKTX(),
-                                                                phieuNuocKTX.getLuongNuocTieuThu(),
-                                                                phieuNuocKTX.isTrangThai(),
-                                                                modelMapper.map(phieuNuocKTX.getGiaNuocTheoThang(),GiaNuocTheoThangDTO.class),
-                                                                total));
-                }
-                return ResponseEntity.ok(phieuNuocKTXDTOList);
+            List<PhieuNuocKTXDTO> phieuNuocKTXDTOList = new ArrayList<>();
+            Double total;
+            for(PhieuNuocKTX phieuNuocKTX: phieuNuocKTXList){
+                total = phieuNuocKTX.getLuongNuocTieuThu()*phieuNuocKTX.getGiaNuocTheoThang().getGiaNuoc();
+                phieuNuocKTXDTOList.add(new PhieuNuocKTXDTO(phieuNuocKTX.getId(),
+                                                            phieuNuocKTX.getMaSoKTX(),
+                                                            phieuNuocKTX.getLuongNuocTieuThu(),
+                                                            phieuNuocKTX.isTrangThai(),
+                                                            modelMapper.map(phieuNuocKTX.getGiaNuocTheoThang(),GiaNuocTheoThangDTO.class),
+                                                            total));
             }
+            return ResponseEntity.ok(phieuNuocKTXDTOList);
         }
     }
 

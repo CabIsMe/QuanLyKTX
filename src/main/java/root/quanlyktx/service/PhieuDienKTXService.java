@@ -32,28 +32,24 @@ public class PhieuDienKTXService {
     public ResponseEntity<?> getElectricBills(String mssv) {
         Date currentDate = new Date();
         Optional<HopDongKTX> hopDongKTX = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayMoDangKyBeforeAndTerm_NgayKetThucAfter(mssv, currentDate, currentDate));
-        if (hopDongKTX.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empty");
         if (!hopDongKTX.get().isTrangThai()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empty");
         else {
             Date dateStart = hopDongKTX.get().getNgayLamDon();
             Integer month = dateStart.getMonth() + 1;
             Integer year = dateStart.getYear() + 1900;
             List<PhieuDienKTX> phieuDienKTXList = phieuDienKTXRepository.findAllByMaSoKTXAndGiaDienTheoThang_ThangGreaterThanEqualAndGiaDienTheoThang_NamGreaterThanEqual(hopDongKTX.get().getIdPhongKTX(), month, year);
-            if (phieuDienKTXList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("empty");
-            else {
-                List<PhieuDienKTXDTO> phieuDienKTXDTOList = new ArrayList<>();
-                Double total;
-                for (PhieuDienKTX phieuDienKTX : phieuDienKTXList) {
-                    total = phieuDienKTX.getSoDienTieuThu() * phieuDienKTX.getGiaDienTheoThang().getGiaDien();
-                    phieuDienKTXDTOList.add(new PhieuDienKTXDTO(phieuDienKTX.getId(),
-                                                                phieuDienKTX.getMaSoKTX(),
-                                                                phieuDienKTX.getSoDienTieuThu(),
-                                                                phieuDienKTX.isTrangThai(),
-                                                                modelMapper.map(phieuDienKTX.getGiaDienTheoThang(), GiaDienTheoThangDTO.class),
-                                                                total));
-                }
-                return ResponseEntity.ok(phieuDienKTXDTOList);
+            List<PhieuDienKTXDTO> phieuDienKTXDTOList = new ArrayList<>();
+            Double total;
+            for (PhieuDienKTX phieuDienKTX : phieuDienKTXList) {
+                total = phieuDienKTX.getSoDienTieuThu() * phieuDienKTX.getGiaDienTheoThang().getGiaDien();
+                phieuDienKTXDTOList.add(new PhieuDienKTXDTO(phieuDienKTX.getId(),
+                                                            phieuDienKTX.getMaSoKTX(),
+                                                            phieuDienKTX.getSoDienTieuThu(),
+                                                            phieuDienKTX.isTrangThai(),
+                                                            modelMapper.map(phieuDienKTX.getGiaDienTheoThang(), GiaDienTheoThangDTO.class),
+                                                            total));
             }
+            return ResponseEntity.ok(phieuDienKTXDTOList);
         }
     }
 
