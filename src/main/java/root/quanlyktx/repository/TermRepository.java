@@ -60,9 +60,5 @@ public interface TermRepository extends JpaRepository<Term, Integer> {
             return term.getId();
         return null;
     }
-    default boolean getTimeAllowedForRegistration(){
-        Date date=new Date();
-        return existsByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date, date);
-    }
 
 }

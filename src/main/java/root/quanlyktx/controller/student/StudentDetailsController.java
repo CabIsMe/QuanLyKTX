@@ -20,9 +20,9 @@ public class StudentDetailsController {
     @Autowired
     StudentService studentService;
 
-    @GetMapping("/info/{MSSV}")
-    public StudentDto thongTinSV(@PathVariable("MSSV") String MSSV){
-        return studentService.getInfo(MSSV);
+    @GetMapping("/info")
+    public StudentDto thongTinSV(){
+        return studentService.getInfo();
     }
 
 }

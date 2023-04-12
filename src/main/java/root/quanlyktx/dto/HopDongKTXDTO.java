@@ -8,8 +8,8 @@ import java.util.Date;
 
 @Data
 @ToString
-//@AllArgsConstructor
-//@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class HopDongKTXDTO {
     private Integer id;
     private Integer idPhongKTX;

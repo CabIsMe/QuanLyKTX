@@ -8,8 +8,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.StudentDto;
@@ -81,8 +84,6 @@ public class HopDongKTXService {
     }
 
 
-
-
     public Double amountTotal(Term term, LoaiKTX loaiKTX){
         LocalDate dateStart = term.getNgayKetThucDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateEnd = term.getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -92,19 +93,22 @@ public class HopDongKTXService {
     }
 
 
-    public boolean createContract(InputContract inputContract){
+    public boolean createContract(Integer idPhong){
+        String mssv= getUsernameFromSecurityContextHolder();
+        if(mssv==null)
+            return false;
         Date date= new Date();
         Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
         if(term == null){
             logger.error("This time not allowed");
             return false;
         }
-        if(hopDongKTXRepository.existsByIdTermAndMSSV(term.getId(),inputContract.getMSSV())){
+        if(hopDongKTXRepository.existsByIdTermAndMSSV(term.getId(),mssv)){
             logger.error("Contract already exists");
             return false;
         }
-        logger.info("check Room And Bed");
-        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findByIdAndTrangThaiTrue(inputContract.getIdPhongKTX());
+//        logger.info("check Room And Bed");
+        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findByIdAndTrangThaiTrue(idPhong);
         if(optionalPhongKTX.isEmpty())
             return false;
         PhongKTX phongKTX=optionalPhongKTX.get();
@@ -119,11 +123,8 @@ public class HopDongKTXService {
             return false;
         }
         Double total= amountTotal(term, loaiKTX);
-        HopDongKTX hopDongKTX=new HopDongKTX(inputContract.getIdPhongKTX(), inputContract.getMSSV(),date, term.getId(), total);
+        HopDongKTX hopDongKTX=new HopDongKTX(idPhong, mssv,date, term.getId(), total);
 
-//        Double total = amountTotal(hopDongKTXDTO,loaiKTX);
-//        HopDongKTX hopDongKTX=new HopDongKTX(hopDongKTXDTO.getIdPhongKTX(), hopDongKTXDTO.getMSSV(),date,total,term.getId());
-        System.out.println(hopDongKTX.toString());
         try{
             hopDongKTXRepository.save(hopDongKTX);
 
@@ -135,17 +136,53 @@ public class HopDongKTXService {
         return true;
     }
 
-    public ResponseEntity<?> contractExtension(InputContract inputContract){
+    public String getUsernameFromSecurityContextHolder(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getName().equals("anonymousUser")){
+            logger.error("Is not authenticated");
+            return null;
+        }
+
+        return authentication.getName();
+    }
+
+    public ViewContractRoom getViewBeforeCreateContract(Integer idPhong){
+        String mssv= getUsernameFromSecurityContextHolder();
+        Student student= studentRepository.findByUsername(mssv);
+        Date date= new Date();
+        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
+
+        PhongKTX phongKTX=phongKTXRepository.findByIdAndTrangThaiTrue(idPhong).get();
+        LoaiKTX loaiKTX=loaiKTXRepository.findById(phongKTX.getIdLoaiKTX()).get();
+        Double total= amountTotal(term, loaiKTX);
+        HopDongKTX hopDongKTX=new HopDongKTX(idPhong, mssv,date, term.getId(), total);
+        logger.info("Get View Before Create Contract - "+hopDongKTX.toString());
+        ViewContractRoom viewContractRoom = new ViewContractRoom(modelMapper.map(hopDongKTX,HopDongKTXDTO.class),
+                modelMapper.map(loaiKTX,LoaiKTXDto.class),
+                modelMapper.map(student, StudentDto.class),
+                new Date(hopDongKTX.getNgayLamDon().getTime()+term.getHanDongPhi()*86400000),
+                term.getNgayKetThucDangKy(), term.getNgayKetThuc(),
+                hopDongKTX.getTongTien());
+        return viewContractRoom;
+
+    }
+
+
+    public ResponseEntity<?> contractExtension(Integer idPhong){
+        String mssv=getUsernameFromSecurityContextHolder();
+        if(mssv==null){
+            return ResponseEntity.badRequest().body("Is not authenticated");
+        }
         Date current= new Date();
         Term currentTerm= termRepository.getByNgayKetThucDangKyBeforeAndNgayKetThucAfter(current,current);
         if(currentTerm == null){
             return ResponseEntity.badRequest().body("Can't register at this time (1)");
         }
-        if(!hopDongKTXRepository.existsByIdTermAndMSSVAndTrangThaiTrue(currentTerm.getId(),inputContract.getMSSV())){
+        if(!hopDongKTXRepository.existsByIdTermAndMSSVAndTrangThaiTrue(currentTerm.getId(),mssv)){
             return ResponseEntity.badRequest().body("Students are not allowed to extend the contract");
         }
         // Check Exist contract at current Term of Student
-        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findByIdAndTrangThaiTrue(inputContract.getIdPhongKTX());
+        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findByIdAndTrangThaiTrue(idPhong);
         if(optionalPhongKTX.isEmpty())
             return ResponseEntity.badRequest().body("This room didn't exist");
         // Check exist room
@@ -170,7 +207,7 @@ public class HopDongKTXService {
         }
         // Check that the registration date is valid.
         Double total= amountTotal(newTerm, loaiKTX);
-        HopDongKTX hopDongKTX=new HopDongKTX(inputContract.getIdPhongKTX(), inputContract.getMSSV(),current, newTerm.getId(), total);
+        HopDongKTX hopDongKTX=new HopDongKTX(idPhong, mssv,current, newTerm.getId(), total);
         try{
             hopDongKTXRepository.save(hopDongKTX);
 
@@ -180,16 +217,43 @@ public class HopDongKTXService {
         return ResponseEntity.ok(true);
     }
 
-    public boolean cancelContract(InputContract inputContract){
-//        HopDongKTX hopDongKTX= hopDongKTXRepository.findBy
-        return true;
+    public ResponseEntity<?> cancelContract(){
+        String mssv= getUsernameFromSecurityContextHolder();
+        if(mssv==null){
+            return ResponseEntity.badRequest().body("Is not Authenticated");
+        }
+        Date date= new Date();
+        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
+        if(term == null){
+            return ResponseEntity.badRequest().body("Can't cancel a contract at this time");
+        }
+        HopDongKTX hopDongKTX=hopDongKTXRepository.findByMSSVAndTrangThaiFalseAndIdTerm(mssv,term.getId());
+        if(hopDongKTX==null){
+            return ResponseEntity.badRequest().body("A contract not found");
+        }
+
+        try{
+            hopDongKTXRepository.delete(hopDongKTX);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Cancel a contract failed");
+        }
+        return ResponseEntity.ok().body("Successfully canceled contract");
     }
 
     public boolean checkStatus(String MSSV) {
         return hopDongKTXRepository.getHopDongKTXByMSSVAndTrangThaiTrue(MSSV);
     }
 
+    public boolean checkConditionToRegistration(){
+        String mssv= getUsernameFromSecurityContextHolder();
+        Date date= new Date();
+        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
+        if(term==null)
+            return false;
 
+        return !hopDongKTXRepository.existsByIdTermAndMSSV(term.getId(),mssv);
+    }
 
 //    public ResponseEntity<?> getHopDongTemp(HopDongKTXDTO hopDongKTXDTO) {
 //        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAllByMSSV(hopDongKTXDTO.getMSSV());
@@ -197,7 +261,11 @@ public class HopDongKTXService {
 //        return ResponseEntity.ok(hopDongKTXList);
 //    }
 
-    public ResponseEntity<?> getViewContractRoom(String mssv) {
+    public ResponseEntity<?> getViewContractRoom() {
+        String mssv= getUsernameFromSecurityContextHolder();
+        if(mssv==null){
+            return ResponseEntity.badRequest().body("Is not authenticated");
+        }
         Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayMoDangKyBeforeAndTerm_NgayKetThucAfter(mssv, new Date(),new Date()));
         if (optional.isEmpty()) return ResponseEntity.badRequest().body("Empty");
         HopDongKTX hopDongKTX =optional.get();
