@@ -136,7 +136,7 @@ public class HopDongKTXService {
         return true;
     }
 
-    public String getUsernameFromSecurityContextHolder(){
+    public static String getUsernameFromSecurityContextHolder(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getName().equals("anonymousUser")){
             logger.error("Is not authenticated");

@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import root.quanlyktx.entity.HopDongKTX;
 
@@ -34,4 +36,8 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     HopDongKTX findHopDongKTXByMSSVAndTerm_NgayMoDangKyBeforeAndTerm_NgayKetThucAfter(String mssv,Date date1,Date date2);
     HopDongKTX findByMSSVAndTrangThaiFalseAndIdTerm(String MSSV, Integer idTerm);
     boolean existsByIdPhongKTXAndIdTermAndTrangThaiTrue(Integer idPhong, Integer idTerm);
+
+    //thong ke
+    @Query("SELECT COALESCE(SUM(hd.tongTien),0) FROM HopDongKTX hd WHERE hd.term.ngayMoDangKy <= :curDate AND hd.trangThai=true GROUP BY hd.term.id,hd.term.ngayMoDangKy HAVING SUM(hd.tongTien) IS NOT NULL ORDER BY hd.term.ngayMoDangKy DESC ")
+    List<Double> sumTotalByCurTerm(@Param("curDate") Date curDate,Pageable pageable);
 }
