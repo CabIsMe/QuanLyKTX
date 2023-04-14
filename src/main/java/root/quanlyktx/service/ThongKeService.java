@@ -31,7 +31,7 @@ public class ThongKeService {
         Optional<Term> term = termRepository.findById(idTerm);
         if (term.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).body("not found");
         Date dateEnd = term.get().getNgayKetThuc();
-        List<Term> termList = termRepository.findAllByNgayKetThucGreaterThanEqualAndAndNgayKetThucDangKyBefore(dateEnd,new Date());
+        List<Term> termList = termRepository.   findAllByNgayKetThucGreaterThanEqualAndAndNgayKetThucDangKyBefore(dateEnd,new Date());
         List<StudentInTerm> studentInTerms = new ArrayList<>();
         termList.forEach(term1 -> studentInTerms.add(new StudentInTerm(term1.getId(),term1.getNgayMoDangKy(),term1.getNgayKetThuc(),term1.getHopDongKTXList().size())));
         return ResponseEntity.ok(studentInTerms);

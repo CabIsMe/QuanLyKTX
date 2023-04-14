@@ -18,7 +18,7 @@ public interface PhongKTXRepository extends JpaRepository<PhongKTX, Integer> {
     List<PhongKTX> findAllByTrangThaiTrue();
     Optional<PhongKTX> findByIdAndTrangThaiTrue(Integer id);
 
-    @Query("SELECT p.id, COALESCE(COUNT(hd), 0) FROM PhongKTX p LEFT JOIN p.hopDongKTXList hd ON hd.term.ngayMoDangKy <= :curDate AND hd.term.ngayKetThuc >= :curDate where p.trangThai=true GROUP BY p.id")
+    @Query("SELECT p.id, COALESCE(COUNT(hd), 0) FROM PhongKTX p LEFT JOIN p.hopDongKTXList hd ON hd.term.ngayKetThucDangKy <= :curDate AND hd.term.ngayKetThuc >= :curDate where p.trangThai=true GROUP BY p.id")
     List<Object[]> findAllRoomsHaveStudentThisTerm(@Param("curDate") Date curDate1);
 
     @Query("SELECT loai.tenLoai, COUNT(hd), loai.giaPhong "
@@ -26,7 +26,7 @@ public interface PhongKTXRepository extends JpaRepository<PhongKTX, Integer> {
             + "JOIN loai.phongKTXList phong "
             + "JOIN phong.hopDongKTXList hd "
             + "JOIN hd.term t "
-            + "WHERE t.ngayMoDangKy <= :currentDate AND t.ngayKetThuc >= :currentDate "
+            + "WHERE t.ngayKetThucDangKy <= :currentDate AND t.ngayKetThuc >= :currentDate "
             + "GROUP BY loai.tenLoai, loai.giaPhong")
     List<Object[]> countStudentsOfRoomtypes(@Param("currentDate") Date currentDate);
 }

@@ -11,10 +11,11 @@ import java.util.List;
 
 
 public interface TermRepository extends JpaRepository<Term, Integer> {
+    Term findTermById(Integer idTerm);
     Term getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(Date date, Date date1);
     Term getByNgayKetThucDangKyBeforeAndNgayKetThucAfter(Date date, Date date1);
     List<Term> findAllByNgayMoDangKyAfter(Date d);
-    List<Term> findAllByNgayMoDangKyBefore(Date d);
+    List<Term> findAllByNgayKetThucDangKyBefore(Date d);
     boolean existsByNgayKetThucDangKyAfter(Date d1);
     boolean existsByNgayKetThucAfter(Date date);
     boolean existsByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(Date d1, Date d2);

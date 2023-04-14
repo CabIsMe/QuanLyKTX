@@ -126,10 +126,10 @@ public class TermService {
     }
 
     public List<TermDTO> getAllTermAccordingToStatusContract(boolean status) {
-        List<Term> termList = termRepository.findAllByNgayMoDangKyBefore(new Date());
+        List<Term> termList = termRepository.findAllByNgayKetThucDangKyBefore(new Date());
         List<TermDTO> termDTOList = new ArrayList<>();
-        Date date = new Date();
-        termDTOList.add(new TermDTO(0,date,date));
+//        Date date = new Date();
+//        termDTOList.add(new TermDTO(0,date,date));
         for (Term term:termList){
             for(HopDongKTX hopDongKTX : term.getHopDongKTXList()){
                 if(hopDongKTX.isTrangThai()==status){

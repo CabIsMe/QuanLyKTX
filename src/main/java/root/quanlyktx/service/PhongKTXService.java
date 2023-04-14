@@ -118,7 +118,7 @@ public class PhongKTXService {
     public List<Integer> getAllPhongHaveStudents(boolean status) {
         List<PhongKTX> phongKTXList = phongKTXRepository.findAllByTrangThaiTrue();
         List<Integer> idPhong = new ArrayList<>();
-        idPhong.add(0);
+//        idPhong.add(0);
         for(PhongKTX phongKTX : phongKTXList){
             for (HopDongKTX hopDongKTX : phongKTX.getHopDongKTXList()){
                 if(hopDongKTX.isTrangThai()==status){

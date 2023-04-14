@@ -22,8 +22,9 @@ public class PhieuNuoxKTXController {
     private GiaNuocTheoThangSerive giaNuocTheoThangSerive;
 
     @GetMapping("/")
-    public ResponseEntity<?> getPhieuNuocList(@RequestParam(name = "idphongktx") Integer idPhongKTX,@RequestParam(name = "year") Integer year){
-        return phieuNuocKTXService.getPhieuNuocList(idPhongKTX,year);
+    public ResponseEntity<?> getPhieuNuocList(@RequestParam(name = "idTerm") Integer idTerm,
+                                              @RequestParam(name = "status") Boolean status){
+        return phieuNuocKTXService.getPhieuNuocList(idTerm,status);
     }
 
     @PostMapping("/")

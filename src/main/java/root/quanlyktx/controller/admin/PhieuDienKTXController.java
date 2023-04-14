@@ -16,8 +16,9 @@ public class PhieuDienKTXController {
     PhieuDienKTXService phieuDienKTXService;
 
     @GetMapping("/")
-    public ResponseEntity<?> getElectricList(@RequestParam(name = "idphongktx") Integer idPhongKTX,@RequestParam(name = "year") Integer year){
-        return phieuDienKTXService.getElectricList(idPhongKTX,year);
+    public ResponseEntity<?> getElectricList(@RequestParam(name = "idTerm") Integer idTerm,
+                                             @RequestParam(name = "status") Boolean status){
+        return phieuDienKTXService.getElectricList(idTerm,status);
     }
 
     @PostMapping("/")
