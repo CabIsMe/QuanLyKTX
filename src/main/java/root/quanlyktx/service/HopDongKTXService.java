@@ -268,7 +268,7 @@ public class HopDongKTXService {
         if(mssv==null){
             return ResponseEntity.badRequest().body("Is not authenticated");
         }
-        Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayKetThucDangKyBeforeAndTerm_NgayKetThucAfter(mssv, new Date(),new Date()));
+        Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.getFirstByMSSVAndNgayLamDonDesc(mssv));
         if (optional.isEmpty()) return ResponseEntity.badRequest().body("Empty");
         HopDongKTX hopDongKTX =optional.get();
         LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(hopDongKTX.getPhongKTX().getIdLoaiKTX());
