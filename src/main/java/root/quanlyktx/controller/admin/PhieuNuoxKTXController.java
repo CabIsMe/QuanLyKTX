@@ -21,10 +21,11 @@ public class PhieuNuoxKTXController {
     @Autowired
     private GiaNuocTheoThangSerive giaNuocTheoThangSerive;
 
-    @GetMapping("/")
-    public ResponseEntity<?> getPhieuNuocList(@RequestParam(name = "idTerm") Integer idTerm,
+    @GetMapping("/{numpage}")
+    public ResponseEntity<?> getPhieuNuocList(@PathVariable("numpage") Integer numPage,
+                                              @RequestParam(name = "idTerm") Integer idTerm,
                                               @RequestParam(name = "status") Boolean status){
-        return phieuNuocKTXService.getPhieuNuocList(idTerm,status);
+        return phieuNuocKTXService.getPhieuNuocList(numPage,idTerm,status);
     }
 
     @PostMapping("/")

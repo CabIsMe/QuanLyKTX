@@ -15,10 +15,11 @@ public class PhieuDienKTXController {
     @Autowired
     PhieuDienKTXService phieuDienKTXService;
 
-    @GetMapping("/")
-    public ResponseEntity<?> getElectricList(@RequestParam(name = "idTerm") Integer idTerm,
+    @GetMapping("/{numpage}")
+    public ResponseEntity<?> getElectricList(@PathVariable("numpage") Integer numPage,
+                                             @RequestParam(name = "idTerm") Integer idTerm,
                                              @RequestParam(name = "status") Boolean status){
-        return phieuDienKTXService.getElectricList(idTerm,status);
+        return phieuDienKTXService.getElectricList(numPage,idTerm,status);
     }
 
     @PostMapping("/")

@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -89,18 +91,19 @@ public class PhieuNuocKTXService {
         }
     }
 
-    public ResponseEntity<?> getPhieuNuocList(Integer idTerm,Boolean status) {
+    public ResponseEntity<?> getPhieuNuocList(Integer numPage,Integer idTerm,Boolean status) {
+        Pageable pageable = PageRequest.of(0*numPage,9*numPage);
         Term term = termRepository.findTermById(idTerm);
         YearMonth termDateStart = YearMonth.from(term.getNgayKetThucDangKy().toInstant());
         YearMonth termDateEnd = YearMonth.from(term.getNgayKetThuc().toInstant());
         List<PhieuNuocKTX> phieuNuocKTXList = new ArrayList<>();
         if(termDateEnd.getMonthValue() < termDateStart.getMonthValue()){
-            phieuNuocKTXList = phieuNuocKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),12,termDateStart.getYear());
-            List<PhieuNuocKTX> phieuNuocKTXList1 = phieuNuocKTXRepository.findByStatusAndMonthRange(status,1,termDateEnd.getMonthValue(),termDateEnd.getYear());
+            phieuNuocKTXList = phieuNuocKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),12,termDateStart.getYear(),pageable);
+            List<PhieuNuocKTX> phieuNuocKTXList1 = phieuNuocKTXRepository.findByStatusAndMonthRange(status,1,termDateEnd.getMonthValue(),termDateEnd.getYear(),pageable);
             phieuNuocKTXList.addAll(phieuNuocKTXList1);
         }
         else {
-            phieuNuocKTXList = phieuNuocKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),termDateEnd.getYear(),termDateEnd.getYear());
+            phieuNuocKTXList = phieuNuocKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),termDateEnd.getYear(),termDateEnd.getYear(),pageable);
         }
         if (phieuNuocKTXList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("empty");
         else{
