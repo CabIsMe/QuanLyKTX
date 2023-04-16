@@ -3,18 +3,16 @@ package root.quanlyktx.controller.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import root.quanlyktx.model.ViewBills;
-import root.quanlyktx.service.HopDongKTXService;
 import root.quanlyktx.service.PhieuDienKTXService;
 import root.quanlyktx.service.PhieuNuocKTXService;
 import root.quanlyktx.service.PhongKTXService;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("api/bills")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@PreAuthorize("hasAuthority('student')")
 public class BillsController {
 
     @Autowired
@@ -24,19 +22,19 @@ public class BillsController {
     @Autowired
     PhieuDienKTXService phieuDienKTXService;
 
-    @GetMapping("/water/{mssv}")
-    public ResponseEntity<?> getWaterBills(@PathVariable("mssv") String mssv){
+    @GetMapping("/water")
+    public ResponseEntity<?> getWaterBills() {
 //        List<ViewBills> viewBillsList = phieuNuocKTXService.getWaterBills(mssv);
 //        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
 //        else return ResponseEntity.ok(viewBillsList);
-        return phieuNuocKTXService.getWaterBills(mssv);
+        return phieuNuocKTXService.getWaterBills();
     }
 
-    @GetMapping("/electric/{mssv}")
-    public ResponseEntity<?> getElectricBills(@PathVariable("mssv") String mssv){
+    @GetMapping("/electric")
+    public ResponseEntity<?> getElectricBills(){
 //        List<ViewBills> viewBillsList = phieuDienKTXService.getElectricBills(mssv);
 //        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
 //        else return ResponseEntity.ok(viewBillsList);
-        return phieuDienKTXService.getElectricBills(mssv);
+        return phieuDienKTXService.getElectricBills();
     }
 }

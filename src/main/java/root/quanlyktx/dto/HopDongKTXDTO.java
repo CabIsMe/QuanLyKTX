@@ -21,7 +21,7 @@ public class HopDongKTXDTO {
     private Integer idTerm;
     @JsonIgnore
     private PhongKTXDTO phongKTX;
-//    @JsonIgnore
+    @JsonIgnore
     private TermDTO term;
 
     public String getMSSV() {

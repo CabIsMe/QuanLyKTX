@@ -11,7 +11,7 @@ import root.quanlyktx.service.PhongKTXService;
 import root.quanlyktx.service.ThongKeService;
 
 @RestController
-@RequestMapping("api/analysis ")
+@RequestMapping("api/analysis")
 public class ThongKeController {
     @Autowired
     ThongKeService thongKeService;
@@ -22,5 +22,19 @@ public class ThongKeController {
         return thongKeService.getAmountStudentInTerm(idTerm);
     }
 
+    @GetMapping("/room")
+    public ResponseEntity<?> roomStatistics(){
+        return thongKeService.getRoomStatistics();
+    }
+
+    @GetMapping("/money")
+    public ResponseEntity<?> totalMoneyInCurTerm(){
+        return thongKeService.getTotalMoneyInCurTerm();
+    }
+
+    @GetMapping("/loaiKTX")
+    public ResponseEntity<?> studentRoomType(){
+        return thongKeService.getStudentsOfRoomTypes();
+    }
 //    @GetMapping("/totalMoneyIn")
 }

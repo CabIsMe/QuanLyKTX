@@ -17,13 +17,15 @@ import java.util.Date;
 @NoArgsConstructor
 public class ViewContractRoom {
     private HopDongKTXDTO hopDongKTX;
-    private LoaiKTXDto loaiKTX;
-    private StudentDto student;
+    private String nameRoomtype;
+    private Double price;
+    private String fullName;
+    private String mail;
+    private String phoneNumber;
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date datePayment;
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date dateFrom;
     @JsonFormat(pattern = "dd/MM/yyyy", timezone = "Asia/Ho_Chi_Minh")
     private Date dateEnd;
-    private Double total;
 }
