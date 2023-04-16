@@ -14,8 +14,6 @@ public class PhieuNuocKTX {
     @ManyToOne
     @JoinColumn(name = "id_don_gia")
     private GiaNuocTheoThang giaNuocTheoThang;
-//    @Column(name = "id_don_gia")
-//    private Integer idDonGia;
     @Column(name = "luong_nuoc_tieu_thu")
     private Integer luongNuocTieuThu;
     @Column(name ="trang_thai")

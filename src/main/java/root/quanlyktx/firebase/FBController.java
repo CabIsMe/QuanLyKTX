@@ -34,16 +34,17 @@ public class FBController {
     @Autowired
     FBBillService fbBillService;
 
-    @PostMapping("createInFirebase")
-    public String createPatient(@RequestBody Student student ) throws InterruptedException, ExecutionException {
-        try{
-            Firestore dbFirestore = FirestoreClient.getFirestore();
-            ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection("students").document(student.getUsername()).set(student);
-            return collectionsApiFuture.get().getUpdateTime().toString();
-        }
-        catch (Exception e){
-            return e.getMessage();
-        }
+    @GetMapping("createInFirebase")
+    public void createPatient() throws InterruptedException, ExecutionException {
+//        try{
+//            Firestore dbFirestore = FirestoreClient.getFirestore();
+//            ApiFuture<WriteResult> collectionsApiFuture = dbFirestore.collection("students").document(student.getUsername()).set(student);
+//            return collectionsApiFuture.get().getUpdateTime().toString();
+//        }
+//        catch (Exception e){
+//            return e.getMessage();
+//        }
+        fbStudentService.createMockStudent();
     }
 
 //    @GetMapping("createAutoBills")

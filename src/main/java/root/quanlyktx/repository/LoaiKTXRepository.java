@@ -13,5 +13,5 @@ public interface LoaiKTXRepository extends JpaRepository<LoaiKTX, Integer> {
     LoaiKTX findLoaiKTXById(Integer id);
     @NonNull
     Optional<LoaiKTX> findById(Integer id);
-
+    
 }

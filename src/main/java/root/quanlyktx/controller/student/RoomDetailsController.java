@@ -22,13 +22,11 @@ public class RoomDetailsController {
     @Autowired
     private LoaiKTXService loaiKTXService;
 
-
-
-
     @GetMapping("/room-type")
     public List <LoaiKTXDto> getAllListLoaiKTX(){
         return loaiKTXService.getAll();
     }
+
     @GetMapping("/room-type/{id}")
     public LoaiKTXDto getOneLoaiKTX(@PathVariable("id") Integer id){
         return loaiKTXService.getSingleLoaiKTX(id);

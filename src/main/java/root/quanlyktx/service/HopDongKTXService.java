@@ -63,10 +63,6 @@ public class HopDongKTXService {
 
     public List<HopDongKTXDTO> getAll() {
         List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAll();
-//        logger.info("OKLA");
-//        OperationHistory operationHistory=new OperationHistory("src/main/resources/static/logfile.log");
-//        List<String>strings= operationHistory.LoadDataToList();
-
         return hopDongKTXList.stream().map(hopDongKTX -> modelMapper.map(hopDongKTX, HopDongKTXDTO.class)).collect(Collectors.toList());
     }
 
@@ -170,7 +166,7 @@ public class HopDongKTXService {
     }
 
 
-    public ResponseEntity<?> contractExtension(Integer idPhong){
+    public ResponseEntity<?> contractExtension(){
         String mssv=getUsernameFromSecurityContextHolder();
         if(mssv==null){
             return ResponseEntity.badRequest().body("Is not authenticated");
@@ -180,11 +176,14 @@ public class HopDongKTXService {
         if(currentTerm == null){
             return ResponseEntity.badRequest().body("Can't register at this time (1)");
         }
-        if(!hopDongKTXRepository.existsByIdTermAndMSSVAndTrangThaiTrue(currentTerm.getId(),mssv)){
+
+        HopDongKTX hopDongKTXOld= hopDongKTXRepository.getHopDongKTXByIdTermAndMSSVAndTrangThaiTrue(currentTerm.getId(), mssv);
+        if(hopDongKTXOld==null){
             return ResponseEntity.badRequest().body("Students are not allowed to extend the contract");
         }
+
         // Check Exist contract at current Term of Student
-        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findByIdAndTrangThaiTrue(idPhong);
+        Optional<PhongKTX> optionalPhongKTX=phongKTXRepository.findByIdAndTrangThaiTrue(hopDongKTXOld.getIdPhongKTX());
         if(optionalPhongKTX.isEmpty())
             return ResponseEntity.badRequest().body("This room didn't exist");
         // Check exist room
@@ -209,7 +208,7 @@ public class HopDongKTXService {
         }
         // Check that the registration date is valid.
         Double total= amountTotal(newTerm, loaiKTX);
-        HopDongKTX hopDongKTX=new HopDongKTX(idPhong, mssv,current, newTerm.getId(), total);
+        HopDongKTX hopDongKTX=new HopDongKTX(hopDongKTXOld.getIdPhongKTX(), mssv,current, newTerm.getId(), total);
         try{
             hopDongKTXRepository.save(hopDongKTX);
 
@@ -226,21 +225,42 @@ public class HopDongKTXService {
         }
         Date date= new Date();
         Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
-        if(term == null){
-            return ResponseEntity.badRequest().body("Can't cancel a contract at this time");
+
+//        if(term == null && nextTerm ==null){
+//            return ResponseEntity.badRequest().body("Can't cancel a contract at this time");
+//        }
+        if(term != null){
+            HopDongKTX hopDongKTX=hopDongKTXRepository.findByMSSVAndTrangThaiFalseAndIdTerm(mssv,term.getId());
+            if(hopDongKTX==null){
+                return ResponseEntity.badRequest().body("A contract not found");
+            }
+
+            try{
+                hopDongKTXRepository.delete(hopDongKTX);
+            }catch (Exception e){
+                e.printStackTrace();
+                return ResponseEntity.badRequest().body("Cancel a contract failed");
+            }
+            return ResponseEntity.ok().body("Successfully canceled contract");
         }
-        HopDongKTX hopDongKTX=hopDongKTXRepository.findByMSSVAndTrangThaiFalseAndIdTerm(mssv,term.getId());
-        if(hopDongKTX==null){
-            return ResponseEntity.badRequest().body("A contract not found");
+        else{
+            Term nextTerm= termRepository.getTheNextTerm();
+            if(nextTerm != null){
+                HopDongKTX newHopDongKTX=hopDongKTXRepository.findByMSSVAndTrangThaiFalseAndIdTerm(mssv,nextTerm.getId());
+                if(newHopDongKTX==null){
+                    return ResponseEntity.badRequest().body("Next term contract not found");
+                }
+                try{
+                    hopDongKTXRepository.delete(newHopDongKTX);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return ResponseEntity.badRequest().body("Cancel next term contract failed");
+                }
+                return ResponseEntity.ok().body("Successfully canceled next term contract");
+            }
+            return ResponseEntity.badRequest().body("Can't cancel next term contract at this time");
         }
 
-        try{
-            hopDongKTXRepository.delete(hopDongKTX);
-        }catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Cancel a contract failed");
-        }
-        return ResponseEntity.ok().body("Successfully canceled contract");
     }
 
     public boolean checkStatus(String MSSV) {
@@ -257,17 +277,13 @@ public class HopDongKTXService {
         return !hopDongKTXRepository.existsByIdTermAndMSSV(term.getId(),mssv);
     }
 
-//    public ResponseEntity<?> getHopDongTemp(HopDongKTXDTO hopDongKTXDTO) {
-//        List<HopDongKTX> hopDongKTXList = hopDongKTXRepository.findAllByMSSV(hopDongKTXDTO.getMSSV());
-//        System.out.println(hopDongKTXList.stream().toString());
-//        return ResponseEntity.ok(hopDongKTXList);
-//    }
 
     public ResponseEntity<?> getViewContractRoom() {
         String mssv= getUsernameFromSecurityContextHolder();
         if(mssv==null){
             return ResponseEntity.badRequest().body("Is not authenticated");
         }
+
         Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findFirstByMSSVOrderByNgayLamDonDesc(mssv));
         if (optional.isEmpty()) return ResponseEntity.badRequest().body("Empty");
         HopDongKTX hopDongKTX =optional.get();

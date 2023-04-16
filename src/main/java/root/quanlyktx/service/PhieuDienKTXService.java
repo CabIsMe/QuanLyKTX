@@ -17,7 +17,6 @@ import root.quanlyktx.dto.PhieuDienKTXDTO;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.PhieuDienKTX;
 import root.quanlyktx.entity.Term;
-import root.quanlyktx.firebase.FBPhieuDienNuocService;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.PhieuDienKTXRepository;
 import root.quanlyktx.repository.TermRepository;
@@ -120,5 +119,8 @@ public class PhieuDienKTXService {
             return ResponseEntity.badRequest().body("save fail");
         }
     }
+
+
+
 }
 

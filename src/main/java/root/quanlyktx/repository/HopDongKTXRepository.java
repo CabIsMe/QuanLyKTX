@@ -21,7 +21,8 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     Integer countHopDongKTXByIdPhongKTXAndIdTerm(Integer idPhong, Integer idTerm);
     HopDongKTX getHopDongKTXById(Integer id);
     boolean existsByIdTermAndMSSV(Integer idTerm, String MSSV);
-    boolean existsByIdTermAndMSSVAndTrangThaiTrue(Integer idTerm, String MSSV);
+    boolean existsByIdPhongKTXAndIdTermAndTrangThaiTrue(Integer idPhong, Integer idTerm);
+    HopDongKTX getHopDongKTXByIdTermAndMSSVAndTrangThaiTrue(Integer idTerm, String mssv);
     boolean existsById(Integer idHopDong);
     List <HopDongKTX> findAllByNgayLamDonBeforeAndTrangThaiFalse(Date date);
     boolean existsByIdTerm(Integer idTerm);
@@ -35,7 +36,6 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     boolean existsByMSSV(String MSSV);
     HopDongKTX findHopDongKTXByMSSVAndTerm_NgayKetThucDangKyBeforeAndTerm_NgayKetThucAfter(String mssv,Date date1,Date date2);
     HopDongKTX findByMSSVAndTrangThaiFalseAndIdTerm(String MSSV, Integer idTerm);
-    boolean existsByIdPhongKTXAndIdTermAndTrangThaiTrue(Integer idPhong, Integer idTerm);
     HopDongKTX findFirstByMSSVOrderByNgayLamDonDesc(String mssv);
     //thong ke
     @Query("SELECT COALESCE(SUM(hd.tongTien),0) FROM HopDongKTX hd WHERE hd.term.ngayKetThucDangKy <= :curDate AND hd.trangThai=true GROUP BY hd.term.id,hd.term.ngayKetThucDangKy HAVING SUM(hd.tongTien) IS NOT NULL ORDER BY hd.term.ngayKetThucDangKy DESC ")

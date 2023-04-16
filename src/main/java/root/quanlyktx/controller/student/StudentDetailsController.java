@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.StudentDto;
-import root.quanlyktx.model.StudentDetails;
 import root.quanlyktx.service.HopDongKTXService;
 import root.quanlyktx.service.StudentService;
 
