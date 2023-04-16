@@ -94,8 +94,8 @@ public class PhieuNuocKTXService {
     public ResponseEntity<?> getPhieuNuocList(Integer numPage,Integer idTerm,Boolean status) {
         Pageable pageable = PageRequest.of(0,9*numPage);
         Term term = termRepository.findTermById(idTerm);
-        YearMonth termDateStart = YearMonth.from(term.getNgayKetThucDangKy().toInstant());
-        YearMonth termDateEnd = YearMonth.from(term.getNgayKetThuc().toInstant());
+        LocalDate termDateStart = term.getNgayKetThucDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate termDateEnd = term.getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         List<PhieuNuocKTX> phieuNuocKTXList = new ArrayList<>();
         if(termDateEnd.getMonthValue() < termDateStart.getMonthValue()){
             phieuNuocKTXList = phieuNuocKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),12,termDateStart.getYear(),pageable);
@@ -103,7 +103,7 @@ public class PhieuNuocKTXService {
             phieuNuocKTXList.addAll(phieuNuocKTXList1);
         }
         else {
-            phieuNuocKTXList = phieuNuocKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),termDateEnd.getYear(),termDateEnd.getYear(),pageable);
+            phieuNuocKTXList = phieuNuocKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),termDateEnd.getMonthValue(),termDateEnd.getYear(),pageable);
         }
         if (phieuNuocKTXList.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("empty");
         else{

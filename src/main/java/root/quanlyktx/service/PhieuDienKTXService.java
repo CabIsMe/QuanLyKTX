@@ -22,7 +22,9 @@ import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.PhieuDienKTXRepository;
 import root.quanlyktx.repository.TermRepository;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -75,8 +77,8 @@ public class PhieuDienKTXService {
     public ResponseEntity<?> getElectricList(Integer numPage,Integer idTerm, Boolean status) {
         Pageable pageable = PageRequest.of(0,9*numPage);
         Term term = termRepository.findTermById(idTerm);
-        YearMonth termDateStart = YearMonth.from(term.getNgayKetThucDangKy().toInstant());
-        YearMonth termDateEnd = YearMonth.from(term.getNgayKetThuc().toInstant());
+        LocalDate termDateStart = term.getNgayKetThucDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate termDateEnd = term.getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         List<PhieuDienKTX> phieuDienKTXList = new ArrayList<>();
         if (termDateEnd.getMonthValue() < termDateStart.getMonthValue()){
             phieuDienKTXList = phieuDienKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),12,termDateStart.getYear(),pageable);
