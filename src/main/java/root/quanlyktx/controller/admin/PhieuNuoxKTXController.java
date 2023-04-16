@@ -22,7 +22,7 @@ public class PhieuNuoxKTXController {
     private GiaNuocTheoThangSerive giaNuocTheoThangSerive;
 
     @GetMapping("/")
-    public ResponseEntity<?> getPhieuNuocList(@RequestParam(name = "numpage") Integer numPage,
+    public ResponseEntity<?> getPhieuNuocList(@RequestParam(name = "numpage",defaultValue = "1") Integer numPage,
                                               @RequestParam(name = "idTerm") Integer idTerm,
                                               @RequestParam(name = "status") Boolean status){
         return phieuNuocKTXService.getPhieuNuocList(numPage,idTerm,status);
