@@ -14,6 +14,7 @@ import root.quanlyktx.firebase.FBPhieuDienNuocService;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.PhieuDienKTXRepository;
 
+import javax.annotation.PostConstruct;
 import java.time.YearMonth;
 import java.util.*;
 
@@ -91,5 +92,8 @@ public class PhieuDienKTXService {
             return ResponseEntity.badRequest().body("save fail");
         }
     }
+
+
+
 }
 

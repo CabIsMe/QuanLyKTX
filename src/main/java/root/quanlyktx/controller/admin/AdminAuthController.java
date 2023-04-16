@@ -66,7 +66,7 @@ public class AdminAuthController {
 
         }
 //        return ResponseEntity.ok(new JwtResponseAndOtp(jwt, userDetails.getUsername(),roles,OTP));
-        return ResponseEntity.ok(otp.getOtpCode());
+        return ResponseEntity.ok(true);
     }
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody Admin admin) {

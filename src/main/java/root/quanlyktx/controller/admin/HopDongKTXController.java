@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/contract")
+@RequestMapping("/api/manage/contract")
 @CrossOrigin(origins = "*", maxAge = 3600)
 
 public class HopDongKTXController {

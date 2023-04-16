@@ -19,7 +19,7 @@ public class JwtUtils {
     private final String jwtSecret= "lamSaoMaBietDuoc";
 
 //    Thời gian hết hạn access token
-    private final int jwtExpirationMs=86400000;
+    private final int jwtExpirationMs=86400000*30;
     public String generateJwtToken(Authentication authentication) {
 
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();

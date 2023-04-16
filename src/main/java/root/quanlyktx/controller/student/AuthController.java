@@ -94,7 +94,7 @@ public class AuthController {
         studentService.updateStatus(accountAndOtp.getUsername(),true);
         return ResponseEntity.ok(true);
     }
-    @GetMapping("resend-otp/{MSSV}")
+    @GetMapping("/resend-otp/{MSSV}")
     public ResponseEntity<?> resendOtp(@PathVariable String MSSV){
         Student student=studentService.getStudentByUsername(MSSV);
        if(student!=null){
@@ -109,7 +109,7 @@ public class AuthController {
     }
 
     @PreAuthorize("hasAuthority('student')")
-    @PostMapping("change-password")
+    @PostMapping("/change-password")
     public boolean changePass(@RequestBody PasswordEditing passwordEditing){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try{
@@ -122,5 +122,10 @@ public class AuthController {
             return false;
 
         return studentService.changePassword(authentication.getName(), passwordEditing.getNewPassword());
+    }
+
+    @GetMapping("/forgot-password/{mssv}")
+    public ResponseEntity<?> forgotPassword(@PathVariable("mssv") String mssv)throws Exception{
+        return studentService.forgotPass(mssv);
     }
 }

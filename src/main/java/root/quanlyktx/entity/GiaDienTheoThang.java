@@ -11,7 +11,6 @@ public class GiaDienTheoThang {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-
     @Column(name = "thang")
     private Integer thang;
     @Column(name ="nam")

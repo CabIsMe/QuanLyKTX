@@ -38,9 +38,9 @@ public class ContractRoomController {
 
         return hopDongKTXService.createContract(idPhong);
     }
-    @GetMapping("/extend/{idPhong}")
-    public ResponseEntity<?> extendDorm(@PathVariable("idPhong") Integer idPhong){
-        return hopDongKTXService.contractExtension(idPhong);
+    @GetMapping("/extend")
+    public ResponseEntity<?> extendDorm(){
+        return hopDongKTXService.contractExtension();
     }
 
     @GetMapping("/")
