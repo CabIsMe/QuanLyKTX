@@ -15,8 +15,8 @@ public class PhieuDienKTXController {
     @Autowired
     PhieuDienKTXService phieuDienKTXService;
 
-    @GetMapping("/{numpage}")
-    public ResponseEntity<?> getElectricList(@PathVariable("numpage") Integer numPage,
+    @GetMapping("/")
+    public ResponseEntity<?> getElectricList(@RequestParam(name = "numpage") Integer numPage,
                                              @RequestParam(name = "idTerm") Integer idTerm,
                                              @RequestParam(name = "status") Boolean status){
         return phieuDienKTXService.getElectricList(numPage,idTerm,status);
