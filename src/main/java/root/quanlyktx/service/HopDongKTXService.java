@@ -268,15 +268,17 @@ public class HopDongKTXService {
         if(mssv==null){
             return ResponseEntity.badRequest().body("Is not authenticated");
         }
-        Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.getFirstByMSSVAndNgayLamDonDesc(mssv));
+        Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findFirstByMSSVOrderByNgayLamDonDesc(mssv));
         if (optional.isEmpty()) return ResponseEntity.badRequest().body("Empty");
         HopDongKTX hopDongKTX =optional.get();
-        LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(hopDongKTX.getPhongKTX().getIdLoaiKTX());
-        Student student = studentRepository.findByUsername(mssv);
+//        LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(hopDongKTX.getPhongKTX().getIdLoaiKTX());
+        LoaiKTX loaiKTX = hopDongKTX.getPhongKTX().getLoaiKTX();
+        Student student = hopDongKTX.getStudent();
         LocalDate dateStart = hopDongKTX.getTerm().getNgayMoDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateEnd = hopDongKTX.getTerm().getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         Period period = Period.between(dateStart,dateEnd);
         int totalMonthPayment = period.getMonths()+1;
+        System.out.println(totalMonthPayment);
         loaiKTX.setGiaPhong(hopDongKTX.getTongTien()/totalMonthPayment);
         ViewContractRoom viewContractRoom = new ViewContractRoom(modelMapper.map(hopDongKTX,HopDongKTXDTO.class),
                 loaiKTX.getTenLoai(),
