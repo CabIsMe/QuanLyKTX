@@ -22,6 +22,7 @@ public class RoomDetailsController {
     @Autowired
     private LoaiKTXService loaiKTXService;
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/room-type")
     public List <LoaiKTXDto> getAllListLoaiKTX(){
         return loaiKTXService.getAll();
