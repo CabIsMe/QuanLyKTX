@@ -60,7 +60,7 @@ public class LoaiKTXService {
 
     public ResponseEntity<?> getAllListLoaiKTXGender() {
         String mssv = getUsernameFromSecurityContextHolder();
-        if (mssv==null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("unauthorization")
+        if (mssv==null) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("unauthorization");
         Student student = studentRepository.findByUsername(mssv);
         List<LoaiKTX> loaiKTXList = loaiKTXRepository.findAllByGerder(student.isGioiTinh());
         return ResponseEntity.ok(loaiKTXList.stream().map(loaiKTX -> modelMapper.map(loaiKTX,LoaiKTXDto.class)).collect(Collectors.toList()));
