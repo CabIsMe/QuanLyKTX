@@ -1,6 +1,7 @@
 package root.quanlyktx.controller.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.LoaiKTXDto;
@@ -26,6 +27,11 @@ public class RoomDetailsController {
     @GetMapping("/room-type")
     public List <LoaiKTXDto> getAllListLoaiKTX(){
         return loaiKTXService.getAll();
+    }
+
+    @GetMapping("/room-type-gender")
+    public ResponseEntity<?> getAllListLoaiKTXGender(){
+        return loaiKTXService.getAllListLoaiKTXGender();
     }
 
     @GetMapping("/room-type/{id}")

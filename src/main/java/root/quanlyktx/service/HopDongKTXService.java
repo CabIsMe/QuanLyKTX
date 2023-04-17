@@ -283,19 +283,13 @@ public class HopDongKTXService {
         if(mssv==null){
             return ResponseEntity.badRequest().body("Is not authenticated");
         }
-
-        Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findFirstByMSSVOrderByNgayLamDonDesc(mssv));
+        Date curDate = new Date();
+        Optional<HopDongKTX> optional = Optional.ofNullable(hopDongKTXRepository.findFirstByMSSVAndTerm_NgayMoDangKyBeforeAndTerm_NgayKetThucAfterOrderByNgayLamDonDesc(mssv,curDate,curDate));
         if (optional.isEmpty()) return ResponseEntity.badRequest().body("Empty");
         HopDongKTX hopDongKTX =optional.get();
 //        LoaiKTX loaiKTX = loaiKTXRepository.findLoaiKTXById(hopDongKTX.getPhongKTX().getIdLoaiKTX());
         LoaiKTX loaiKTX = hopDongKTX.getPhongKTX().getLoaiKTX();
         Student student = hopDongKTX.getStudent();
-        LocalDate dateStart = hopDongKTX.getTerm().getNgayMoDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate dateEnd = hopDongKTX.getTerm().getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        Period period = Period.between(dateStart,dateEnd);
-        int totalMonthPayment = period.getMonths()+1;
-        System.out.println(totalMonthPayment);
-        loaiKTX.setGiaPhong(hopDongKTX.getTongTien()/totalMonthPayment);
         ViewContractRoom viewContractRoom = new ViewContractRoom(modelMapper.map(hopDongKTX,HopDongKTXDTO.class),
                 loaiKTX.getTenLoai(),
                 loaiKTX.getGiaPhong(),
@@ -337,14 +331,13 @@ public class HopDongKTXService {
         }
     }
 
-    public ResponseEntity<?> updateStatusContract(Integer idHopDong,Integer idTerm) {
+    public ResponseEntity<?> updateStatusContract(Integer idHopDong) {
         Optional<HopDongKTX> hopDongKTXOptional = Optional.ofNullable(hopDongKTXRepository.getHopDongKTXById(idHopDong));
         if(hopDongKTXOptional.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception, Not Found");
         else {
             HopDongKTX hopDongKTX = hopDongKTXOptional.get();
             Date datePayment = calculateDatePayment(hopDongKTX.getNgayLamDon(),hopDongKTX.getTerm().getHanDongPhi());
-            if(idTerm != termRepository.getCurrentTerm()) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No edit contract status allow,contracts of the past period cannot be modified");
             if(new Date().compareTo(datePayment)>=0) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No edit contract status allow,because current date >= date payment");
             else
             {
