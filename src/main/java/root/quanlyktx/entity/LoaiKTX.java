@@ -20,6 +20,8 @@ public class LoaiKTX {
     private String Image;
     @Column(name = "ten_loai")
     private String tenLoai;
+    @Column(name = "gioi_tinh")
+    private Boolean gerder;
     @Column(name="mo_ta")
     private String description;
 
@@ -89,5 +91,13 @@ public class LoaiKTX {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getGerder() {
+        return gerder;
+    }
+
+    public void setGerder(Boolean gerder) {
+        this.gerder = gerder;
     }
 }
