@@ -331,14 +331,13 @@ public class HopDongKTXService {
         }
     }
 
-    public ResponseEntity<?> updateStatusContract(Integer idHopDong,Integer idTerm) {
+    public ResponseEntity<?> updateStatusContract(Integer idHopDong) {
         Optional<HopDongKTX> hopDongKTXOptional = Optional.ofNullable(hopDongKTXRepository.getHopDongKTXById(idHopDong));
         if(hopDongKTXOptional.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Exception, Not Found");
         else {
             HopDongKTX hopDongKTX = hopDongKTXOptional.get();
             Date datePayment = calculateDatePayment(hopDongKTX.getNgayLamDon(),hopDongKTX.getTerm().getHanDongPhi());
-            if(idTerm != termRepository.getCurrentTerm()) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No edit contract status allow,contracts of the past period cannot be modified");
             if(new Date().compareTo(datePayment)>=0) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No edit contract status allow,because current date >= date payment");
             else
             {

@@ -35,8 +35,8 @@ public class HopDongKTXController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<?> updateStatusContract(@RequestParam(name = "idHopDong") Integer idHopDong,@RequestParam(name = "idTerm") Integer idTerm){
-        return hopDongKTXService.updateStatusContract(idHopDong,idTerm);
+    public ResponseEntity<?> updateStatusContract(@RequestParam(name = "idHopDong") Integer idHopDong){
+        return hopDongKTXService.updateStatusContract(idHopDong);
     }
 
     @GetMapping("/{id}")
