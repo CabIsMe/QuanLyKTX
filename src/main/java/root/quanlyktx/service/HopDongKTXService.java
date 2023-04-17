@@ -279,7 +279,7 @@ public class HopDongKTXService {
 
 
     public ResponseEntity<?> getViewContractRoom() {
-        String mssv= "n19dccn018";
+        String mssv= getUsernameFromSecurityContextHolder();
         if(mssv==null){
             return ResponseEntity.badRequest().body("Is not authenticated");
         }

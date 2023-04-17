@@ -16,7 +16,7 @@ import root.quanlyktx.service.TermService;
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("api/student/contract")
-//@PreAuthorize("hasAuthority('student')")
+@PreAuthorize("hasAuthority('student')")
 public class ContractRoomController {
     @Autowired
     private HopDongKTXService hopDongKTXService;
