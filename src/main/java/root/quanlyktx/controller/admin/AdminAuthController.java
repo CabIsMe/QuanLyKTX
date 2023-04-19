@@ -16,6 +16,7 @@ import root.quanlyktx.jwt.JwtResponse;
 import root.quanlyktx.jwt.JwtUtils;
 import root.quanlyktx.model.AccountAndOtp;
 import root.quanlyktx.repository.AdminRepository;
+import root.quanlyktx.service.AdminService;
 import root.quanlyktx.userdetail.HandleAdminDetail;
 import root.quanlyktx.entity.OTP;
 import root.quanlyktx.model.OTPCode;
@@ -34,6 +35,9 @@ public class AdminAuthController {
 
     @Autowired
     AdminRepository adminRepository;
+
+    @Autowired
+    AdminService adminService;
 
     @Autowired
     OtpService otpService;
@@ -68,27 +72,8 @@ public class AdminAuthController {
 //        return ResponseEntity.ok(new JwtResponseAndOtp(jwt, userDetails.getUsername(),roles,OTP));
         return ResponseEntity.ok(true);
     }
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody Admin admin) {
-        if (adminRepository.existsById(admin.getUsername())) {
-            return ResponseEntity.badRequest().body("Error: Username is already taken!");
-        }
-        // Create new user's account
-        try{
-            Admin admin1 = new Admin(admin.getUsername(), encoder.encode(admin.getPassword()));
-            // student la 2
-            admin1.setRole_id(1);
-            adminRepository.save(admin1);
-            return ResponseEntity.ok("User registered successfully!");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity
-                    .badRequest()
-                    .body("Error: Can't save User");
-        }
 
-    }
+
     @PostMapping("/two-factor-auth")
     public ResponseEntity<?> twoFactorAuthentication(@RequestBody AccountAndOtp accountAndOtp){
         Authentication authentication = authenticationManager.authenticate(

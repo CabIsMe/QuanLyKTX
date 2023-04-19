@@ -12,7 +12,7 @@ import root.quanlyktx.service.PhongKTXService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/room")
+@RequestMapping("/api/manage/room")
 @CrossOrigin(origins = "*", maxAge = 3600)
 
 public class PhongKTXController {
@@ -40,7 +40,7 @@ public class PhongKTXController {
     public List <PhongKTXDTO> getAll() { return phongKTXService.getALL();}
 
     @GetMapping("/combobox")
-    public List<Integer> comboboxPhongHaveStudents(@RequestParam("status") boolean status) {
+    public List<PhongKTXDTO> comboboxPhongHaveStudents(@RequestParam( defaultValue = "true") Boolean status) {
         return phongKTXService.getAllPhongHaveStudents(status);
     }
 

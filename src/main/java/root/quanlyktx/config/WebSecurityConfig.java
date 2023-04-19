@@ -38,10 +38,7 @@ public class WebSecurityConfig {
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
-//    @Bean
-//    public JavaMailSender javaMailSender(){
-//        return new JavaMailSenderImpl();
-//    }
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
@@ -74,6 +71,7 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/owner/**").hasAuthority("owner")
                 .antMatchers("/api/admin/**").permitAll()
 //                .anyRequest().authenticated();
                 // dòng trên để filter url, dòng dưới để tắt đi cho dễ test

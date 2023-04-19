@@ -14,14 +14,13 @@ import root.quanlyktx.service.LoaiKTXService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/room-type")
+@RequestMapping("/api/manage/room-type")
 //@PreAuthorize("hasAuthority('student')")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class LoaiKTXController {
     @Autowired
     LoaiKTXService loaiKTXService;
-
-
+    
     
     @GetMapping("/")
     List <LoaiKTXDto> getAll(){

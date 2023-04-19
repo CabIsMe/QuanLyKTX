@@ -33,10 +33,6 @@ public class HandleAdminDetail implements UserDetails {
 //    }
     public static HandleAdminDetail build(Admin admin) {
         List<GrantedAuthority> authorities= new ArrayList<>();
-//        if(user.getRole()==4)
-//            authorities.add(new SimpleGrantedAuthority("student"));
-//        else if(user.getRole()==3)
-//            authorities.add(new SimpleGrantedAuthority("admin"));
 
         authorities.add(new SimpleGrantedAuthority(admin.getRole().getRoleName()));
         return new HandleAdminDetail(admin, authorities);

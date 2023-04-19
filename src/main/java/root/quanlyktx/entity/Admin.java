@@ -57,6 +57,12 @@ public class Admin {
         this.password = password;
     }
 
+    public Admin(String username, String hoTen, String password) {
+        this.username = username;
+        this.hoTen = hoTen;
+        this.password = password;
+    }
+
     public String getUsername() {
         return username;
     }

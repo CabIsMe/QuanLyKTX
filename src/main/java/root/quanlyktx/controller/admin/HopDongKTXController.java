@@ -4,6 +4,7 @@ import org.apache.http.annotation.Contract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.entity.HopDongKTX;
@@ -23,26 +24,27 @@ public class HopDongKTXController {
 
 
 
+
     @GetMapping("/")
     public List<HopDongKTXDTO> getAll(){ return hopDongKTXService.getAll();}
 
     @GetMapping("/list/{numpage}")
-    public ResponseEntity<?> getViewContractRoomList(@PathVariable("numpage") Integer numPage,
-          @RequestParam(name = "idphongktx",defaultValue = "0") Integer idPhongKTX,
-          @RequestParam(name = "idterm",defaultValue = "0") Integer idTerm,
-          @RequestParam(name = "status",defaultValue = "false") boolean status){
+    public ResponseEntity<?> getViewContractRoomList(@PathVariable("numpage")Integer numPage,
+          @RequestParam(defaultValue = "0") Integer idPhongKTX,
+          @RequestParam(defaultValue = "0") Integer idTerm,
+          @RequestParam(defaultValue = "false") boolean status){
         return hopDongKTXService.getViewContractRoomList(numPage,idPhongKTX,idTerm,status);
     }
 
-    @PutMapping("/")
-    public ResponseEntity<?> updateStatusContract(@RequestParam(name = "idHopDong") Integer idHopDong){
-        return hopDongKTXService.updateStatusContract(idHopDong);
+    @GetMapping("/update")
+    public ResponseEntity<?> updateStatusContract(@RequestParam Integer idContract){
+        return hopDongKTXService.updateStatusContract(idContract);
     }
 
-    @GetMapping("/{id}")
-    public HopDongKTXDTO getById(@PathVariable("id") Integer id){
-       return hopDongKTXService.getById(id);
-    }
+//    @GetMapping("/{id}")
+//    public HopDongKTXDTO getById(@PathVariable("id") Integer id){
+//       return hopDongKTXService.getById(id);
+//    }
 
     @GetMapping("/phong/{idphongktx}")
     public List<HopDongKTXDTO> getByIdPhongKTX(@PathVariable("idphongktx") Integer idphongktx){
@@ -53,20 +55,22 @@ public class HopDongKTXController {
 //        return hopDongKTXService.xoaHopDongChuaDongPhi();
 //    }
 
-    @GetMapping("/timkiem")
-    public  HopDongKTXDTO search(@RequestParam Integer id){ return  hopDongKTXService.getById(id);}
+    @GetMapping("/search")
+    public  List<HopDongKTXDTO> searchContract(@RequestParam @Nullable String id){ return  hopDongKTXService.getById(id);}
 
-    @GetMapping("/searching")
-    public List<HopDongKTXDTO> getContracts(
-            @RequestParam(required = false) Integer id,
-            @RequestParam(required = false) Integer idPhong,
-            @RequestParam(required = false) String MSSV
-    ) {
-        List <HopDongKTXDTO> contracts= hopDongKTXService.getAll();
-        return contracts.stream()
-                .filter(c -> id == null || c.getId().equals(id))
-                .filter(c -> idPhong == null || c.getIdPhongKTX().equals(idPhong))
-                .filter(c -> MSSV == null || c.getMSSV().equals(MSSV))
-                .collect(Collectors.toList());
-    }
+//    @GetMapping("/searching")
+//    public List<HopDongKTXDTO> getContracts(
+//            @RequestParam(required = false) Integer id,
+//            @RequestParam(required = false) Integer idPhong,
+//            @RequestParam(required = false) String MSSV
+//    ) {
+//        List <HopDongKTXDTO> contracts= hopDongKTXService.getAll();
+//        return contracts.stream()
+//                .filter(c -> id == null || c.getId().equals(id))
+//                .filter(c -> idPhong == null || c.getIdPhongKTX().equals(idPhong))
+//                .filter(c -> MSSV == null || c.getMSSV().equals(MSSV))
+//                .collect(Collectors.toList());
+//    }
+
+
 }

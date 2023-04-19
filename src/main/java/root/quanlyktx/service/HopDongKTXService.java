@@ -66,10 +66,22 @@ public class HopDongKTXService {
         return hopDongKTXList.stream().map(hopDongKTX -> modelMapper.map(hopDongKTX, HopDongKTXDTO.class)).collect(Collectors.toList());
     }
 
-    public HopDongKTXDTO getById(Integer id) {
-        HopDongKTX hopDongKTX = hopDongKTXRepository.findById(id).get();
-
-        return modelMapper.map(hopDongKTX, HopDongKTXDTO.class);
+    public List<HopDongKTXDTO> getById(String id) {
+        List<HopDongKTX> hopDongKTXList = new ArrayList<>();
+        try{
+            int intValue = Integer.parseInt(id);
+            hopDongKTXList.add(hopDongKTXRepository.getHopDongKTXById(intValue));
+            if (hopDongKTXList.isEmpty()) {
+                throw new Exception("List empty");
+            }
+        }catch (Exception e){
+            hopDongKTXList = hopDongKTXRepository.findAllByMSSVLike("%"+id+"%");
+        }
+        if(hopDongKTXList.isEmpty())
+            return new ArrayList<>();
+        return hopDongKTXList.stream()
+                .map(hopDongKTX -> modelMapper.map(hopDongKTX, HopDongKTXDTO.class))
+                .collect(Collectors.toList());
     }
 
     public List<HopDongKTXDTO> getByPhongKTX(Integer idPhongKTX) {
@@ -310,25 +322,31 @@ public class HopDongKTXService {
     }
 
     public ResponseEntity<?> getViewContractRoomList(Integer numPage,Integer idPhongKTX,Integer idTerm,boolean status) {
-        Pageable pageable = PageRequest.of(0*numPage,9*numPage);
-        List<HopDongKTX> hopDongKTXList = new ArrayList<>();
-        if(idPhongKTX==0) {
-            hopDongKTXList = hopDongKTXRepository.findAllByTerm_IdAndTrangThai(idTerm,status,pageable);
-        }
-        else if (idTerm==0){
-            hopDongKTXList = hopDongKTXRepository.findAllByIdPhongKTXAndTrangThai(idPhongKTX,status,pageable);
-        }
-        else if(idPhongKTX==0&&idTerm==0){
+
+        Pageable pageable = PageRequest.of(0,numPage);
+        List<HopDongKTX> hopDongKTXList;
+        if(idPhongKTX==0 && idTerm==0){
             hopDongKTXList = hopDongKTXRepository.findAllByTrangThai(status,pageable);
         }
         else{
-            hopDongKTXList = hopDongKTXRepository.findByIdPhongKTXAndTerm_IdAndTrangThaiOrderByNgayLamDonDesc(idPhongKTX,idTerm,status,pageable);
+            if(idPhongKTX==0) {
+                hopDongKTXList = hopDongKTXRepository.findAllByTerm_IdAndTrangThai(idTerm,status,pageable);
+            }
+            else if (idTerm==0){
+                hopDongKTXList = hopDongKTXRepository.findAllByIdPhongKTXAndTrangThai(idPhongKTX,status,pageable);
+            }
+            else{
+                hopDongKTXList = hopDongKTXRepository.findByIdPhongKTXAndTerm_IdAndTrangThaiOrderByNgayLamDonDesc(idPhongKTX,idTerm,status,pageable);
+            }
         }
-        if (hopDongKTXList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
-        else{
-            List<HopDongKTXDTO> hopDongKTXDTOList = hopDongKTXList.stream().map(hopDongKTX -> modelMapper.map(hopDongKTX,HopDongKTXDTO.class)).collect(Collectors.toList());
+
+            List<HopDongKTXDTO> hopDongKTXDTOList = hopDongKTXList.stream()
+                    .map(hopDongKTX -> modelMapper
+                    .map(hopDongKTX,HopDongKTXDTO.class))
+                    .collect(Collectors.toList());
+
             return ResponseEntity.ok(hopDongKTXDTOList);
-        }
+//        }
     }
 
     public ResponseEntity<?> updateStatusContract(Integer idHopDong) {
@@ -338,12 +356,14 @@ public class HopDongKTXService {
         else {
             HopDongKTX hopDongKTX = hopDongKTXOptional.get();
             Date datePayment = calculateDatePayment(hopDongKTX.getNgayLamDon(),hopDongKTX.getTerm().getHanDongPhi());
-            if(new Date().compareTo(datePayment)>=0) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No edit contract status allow,because current date >= date payment");
+            if(new Date().compareTo(datePayment)>=0)
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No edit contract status at this time");
             else
             {
-                if(hopDongKTX.isTrangThai()) hopDongKTX.setTrangThai(false);
-                else hopDongKTX.setTrangThai(true);
+
                 try {
+                    hopDongKTX.setTrangThai(!hopDongKTX.isTrangThai());
+
                     hopDongKTXRepository.save(hopDongKTX);
                     return ResponseEntity.ok().body("Success");
                 }catch (Exception ex){
@@ -354,4 +374,19 @@ public class HopDongKTXService {
         }
     }
 
+
+    public List<HopDongKTXDTO> sortListContractById(List<HopDongKTXDTO> hopdongKTXDTOS){
+        if(hopdongKTXDTOS.isEmpty())
+            return new ArrayList<>();
+        List<Integer> ids=hopdongKTXDTOS.stream()
+                                        .map(HopDongKTXDTO :: getId)
+                                        .collect(Collectors.toList());
+
+        List<Integer> idss = QuickSort.sort(ids);
+        return hopDongKTXRepository.findAllById(idss).stream()
+                                                        .map(hopDongKTX -> modelMapper
+                                                                .map(hopDongKTX,HopDongKTXDTO.class))
+                                                                    .collect(Collectors.toList());
+
+    }
 }

@@ -115,19 +115,19 @@ public class PhongKTXService {
     }
 
 
-    public List<Integer> getAllPhongHaveStudents(boolean status) {
+    public List<PhongKTXDTO> getAllPhongHaveStudents(Boolean status) {
         List<PhongKTX> phongKTXList = phongKTXRepository.findAllByTrangThaiTrue();
-        List<Integer> idPhong = new ArrayList<>();
+        List<PhongKTXDTO> phongKTXDTOList= new ArrayList<>();
 //        idPhong.add(0);
         for(PhongKTX phongKTX : phongKTXList){
             for (HopDongKTX hopDongKTX : phongKTX.getHopDongKTXList()){
                 if(hopDongKTX.isTrangThai()==status){
-                    idPhong.add(phongKTX.getId());
+                    phongKTXDTOList.add(modelMapper.map(phongKTX, PhongKTXDTO.class));
                     break;
                 }
             }
         }
-        return idPhong;
+        return phongKTXDTOList;
     }
 
 //    public ViewInforRoom getViewInforRoom(Integer idPhongKTX){
