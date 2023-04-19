@@ -33,6 +33,7 @@ public class HopDongKTXController {
           @RequestParam(defaultValue = "0") Integer idPhongKTX,
           @RequestParam(defaultValue = "0") Integer idTerm,
           @RequestParam(defaultValue = "false") boolean status){
+
         return hopDongKTXService.getViewContractRoomList(numPage,idPhongKTX,idTerm,status);
     }
 

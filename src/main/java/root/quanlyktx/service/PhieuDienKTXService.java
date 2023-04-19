@@ -56,7 +56,7 @@ public class PhieuDienKTXService {
         Optional<HopDongKTX> hopDongKTX = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayKetThucDangKyBeforeAndTerm_NgayKetThucAfter(mssv, currentDate, currentDate));
         if (hopDongKTX.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empty");
         else {
-            YearMonth dateStart = YearMonth.from(hopDongKTX.get().getNgayLamDon().toInstant());
+            LocalDate dateStart = hopDongKTX.get().getNgayLamDon().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             List<PhieuDienKTX> phieuDienKTXList = phieuDienKTXRepository.findAllByMaSoKTXAndGiaDienTheoThang_ThangGreaterThanEqualAndGiaDienTheoThang_NamGreaterThanEqual(hopDongKTX.get().getIdPhongKTX(), dateStart.getMonthValue(), dateStart.getYear());
             List<PhieuDienKTXDTO> phieuDienKTXDTOList = new ArrayList<>();
             Double total;
