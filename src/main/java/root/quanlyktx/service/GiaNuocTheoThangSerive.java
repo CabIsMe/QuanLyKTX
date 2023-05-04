@@ -1,5 +1,7 @@
 package root.quanlyktx.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -9,9 +11,9 @@ import root.quanlyktx.entity.GiaNuocTheoThang;
 import root.quanlyktx.repository.GiaNuocTheoThangRepository;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @EnableScheduling
@@ -34,8 +36,12 @@ public class GiaNuocTheoThangSerive {
 //        return giaNuocTheoThangRepository.findById(id).get();}
     @Autowired
     GiaNuocTheoThangRepository giaNuocTheoThangRepository;
+    private static final Logger logger = LoggerFactory.getLogger(GiaNuocTheoThangSerive.class);
 
-    public List<GiaNuocTheoThang> getAll(){ return giaNuocTheoThangRepository.findAll();}
+    public List<GiaNuocTheoThang> getAllWaterPrice(){
+        return giaNuocTheoThangRepository.findAll();
+    }
+
     public GiaNuocTheoThang findById(){
         int id;
         int month = LocalDate.now().getMonth().getValue();
@@ -47,26 +53,58 @@ public class GiaNuocTheoThangSerive {
         }
         return giaNuocTheoThangRepository.findById(id).get();
     }
-
-    @Scheduled(cron = "0 0 0 1 * ?")
-    public ResponseEntity<?> addGiaNuocNextMonth(){
+//    @Scheduled(fixedRate = 10000)
+//    @Scheduled(cron = "0 0 0 1 * ?")
+    public void addGiaNuocNextMonth(){
         LocalDate currentDate = LocalDate.now();
         int month = currentDate.getMonth().getValue();
         int year = currentDate.getYear();
 
-        GiaNuocTheoThang giaNuocTheoThang = giaNuocTheoThangRepository.findGiaNuocTheoThangByNamAndThang(month,year);
-        Double giaThangTruoc = giaNuocTheoThang.getGiaNuoc();
+        GiaNuocTheoThang giaNuocTheoThang = giaNuocTheoThangRepository.findGiaNuocTheoThangByNamAndThang(year, month);
+        if(giaNuocTheoThang==null){
+            logger.error("Current Cost of Water Not Found!");
+            return;
+        }
+
         if(month==12){
             month=1;
             year+=1;
         }
-        giaNuocTheoThang = new GiaNuocTheoThang(month,year,giaThangTruoc);
+        else
+            month+=1;
+        if(giaNuocTheoThangRepository.findGiaNuocTheoThangByNamAndThang(year, month)!=null){
+            logger.info("Saved that Record");
+            return;
+        }
+        GiaNuocTheoThang giaNuocTheoThangNew = new GiaNuocTheoThang(month,year,giaNuocTheoThang.getGiaNuoc());
         try {
-            giaNuocTheoThangRepository.save(giaNuocTheoThang);
-            return ResponseEntity.ok().body("success");
+            giaNuocTheoThangRepository.save(giaNuocTheoThangNew);
+            logger.info("success");
         }catch (Exception e){
             e.getStackTrace();
-            return ResponseEntity.badRequest().body("save fail");
+            logger.error("save fail");
         }
+    }
+
+    public boolean editWaterPrice(Integer id, Double price){
+        Optional<GiaNuocTheoThang> optional= giaNuocTheoThangRepository.findById(id);
+        if(optional.isEmpty()){
+            return false;
+        }
+        GiaNuocTheoThang giaNuocTheoThang=optional.get();
+        YearMonth yearMonth1 = YearMonth.of(giaNuocTheoThang.getNam(), giaNuocTheoThang.getThang());
+        YearMonth yearMonth2 = YearMonth.now();
+        if(yearMonth1.isAfter(yearMonth2)){
+            giaNuocTheoThang.setGiaNuoc(price);
+            try{
+                giaNuocTheoThangRepository.save(giaNuocTheoThang);
+            }catch (Exception e){
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        else
+            return false;
     }
 }

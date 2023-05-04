@@ -23,6 +23,10 @@ import root.quanlyktx.repository.PhieuNuocKTXRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -37,8 +41,8 @@ public class FBPhieuDienNuocService {
     @Autowired
     GiaNuocTheoThangRepository giaNuocTheoThangRepository;
 
-//    @Scheduled(fixedRate = 2000)
-    @Scheduled(cron = "0 0 0 2 * ?")
+//    @Scheduled(fixedRate = 10000)
+//    @Scheduled(cron = "0 0 0 2 * ?")
     @Transactional
     public void loadAllAndSavePhieuDienNuocFromFB() throws InterruptedException, ExecutionException {
         Firestore dbFirestore = FirestoreClient.getFirestore();
@@ -48,20 +52,30 @@ public class FBPhieuDienNuocService {
         documentReferences.forEach(documentReference1 -> {
             ApiFuture<DocumentSnapshot> future=documentReference1.get();
             try {
+                List<Integer> monthAndYear=giaDienTheoThangRepository.getPreviousMonthAndYear();
                 DocumentSnapshot snapshot=future.get();
                 InputBillPerMonth inputBillPerMonth = snapshot.toObject(InputBillPerMonth.class);
-                LocalDate currentDate = LocalDate.now();
-                GiaNuocTheoThang giaNuocTheoThang = giaNuocTheoThangRepository.findGiaNuocTheoThangByNamAndThang(currentDate.getYear(),currentDate.getMonthValue());
-                GiaDienTheoThang giaDienTheoThang = giaDienTheoThangRepository.findGiaDienTheoThangByNamAndThang(currentDate.getYear(),currentDate.getMonthValue());
-                PhieuNuocKTX phieuNuocKTX = new PhieuNuocKTX(Integer.parseInt(snapshot.getId()),giaNuocTheoThang,inputBillPerMonth.getAmountOfWater(),false);
-                phieuNuocKTXRepository.save(phieuNuocKTX);
-                PhieuDienKTX phieuDienKTX = new PhieuDienKTX(Integer.parseInt(snapshot.getId()),giaDienTheoThang,inputBillPerMonth.getAmountOfElectric(),false);
-                phieuDienKTXRepository.save(phieuDienKTX);
+                GiaNuocTheoThang giaNuocTheoThang = giaNuocTheoThangRepository.findGiaNuocTheoThangByNamAndThang(monthAndYear.get(1),monthAndYear.get(0));
+                GiaDienTheoThang giaDienTheoThang = giaDienTheoThangRepository.findGiaDienTheoThangByNamAndThang(monthAndYear.get(1),monthAndYear.get(0));
+                assert inputBillPerMonth != null;
+                if(!phieuNuocKTXRepository.existsByGiaNuocTheoThangAndMaSoKTX(giaNuocTheoThang, Integer.parseInt(snapshot.getId()))){
+                    PhieuNuocKTX phieuNuocKTX = new PhieuNuocKTX(Integer.parseInt(snapshot.getId()),giaNuocTheoThang,inputBillPerMonth.getAmountOfWater(),false);
+                    phieuNuocKTXRepository.save(phieuNuocKTX);
+
+                }
+
+                if(!phieuDienKTXRepository.existsByGiaDienTheoThangAndMaSoKTX(giaDienTheoThang, Integer.parseInt(snapshot.getId()))){
+                    PhieuDienKTX phieuDienKTX = new PhieuDienKTX(Integer.parseInt(snapshot.getId()),giaDienTheoThang,inputBillPerMonth.getAmountOfElectric(),false);
+                    phieuDienKTXRepository.save(phieuDienKTX);
+                }
+//
+
 
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         });
     }
+
 
 }

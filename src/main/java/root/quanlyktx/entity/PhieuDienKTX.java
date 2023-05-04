@@ -1,9 +1,12 @@
 package root.quanlyktx.entity;
 
+import lombok.ToString;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "phieu_dien_KTX")
+@ToString
 public class PhieuDienKTX {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,21 +5,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import root.quanlyktx.dto.HopDongKTXDTO;
+import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.dto.PhongKTXDTO;
 
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.entity.Term;
 import root.quanlyktx.entity.HopDongKTX;
+import root.quanlyktx.model.CurrentInfoRoom;
+import root.quanlyktx.model.QuickSort;
 import root.quanlyktx.model.RoomDetails;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.LoaiKTXRepository;
 import root.quanlyktx.repository.PhongKTXRepository;
 import root.quanlyktx.repository.TermRepository;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,30 +55,36 @@ public class PhongKTXService {
             }
     }
 
+    boolean checkExistRoomInContract(Integer idPhong){
+        Date date = new Date();
+        // ngayMoDangKy <= date register <= ngayKetThucDangKy
+        // date != date register
+        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
+        if(term!=null){
+            return true;
+        }
+        else{
+            return hopDongKTXRepository.existsByIdTermAndIdPhongKTX(termRepository.getCurrentTerm(), idPhong);
+        }
+    }
 
     public ResponseEntity<?> deletePhongKTX(Integer id){
-        Date date = new Date();
-        if(termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date, date) != null)
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid");
-        }
+        if(checkExistRoomInContract(id))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to perform corrections at this time");
         Optional<PhongKTX> optional = phongKTXRepository.findById(id);
         if(optional.isEmpty())
         {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PhongKTX invalid");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PhongKTX invalid");
         }
         PhongKTX phongKTX = optional.get();
-                phongKTX.setTrangThai(false);
+                phongKTX.setTrangThai(!phongKTX.isTrangThai());
                 phongKTXRepository.save(phongKTX);
                 return ResponseEntity.ok(true);
     }
 
-    public ResponseEntity<?> updatePhongKTX(Integer id, PhongKTXDTO phongKTXDTO){
-        Date date = new Date();
-        if(termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date, date) != null)
-        {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid");
-        }
+    public ResponseEntity<?> updatePhongKTX(Integer id, Integer idLoaiKTX){
+        if(checkExistRoomInContract(id))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to perform corrections at this time");
         Optional<PhongKTX> optional = phongKTXRepository.findById(id);
         if(optional.isEmpty())
         {
@@ -85,9 +93,7 @@ public class PhongKTXService {
 
                 try{
                     PhongKTX phongKTX_root= optional.get();
-                    phongKTX_root.setIdLoaiKTX(phongKTXDTO.getIdLoaiKTX());
-                    phongKTX_root.setTrangThai(phongKTXDTO.getTrangThai());
-                    //     phongKTX_root.setHinhAnh(phongKTX.getHinhAnh());
+                    phongKTX_root.setIdLoaiKTX(idLoaiKTX);
                     phongKTXRepository.save(phongKTX_root);
                     return ResponseEntity.ok(true);
                 }
@@ -97,16 +103,35 @@ public class PhongKTXService {
                 }
     }
 
+    Integer amountContractRoom(Integer idRoom){
+        Date date=new Date();
+        Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date, date);
+        if (term == null) {
+            term = termRepository.getByNgayKetThucDangKyBeforeAndNgayKetThucAfter(date, date);
+        }
+        return hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndIdTerm(idRoom, term.getId());
 
-    public List<PhongKTXDTO> getALL(){
-        List<PhongKTX> phongKTXList = phongKTXRepository.findAll();
-        return phongKTXList.stream().map(phongKTX -> modelMapper.map(phongKTX, PhongKTXDTO.class)).collect(Collectors.toList());
     }
+    public List<CurrentInfoRoom> getALL(boolean status, Boolean sortByType){
+        List<CurrentInfoRoom> infoRooms=new ArrayList<>();
+        List<PhongKTX> phongKTXList = phongKTXRepository.findAllByTrangThai(status);
+        if(sortByType){
+            phongKTXList= phongKTXList.stream().sorted(Comparator.comparing(PhongKTX::getIdLoaiKTX))
+                    .collect(Collectors.toList());
+        }
+        for(PhongKTX phongKTX: phongKTXList){
+            infoRooms.add(new CurrentInfoRoom(modelMapper.map(phongKTX, PhongKTXDTO.class), amountContractRoom(phongKTX.getId())));
+        }
+
+        return infoRooms;
+    }
+
 
     public PhongKTXDTO getById(Integer id){
         PhongKTX phongKTX = phongKTXRepository.findById(id).get();
         return modelMapper.map(phongKTX, PhongKTXDTO.class);
     }
+
     public List<PhongKTXDTO> getAllByLoaiPhong(Integer id){
         List<PhongKTX>phongKTXList=phongKTXRepository.findAllByIdLoaiKTXAndTrangThaiTrue(id);
         return phongKTXList.stream()
@@ -115,7 +140,7 @@ public class PhongKTXService {
     }
 
 
-    public List<PhongKTXDTO> getAllPhongHaveStudents(Boolean status) {
+    public List<PhongKTXDTO> getAllPhongHaveStudents(boolean status) {
         List<PhongKTX> phongKTXList = phongKTXRepository.findAllByTrangThaiTrue();
         List<PhongKTXDTO> phongKTXDTOList= new ArrayList<>();
 //        idPhong.add(0);
@@ -126,7 +151,9 @@ public class PhongKTXService {
                     break;
                 }
             }
+
         }
+
         return phongKTXDTOList;
     }
 
@@ -137,7 +164,8 @@ public class PhongKTXService {
 //    }
 
 
-    public Integer countHopDongInPhong(Integer idPhong) {
+
+    public Integer countContractRoom(Integer idPhong) {
         Date date= new Date();
         Term term= termRepository.getByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date);
         if(term == null){
@@ -158,7 +186,7 @@ public class PhongKTXService {
         for (PhongKTX phongKTX: phongKTXDTOList) {
 
             roomDetailsList.add(new RoomDetails(phongKTX.getId(), loaiKTX.getTenLoai(),loaiKTX.getGiaPhong(),
-                    loaiKTX.getSoGiuong()- countHopDongInPhong(phongKTX.getId())
+                    loaiKTX.getSoGiuong()- countContractRoom(phongKTX.getId())
                     ,loaiKTX.getImage(),loaiKTX.getDescription()));
         }
         if(roomDetailsList.isEmpty()){
@@ -179,7 +207,9 @@ public class PhongKTXService {
         PhongKTX phongKTX=optional.get();
 
         return new RoomDetails(phongKTX.getId(),loaiKTX.getTenLoai(),loaiKTX.getGiaPhong()
-                ,loaiKTX.getSoGiuong()-countHopDongInPhong(phongKTX.getId())
+                ,loaiKTX.getSoGiuong()- countContractRoom(phongKTX.getId())
                 ,loaiKTX.getImage(), loaiKTX.getDescription());
     }
+
+
 }

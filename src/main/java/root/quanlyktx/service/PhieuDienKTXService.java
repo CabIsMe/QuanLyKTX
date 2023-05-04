@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import root.quanlyktx.dto.GiaDienTheoThangDTO;
 import root.quanlyktx.dto.PhieuDienKTXDTO;
 import root.quanlyktx.entity.HopDongKTX;
@@ -21,16 +22,16 @@ import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.PhieuDienKTXRepository;
 import root.quanlyktx.repository.TermRepository;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
 public class PhieuDienKTXService {
-    @Autowired
-    private TermRepository termRepository;
     @Autowired
     private HopDongKTXRepository hopDongKTXRepository;
     @Autowired
@@ -39,6 +40,20 @@ public class PhieuDienKTXService {
     private ModelMapper modelMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(PhieuDienKTXService.class);
+
+    List<Integer> getPreviousMonthAndYear(){
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+        LocalDate currentDate = LocalDate.now(zoneId);
+        int currentMonth = currentDate.getMonthValue();
+        int currentYear = currentDate.getYear();
+        YearMonth previousMonth = YearMonth.of(currentYear, currentMonth).minusMonths(1);
+        Integer previousMonthValue = previousMonth.getMonthValue();
+        Integer previousYearValue = previousMonth.getYear();
+        List<Integer> list= new ArrayList<>();
+        list.add(previousMonthValue);
+        list.add(previousYearValue);
+        return list;
+    }
 
     public static String getUsernameFromSecurityContextHolder(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,7 +65,7 @@ public class PhieuDienKTXService {
         return authentication.getName();
     }
 
-    public ResponseEntity<?> getElectricBills() {
+    public ResponseEntity<?> getSudentElectricBills() {
         String mssv = getUsernameFromSecurityContextHolder();
         Date currentDate = new Date();
         Optional<HopDongKTX> hopDongKTX = Optional.ofNullable(hopDongKTXRepository.findHopDongKTXByMSSVAndTerm_NgayKetThucDangKyBeforeAndTerm_NgayKetThucAfter(mssv, currentDate, currentDate));
@@ -58,66 +73,55 @@ public class PhieuDienKTXService {
         else {
             LocalDate dateStart = hopDongKTX.get().getNgayLamDon().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             List<PhieuDienKTX> phieuDienKTXList = phieuDienKTXRepository.findAllByMaSoKTXAndGiaDienTheoThang_ThangGreaterThanEqualAndGiaDienTheoThang_NamGreaterThanEqual(hopDongKTX.get().getIdPhongKTX(), dateStart.getMonthValue(), dateStart.getYear());
-            List<PhieuDienKTXDTO> phieuDienKTXDTOList = new ArrayList<>();
-            Double total;
-            for (PhieuDienKTX phieuDienKTX : phieuDienKTXList) {
-                total = phieuDienKTX.getSoDienTieuThu() * phieuDienKTX.getGiaDienTheoThang().getGiaDien();
-                phieuDienKTXDTOList.add(new PhieuDienKTXDTO(phieuDienKTX.getId(),
-                                                            phieuDienKTX.getMaSoKTX(),
-                                                            phieuDienKTX.getSoDienTieuThu(),
-                                                            phieuDienKTX.isTrangThai(),
-                                                            modelMapper.map(phieuDienKTX.getGiaDienTheoThang(), GiaDienTheoThangDTO.class),
-                                                            total));
-            }
+            List<PhieuDienKTXDTO> phieuDienKTXDTOList= phieuDienKTXList.stream()
+                    .map(c -> new PhieuDienKTXDTO(c.getId(), c.getMaSoKTX(), c.getSoDienTieuThu(), c.isTrangThai(),
+                            modelMapper.map(c.getGiaDienTheoThang(), GiaDienTheoThangDTO.class),
+                            c.getSoDienTieuThu()*c.getGiaDienTheoThang().getGiaDien()))
+                    .collect(Collectors.toList());
             return ResponseEntity.ok(phieuDienKTXDTOList);
         }
     }
 
-    public ResponseEntity<?> getElectricList(Integer numPage,Integer idTerm, Boolean status) {
+
+
+    public ResponseEntity<?> electricityListManagement(Short numPage, Integer month, Integer year, Boolean status) {
         Pageable pageable = PageRequest.of(0,9*numPage);
-        Term term = termRepository.findTermById(idTerm);
-        LocalDate termDateStart = term.getNgayKetThucDangKy().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate termDateEnd = term.getNgayKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        List<PhieuDienKTX> phieuDienKTXList = new ArrayList<>();
-        if (termDateEnd.getMonthValue() < termDateStart.getMonthValue()){
-            phieuDienKTXList = phieuDienKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),12,termDateStart.getYear(),pageable);
-            List<PhieuDienKTX> phieuDienKTXList1 = phieuDienKTXRepository.findByStatusAndMonthRange(status,1,termDateEnd.getMonthValue(),termDateEnd.getYear(),pageable);
-            phieuDienKTXList.addAll(phieuDienKTXList1);
+        if(month==null){
+            month= getPreviousMonthAndYear().get(0);
         }
-        else {
-            phieuDienKTXList = phieuDienKTXRepository.findByStatusAndMonthRange(status,termDateStart.getMonthValue(),termDateEnd.getMonthValue(),termDateEnd.getYear(),pageable);
+        if(year==null){
+            year= getPreviousMonthAndYear().get(1);
         }
-        if (phieuDienKTXList.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Not Found");
-        else{
-            List<PhieuDienKTXDTO> phieuDienKTXDTOList = new ArrayList<>();
-            Double total;
-            for (PhieuDienKTX phieuDienKTX : phieuDienKTXList){
-                total = phieuDienKTX.getSoDienTieuThu()*phieuDienKTX.getGiaDienTheoThang().getGiaDien();
-                phieuDienKTXDTOList.add(new PhieuDienKTXDTO(phieuDienKTX.getId(),
-                        phieuDienKTX.getMaSoKTX(),
-                        phieuDienKTX.getSoDienTieuThu(),
-                        phieuDienKTX.isTrangThai(),
-                        modelMapper.map(phieuDienKTX.getGiaDienTheoThang(), GiaDienTheoThangDTO.class),
-                        total));
-            }
-            return ResponseEntity.ok(phieuDienKTXDTOList);
-        }
+        List<PhieuDienKTX> phieuDienKTXList = phieuDienKTXRepository.findAllByTrangThaiAndGiaDienTheoThang_ThangAndGiaDienTheoThang_Nam(status,month,year,pageable);
+
+        List<PhieuDienKTXDTO> phieuDienKTXDTOList= phieuDienKTXList.stream()
+                .map(c -> new PhieuDienKTXDTO(c.getId(), c.getMaSoKTX(), c.getSoDienTieuThu(), c.isTrangThai(),
+                        modelMapper.map(c.getGiaDienTheoThang(), GiaDienTheoThangDTO.class),
+                        c.getSoDienTieuThu()*c.getGiaDienTheoThang().getGiaDien()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(phieuDienKTXDTOList);
     }
 
-    public ResponseEntity<?> updateStatus(PhieuDienKTXDTO phieuDienKTXDTO) {
-        if(!phieuDienKTXDTO.isTrangThai()) phieuDienKTXDTO.setTrangThai(true);
-        else{
-            YearMonth thangTruoc = YearMonth.now().minusMonths(1);
-            if(phieuDienKTXDTO.getGiaDienTheoThang().getThang()==thangTruoc.getMonthValue())
-                phieuDienKTXDTO.setTrangThai(false);
+    public ResponseEntity<?> updateStatus(Integer id) {
+        Optional<PhieuDienKTX> optional= phieuDienKTXRepository.findById(id);
+        if(optional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found: "+id);
         }
-        try {
-            phieuDienKTXRepository.save(modelMapper.map(phieuDienKTXDTO,PhieuDienKTX.class));
-            return ResponseEntity.ok().body("success");
-        }catch (Exception e){
-            e.getStackTrace();
-            return ResponseEntity.badRequest().body("save fail");
+        PhieuDienKTX phieuDienKTX=optional.get();
+        Integer yearOfInvoice=phieuDienKTX.getGiaDienTheoThang().getNam();
+        Integer monthOfInvoice=phieuDienKTX.getGiaDienTheoThang().getThang();
+        YearMonth current= YearMonth.now();
+        if(current.isAfter(YearMonth.of(yearOfInvoice, monthOfInvoice))){
+            phieuDienKTX.setTrangThai(!phieuDienKTX.isTrangThai());
+            try{
+                phieuDienKTXRepository.save(phieuDienKTX);
+                return ResponseEntity.noContent().build();
+            }catch (Exception e){
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Server Error");
+            }
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to done this time");
     }
 
 

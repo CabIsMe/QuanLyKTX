@@ -5,6 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "gia_dien_theo_thang")
+
 public class GiaDienTheoThang {
 
     @Id

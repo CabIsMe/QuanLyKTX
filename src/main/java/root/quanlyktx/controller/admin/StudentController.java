@@ -15,7 +15,6 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/manage/student")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class StudentController {
 
     @Autowired

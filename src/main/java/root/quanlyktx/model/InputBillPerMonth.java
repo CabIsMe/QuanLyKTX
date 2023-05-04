@@ -7,8 +7,8 @@ import java.util.Random;
 
 @Data
 public class InputBillPerMonth {
-    Integer amountOfWater;
-    Integer amountOfElectric;
+    private Integer amountOfWater;
+    private Integer amountOfElectric;
     public static Integer generateRandomNumberWater() {
         Random rand = new Random();
         return rand.nextInt(5) + 1;

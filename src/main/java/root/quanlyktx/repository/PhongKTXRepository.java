@@ -29,4 +29,5 @@ public interface PhongKTXRepository extends JpaRepository<PhongKTX, Integer> {
             + "WHERE t.ngayKetThucDangKy <= :currentDate AND t.ngayKetThuc >= :currentDate "
             + "GROUP BY loai.tenLoai, loai.giaPhong")
     List<Object[]> countStudentsOfRoomtypes(@Param("currentDate") Date currentDate);
+    List<PhongKTX> findAllByTrangThai(boolean stt);
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface LoaiKTXRepository extends JpaRepository<LoaiKTX, Integer> {
     LoaiKTX findLoaiKTXById(Integer id);
-    List<LoaiKTX> findAllByGerder(Boolean gerder);
+    List<LoaiKTX> findAllByGioiTinh(Boolean gerder);
     @NonNull
     Optional<LoaiKTX> findById(Integer id);
     

@@ -20,7 +20,7 @@ public class FBImageService implements IImageService{
     public String save(MultipartFile file) throws IOException {
         Bucket bucket = StorageClient.getInstance().bucket();
 
-        String name = generateFileName(file.getOriginalFilename());
+        String name = file.getOriginalFilename();
 
         bucket.create(name, file.getBytes(), file.getContentType());
 

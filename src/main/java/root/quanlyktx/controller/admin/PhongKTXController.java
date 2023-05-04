@@ -7,13 +7,15 @@ import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.PhongKTXDTO;
 import root.quanlyktx.entity.PhieuNuocKTX;
 import root.quanlyktx.entity.PhongKTX;
+import root.quanlyktx.model.CurrentInfoRoom;
 import root.quanlyktx.service.PhongKTXService;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/manage/room")
-@CrossOrigin(origins = "*", maxAge = 3600)
 
 public class PhongKTXController {
 
@@ -26,23 +28,38 @@ public class PhongKTXController {
         return phongKTXService.addPhongKTX(phongKTXDTO);
     }
 
-    @DeleteMapping("/remove/{id}")
+    @GetMapping("/remove/{id}")
     public ResponseEntity<?> deletePhongKTX(@PathVariable("id") Integer id) {
         return phongKTXService.deletePhongKTX(id);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updatePhongKTX(@PathVariable("id") Integer id, @RequestBody PhongKTXDTO phongKTXDTO){
-        return phongKTXService.updatePhongKTX(id, phongKTXDTO);
+    @PatchMapping("/update/{id}/{idTypeRoom}")
+    public ResponseEntity<?> updatePhongKTX(@PathVariable("id") Integer id, @PathVariable Integer idTypeRoom){
+        return phongKTXService.updatePhongKTX(id, idTypeRoom);
     }
 
     @GetMapping("/")
-    public List <PhongKTXDTO> getAll() { return phongKTXService.getALL();}
+    public List <CurrentInfoRoom> getAll(@RequestParam(defaultValue = "true") Boolean status,
+                                         @RequestParam(required = false) Boolean gender,
+                                         @RequestParam(required = false) Integer idTypeRoom,
+                                         @RequestParam(required = false) Integer id,
+                                         @RequestParam(defaultValue = "false") Boolean sortByType) {
+
+        List <CurrentInfoRoom> infoRooms=phongKTXService.getALL(status, sortByType);
+        return infoRooms.stream()
+                .filter(currentInfoRoom -> gender ==null || currentInfoRoom.getPhongKTX().getLoaiKTX().isGioiTinh()==gender)
+                .filter(currentInfoRoom -> idTypeRoom ==null || currentInfoRoom.getPhongKTX().getLoaiKTX().getId().equals(idTypeRoom))
+                .filter(currentInfoRoom -> id ==null || currentInfoRoom.getPhongKTX().getId().equals(id))
+                .collect(Collectors.toList());
+    }
+
+
 
     @GetMapping("/combobox")
-    public List<PhongKTXDTO> comboboxPhongHaveStudents(@RequestParam( defaultValue = "true") Boolean status) {
-        return phongKTXService.getAllPhongHaveStudents(status);
+    public List<PhongKTXDTO> comboboxPhongHaveStudents(@RequestParam( defaultValue = "true") Boolean statusContract) {
+        return phongKTXService.getAllPhongHaveStudents(statusContract);
     }
+
 
     @GetMapping("/{id}")
     public PhongKTXDTO getById(@PathVariable("id") Integer id){

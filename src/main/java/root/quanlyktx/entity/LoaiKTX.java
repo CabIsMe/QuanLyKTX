@@ -1,12 +1,14 @@
 package root.quanlyktx.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name="loai_KTX")
+@ToString
 public class LoaiKTX {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +19,11 @@ public class LoaiKTX {
     @Column(name = "gia_phong")
     private Double giaPhong;
     @Column(name = "hinh_anh")
-    private String Image;
+    private String image;
     @Column(name = "ten_loai")
     private String tenLoai;
     @Column(name = "gioi_tinh")
-    private Boolean gerder;
+    private boolean gioiTinh;
     @Column(name="mo_ta")
     private String description;
 
@@ -49,11 +51,11 @@ public class LoaiKTX {
     }
 
     public String getImage() {
-        return Image;
+        return image;
     }
 
     public void setImage(String image) {
-        Image = image;
+        this.image = image;
     }
     public Integer getId() {
         return id;
@@ -75,10 +77,13 @@ public class LoaiKTX {
         this.phongKTXList = phongKTXList;
     }
 
-    public LoaiKTX(Integer id, Integer soGiuong, Double giaPhong) {
-        this.id = id;
+    public LoaiKTX(Integer soGiuong, Double giaPhong, String image, String tenLoai, boolean gioiTinh, String description) {
         this.soGiuong = soGiuong;
         this.giaPhong = giaPhong;
+        this.image = image;
+        this.tenLoai = tenLoai;
+        this.gioiTinh = gioiTinh;
+        this.description = description;
     }
 
     public LoaiKTX() {
@@ -93,11 +98,11 @@ public class LoaiKTX {
         this.description = description;
     }
 
-    public Boolean getGerder() {
-        return gerder;
+    public boolean isGioiTinh() {
+        return gioiTinh;
     }
 
-    public void setGerder(Boolean gerder) {
-        this.gerder = gerder;
+    public void setGioiTinh(boolean gioiTinh) {
+        this.gioiTinh = gioiTinh;
     }
 }

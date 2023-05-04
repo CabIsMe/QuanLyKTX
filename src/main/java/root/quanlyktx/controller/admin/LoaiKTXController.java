@@ -16,11 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/manage/room-type")
 //@PreAuthorize("hasAuthority('student')")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class LoaiKTXController {
     @Autowired
     LoaiKTXService loaiKTXService;
-    
+
     
     @GetMapping("/")
     List <LoaiKTXDto> getAll(){
@@ -44,8 +43,9 @@ public class LoaiKTXController {
         return loaiKTXService.deleteLoaiKTX(id);
     }
     @PutMapping("/update/{id}")
-    ResponseEntity<?> updateLoaiKTX(@PathVariable("id") Integer id, @RequestBody LoaiKTXDto loaiKTXDto){
-        return loaiKTXService.updateLoaiKTX(id, loaiKTXDto);
+    ResponseEntity<?> updateLoaiKTX(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file
+            , @ModelAttribute LoaiKTXDto loaiKTXDto){
+        return loaiKTXService.updateLoaiKTX(id, file, loaiKTXDto);
     }
 
 }

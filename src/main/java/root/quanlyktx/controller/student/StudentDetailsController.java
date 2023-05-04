@@ -11,7 +11,6 @@ import root.quanlyktx.service.StudentService;
 import java.sql.Date;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("api/student")
 @PreAuthorize("hasAuthority('student')")
 

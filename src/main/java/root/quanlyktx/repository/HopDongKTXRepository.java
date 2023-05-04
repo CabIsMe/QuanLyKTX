@@ -41,4 +41,5 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     @Query("SELECT COALESCE(SUM(hd.tongTien),0) FROM HopDongKTX hd WHERE hd.term.ngayKetThucDangKy <= :curDate AND hd.trangThai=true GROUP BY hd.term.id,hd.term.ngayKetThucDangKy HAVING SUM(hd.tongTien) IS NOT NULL ORDER BY hd.term.ngayKetThucDangKy DESC ")
     List<Double> sumTotalByCurTerm(@Param("curDate") Date curDate,Pageable pageable);
     List<HopDongKTX> findAllByMSSVLike(String mssv);
+    boolean existsByIdTermAndIdPhongKTX(Integer idTerm,Integer idPhong);
 }

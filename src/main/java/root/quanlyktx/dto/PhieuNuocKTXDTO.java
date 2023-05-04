@@ -26,6 +26,4 @@ public class PhieuNuocKTXDTO {
         this.total = total;
     }
 
-    public PhieuNuocKTXDTO() {
-    }
 }

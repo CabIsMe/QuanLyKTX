@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 //@PreAuthorize("hasAuthority('student')")
 @RequestMapping("/api/thongbaoktx")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class ThongBaoKTXController {
     @Autowired
     ThongBaoKTXService thongBaoKTXService;

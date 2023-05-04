@@ -15,7 +15,6 @@ import java.util.List;
 
 @RequestMapping("api/student")
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 @PreAuthorize("hasAuthority('student')")
 public class RoomDetailsController {
     @Autowired

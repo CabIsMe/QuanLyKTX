@@ -14,7 +14,6 @@ import root.quanlyktx.service.HopDongKTXService;
 import root.quanlyktx.service.TermService;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("api/student/contract")
 @PreAuthorize("hasAuthority('student')")
 public class ContractRoomController {

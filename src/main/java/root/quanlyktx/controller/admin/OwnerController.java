@@ -7,7 +7,6 @@ import root.quanlyktx.entity.Admin;
 import root.quanlyktx.service.AdminService;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("api/owner")
 //@PreAuthorize("hasAuthority('owner')")
 public class OwnerController {

@@ -11,7 +11,6 @@ import root.quanlyktx.service.PhongKTXService;
 
 @RestController
 @RequestMapping("api/bills")
-@CrossOrigin(origins = "*", maxAge = 3600)
 @PreAuthorize("hasAuthority('student')")
 public class BillsController {
 
@@ -27,7 +26,7 @@ public class BillsController {
 //        List<ViewBills> viewBillsList = phieuNuocKTXService.getWaterBills(mssv);
 //        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
 //        else return ResponseEntity.ok(viewBillsList);
-        return phieuNuocKTXService.getWaterBills();
+        return phieuNuocKTXService.getStudentWaterBills();
     }
 
     @GetMapping("/electric")
@@ -35,6 +34,6 @@ public class BillsController {
 //        List<ViewBills> viewBillsList = phieuDienKTXService.getElectricBills(mssv);
 //        if(viewBillsList.isEmpty()) return ResponseEntity.badRequest().body("Empty");
 //        else return ResponseEntity.ok(viewBillsList);
-        return phieuDienKTXService.getElectricBills();
+        return phieuDienKTXService.getSudentElectricBills();
     }
 }

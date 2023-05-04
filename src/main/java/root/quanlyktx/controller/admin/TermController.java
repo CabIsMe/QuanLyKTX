@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 //@PreAuthorize("hasAuthority('student')")
 @RequestMapping("/api/manage/term")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class TermController {
     @Autowired
     private TermService termService;
