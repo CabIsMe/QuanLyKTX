@@ -42,4 +42,7 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     List<Double> sumTotalByCurTerm(@Param("curDate") Date curDate,Pageable pageable);
     List<HopDongKTX> findAllByMSSVLike(String mssv);
     boolean existsByIdTermAndIdPhongKTX(Integer idTerm,Integer idPhong);
+    Integer countHopDongKTXByTrangThaiTrueAndTerm_Id(Integer idTerm);
+//    @Query("SELECT COUNT(hd) AS amountGenderTrue, (SELECT COUNT(hd) FROM HopDongKTX hd JOIN hd.term t WHERE t.ngayKetThucDangKy <= :curDate AND t.ngayKetThuc >= :curDate) AS total FROM HopDongKTX hd JOIN hd.term t JOIN hd.phongKTX p JOIN p.loaiKTX l WHERE t.ngayKetThucDangKy <= :curDate AND t.ngayKetThuc >= :curDate AND l.gerder = true")
+//    List<Object[]> countHdInCurrentTermWithTrueGenderAndTotal(@Param("curDate") Date curDate);
 }

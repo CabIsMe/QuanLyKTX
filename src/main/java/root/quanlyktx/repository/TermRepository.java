@@ -3,6 +3,7 @@ package root.quanlyktx.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import root.quanlyktx.entity.Term;
 import root.quanlyktx.model.StudentInTerm;
 
@@ -22,6 +23,8 @@ public interface TermRepository extends JpaRepository<Term, Integer> {
     Integer countByNgayKetThucDangKyAfter(Date d);
     List<Term> findAllByNgayKetThucGreaterThanEqualAndAndNgayKetThucDangKyBefore(Date dateEnd,Date newDate);
 
+    @Query(value = "SELECT * FROM Term WHERE YEAR(ngay_ket_thuc_dang_ky) =:year",nativeQuery = true)
+    List<Term> findTermsByYear(@Param("year") int year);
 //    @Query("SELECT new root.quanlyktx.model.StudentInTerm(t.id,t.ngayMoDangKy,t.ngayKetThuc,COUNT(hd.id)) " +
 //            "FROM HopDongKTX hd " +
 //            "join Term t " +

@@ -18,24 +18,9 @@ import java.util.Optional;
 @Service
 @EnableScheduling
 public class GiaNuocTheoThangSerive {
-
-//    @Autowired
-//    GiaNuocTheoThangRepository giaNuocTheoThangRepository;
-//    public GiaNuocTheoThang findByLastMonth(){
-//               int id;
-//                Date today = new Date();
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(today);
-//        int month = cal.get(Calendar.MONTH);
-//        int year = cal.get(Calendar.YEAR);
-//        if(month == 1){
-//            id = 120000+ year-1;
-//        }else{
-//            id = (month-1)*10000+year;
-//        }
-//        return giaNuocTheoThangRepository.findById(id).get();}
     @Autowired
     GiaNuocTheoThangRepository giaNuocTheoThangRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(GiaNuocTheoThangSerive.class);
 
     public List<GiaNuocTheoThang> getAllWaterPrice(){
@@ -54,7 +39,7 @@ public class GiaNuocTheoThangSerive {
         return giaNuocTheoThangRepository.findById(id).get();
     }
 //    @Scheduled(fixedRate = 10000)
-//    @Scheduled(cron = "0 0 0 1 * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void addGiaNuocNextMonth(){
         LocalDate currentDate = LocalDate.now();
         int month = currentDate.getMonth().getValue();
@@ -88,7 +73,8 @@ public class GiaNuocTheoThangSerive {
 
     public boolean editWaterPrice(Integer id, Double price){
         Optional<GiaNuocTheoThang> optional= giaNuocTheoThangRepository.findById(id);
-        if(optional.isEmpty()){
+        if(optional.isEmpty() || price == null){
+           logger.error("Null of value or not found id");
             return false;
         }
         GiaNuocTheoThang giaNuocTheoThang=optional.get();
@@ -100,11 +86,15 @@ public class GiaNuocTheoThangSerive {
                 giaNuocTheoThangRepository.save(giaNuocTheoThang);
             }catch (Exception e){
                 e.printStackTrace();
+                logger.error("2");
                 return false;
             }
             return true;
         }
-        else
+        else{
+            logger.error("3");
             return false;
+        }
+
     }
 }

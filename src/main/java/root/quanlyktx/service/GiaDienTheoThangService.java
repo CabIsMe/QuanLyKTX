@@ -26,7 +26,7 @@ public class GiaDienTheoThangService {
     }
 
 //    @Scheduled(fixedRate = 10000)
-//    @Scheduled(cron = "0 0 0 1 * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void addGiaDienNextMonth(){
         LocalDate currentDate = LocalDate.now();
         Integer month = currentDate.getMonth().getValue();
@@ -62,7 +62,7 @@ public class GiaDienTheoThangService {
 
     public boolean editElectricPrice(Integer id, Double price){
         Optional<GiaDienTheoThang> optional= giaDienTheoThangRepository.findById(id);
-        if(optional.isEmpty()){
+        if(optional.isEmpty() || price==null){
             return false;
         }
         GiaDienTheoThang giaDienTheoThang=optional.get();

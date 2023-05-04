@@ -8,14 +8,12 @@ import org.springframework.stereotype.Service;
 import root.quanlyktx.entity.HopDongKTX;
 import root.quanlyktx.entity.PhongKTX;
 import root.quanlyktx.entity.Term;
-import root.quanlyktx.model.RoomStatistics;
-import root.quanlyktx.model.StudentInTerm;
-import root.quanlyktx.model.StudentsOfRoomtypes;
-import root.quanlyktx.model.totalMoneyInTerm;
+import root.quanlyktx.model.*;
 import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.PhongKTXRepository;
 import root.quanlyktx.repository.TermRepository;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -27,13 +25,17 @@ public class ThongKeService {
     @Autowired
     PhongKTXRepository phongKTXRepository;
 
-    public ResponseEntity<?> getAmountStudentInTerm(Integer idTerm) {
-        Optional<Term> term = termRepository.findById(idTerm);
-        if (term.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).body("not found");
-        Date dateEnd = term.get().getNgayKetThuc();
-        List<Term> termList = termRepository.   findAllByNgayKetThucGreaterThanEqualAndAndNgayKetThucDangKyBefore(dateEnd,new Date());
-        List<StudentInTerm> studentInTerms = new ArrayList<>();
-        termList.forEach(term1 -> studentInTerms.add(new StudentInTerm(term1.getId(),term1.getNgayMoDangKy(),term1.getNgayKetThuc(),term1.getHopDongKTXList().size())));
+    public ResponseEntity<?> getAmountStudentInTerm() {
+        LocalDate curDate = LocalDate.now();
+        int year = curDate.getYear();
+        List<Term> terms = termRepository.findTermsByYear(year);
+        if (terms.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).body("not found");
+        List<amountStudentInTerm> studentInTerms = new ArrayList<>();
+        terms.forEach(term -> {
+            Integer amountStudent = hopDongKTXRepository.countHopDongKTXByTrangThaiTrueAndTerm_Id(term.getId());
+            studentInTerms.add(new amountStudentInTerm(amountStudent,term.getNgayKetThucDangKy(),term.getNgayKetThuc()));
+        });
+
         return ResponseEntity.ok(studentInTerms);
     }
 
@@ -74,4 +76,12 @@ public class ThongKeService {
         }
         return ResponseEntity.ok(studentsOfRoomtypes);
     }
+
+//    public ResponseEntity<?> getAmountGender() {
+//        Date curdate = new Date();
+//        List<Object[]> objects = hopDongKTXRepository.countHdInCurrentTermWithTrueGenderAndTotal(curdate);
+//        List<amountGender> amountGenders = new ArrayList<>();
+//        objects.forEach(result -> amountGenders.add(new amountGender(((Long) result[0]).longValue(),((Long) result[1]).longValue())));
+//        return ResponseEntity.ok(amountGenders);
+//    }
 }

@@ -18,10 +18,11 @@ public class ThongKeController {
 
 
     @GetMapping("/studentInTerm")
-    public ResponseEntity<?> getAmountStudentInTerm(@RequestParam(name = "idTerm") Integer idTerm){
-        return thongKeService.getAmountStudentInTerm(idTerm);
+    public ResponseEntity<?> getAmountStudentInTerm(){
+        return thongKeService.getAmountStudentInTerm();
     }
-
+//    @GetMapping("/gender")
+//    public ResponseEntity<?> gender(){ return thongKeService.getAmountGender();}
     @GetMapping("/room")
     public ResponseEntity<?> roomStatistics(){
         return thongKeService.getRoomStatistics();

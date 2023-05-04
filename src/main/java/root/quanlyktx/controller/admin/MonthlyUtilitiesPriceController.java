@@ -1,9 +1,10 @@
 package root.quanlyktx.controller.admin;
 
+import com.google.firebase.database.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.entity.GiaDienTheoThang;
 import root.quanlyktx.entity.GiaNuocTheoThang;
 import root.quanlyktx.service.GiaDienTheoThangService;
@@ -26,5 +27,20 @@ public class MonthlyUtilitiesPriceController {
     @GetMapping("/electric")
     public List<GiaDienTheoThang> getAllElectricPrice(){
         return giaDienTheoThangService.getAllElectricPrice();
+    }
+
+    @PatchMapping("/electric/update/{id}")
+    public ResponseEntity<?> updateCostOfElectricity(@PathVariable Integer id,@RequestParam(required = false) Double cost){
+        if(giaDienTheoThangService.editElectricPrice(id, cost)){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().body("Cannot edit this data");
+    }
+    @PatchMapping("/water/update/{id}")
+    public ResponseEntity<?> updateCostOfWater(@PathVariable Integer id, @RequestParam(required = false) Double cost){
+        if(giaNuocTheoThangSerive.editWaterPrice(id, cost)){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.badRequest().body("Cannot edit this data");
     }
 }
