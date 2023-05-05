@@ -27,7 +27,7 @@ public class TermController {
     }
 
     @GetMapping("/search/")
-    public TermDTO getSingle(@RequestParam Integer id){
+    public TermDTO getSingle(@RequestParam(required = false) Integer id){
         return termService.getSingleTerm(id);
     }
 
@@ -35,6 +35,7 @@ public class TermController {
     public ResponseEntity<?> addTerm(@RequestBody TermDTO termDTO){
         return termService.createTerm(termDTO);
     }
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> update_term(@PathVariable("id") Integer id, @RequestBody TermDTO termDTO){
         return termService.updateTerm(id,termDTO);

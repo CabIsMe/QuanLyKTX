@@ -12,10 +12,7 @@ import root.quanlyktx.repository.HopDongKTXRepository;
 import root.quanlyktx.repository.TermRepository;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,6 +40,7 @@ public class TermService {
         return terms
                 .stream()
                 .map(term -> modelMapper.map(term, TermDTO.class))
+                .sorted(Comparator.comparing(TermDTO::getNgayMoDangKy).reversed())
                 .collect(Collectors.toList());
     }
     public TermDTO getSingleTerm(Integer id){
@@ -95,7 +93,7 @@ public class TermService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid - An illogical ");
         }
         if(termRepository.countByNgayKetThucDangKyAfter(termDTO.getNgayMoDangKy())>1){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Date invalid - Exist 2 terms at the same time");
         }
         term.setHanDongPhi(termDTO.getHanDongPhi());
         term.setNgayMoDangKy(termDTO.getNgayMoDangKy());
@@ -122,7 +120,7 @@ public class TermService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Delete term failed");
         }
-        return ResponseEntity.ok(true);
+        return ResponseEntity.noContent().build();
     }
 
     public List<TermDTO> getAllTermAccordingToStatusContract(boolean status) {

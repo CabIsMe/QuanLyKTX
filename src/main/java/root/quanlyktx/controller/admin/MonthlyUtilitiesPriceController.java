@@ -11,6 +11,7 @@ import root.quanlyktx.service.GiaDienTheoThangService;
 import root.quanlyktx.service.GiaNuocTheoThangSerive;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/manage/price")
@@ -21,12 +22,20 @@ public class MonthlyUtilitiesPriceController {
     private GiaDienTheoThangService giaDienTheoThangService;
 
     @GetMapping("/water")
-    public List<GiaNuocTheoThang> getAllWaterPrice(){ return giaNuocTheoThangSerive.getAllWaterPrice();}
+    public List<GiaNuocTheoThang> getAllWaterPrice(@RequestParam(required = false) Integer year){
+        List<GiaNuocTheoThang> giaNuocTheoThangs= giaNuocTheoThangSerive.getAllWaterPrice();
+        return giaNuocTheoThangs.stream()
+                .filter(c-> year==null || c.getNam().equals(year))
+                .collect(Collectors.toList());
+    }
 //    @GetMapping("/water")
 //    public List<GiaDie>
     @GetMapping("/electric")
-    public List<GiaDienTheoThang> getAllElectricPrice(){
-        return giaDienTheoThangService.getAllElectricPrice();
+    public List<GiaDienTheoThang> getAllElectricPrice(@RequestParam(required = false) Integer year){
+        List<GiaDienTheoThang> giaDienTheoThangs=giaDienTheoThangService.getAllElectricPrice();
+        return giaDienTheoThangs.stream()
+                .filter(c-> year==null || c.getNam().equals(year))
+                .collect(Collectors.toList());
     }
 
     @PatchMapping("/electric/update/{id}")

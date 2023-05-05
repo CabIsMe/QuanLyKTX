@@ -1,6 +1,8 @@
 package root.quanlyktx.service;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +40,7 @@ public class PhongKTXService {
     @Autowired
     TermRepository termRepository;
 
-
+    private static final Logger logger = LoggerFactory.getLogger(PhongKTXService.class);
 
     public ResponseEntity<?> addPhongKTX(PhongKTXDTO phongKTXDTO){
         Optional<LoaiKTX> optional = loaiKTXRepository.findById(phongKTXDTO.getIdLoaiKTX());
@@ -178,19 +180,23 @@ public class PhongKTXService {
         LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
         List<PhongKTX> phongKTXDTOList=phongKTXRepository .findAllByIdLoaiKTXAndTrangThaiTrue(idLoaiPhong);
         if(loaiKTX==null || phongKTXDTOList.isEmpty()){
-            System.out.println("List Room is Empty (1)");
+            logger.error("List Room is Empty (1)");
             return null;
         }
 
         List<RoomDetails> roomDetailsList = new ArrayList<>();
-        for (PhongKTX phongKTX: phongKTXDTOList) {
-
-            roomDetailsList.add(new RoomDetails(phongKTX.getId(), loaiKTX.getTenLoai(),loaiKTX.getGiaPhong(),
-                    loaiKTX.getSoGiuong()- countContractRoom(phongKTX.getId())
-                    ,loaiKTX.getImage(),loaiKTX.getDescription()));
+        try{
+            for (PhongKTX phongKTX: phongKTXDTOList) {
+                roomDetailsList.add(new RoomDetails(phongKTX.getId(), loaiKTX.getTenLoai(),loaiKTX.getGiaPhong(),
+                        loaiKTX.getSoGiuong()- countContractRoom(phongKTX.getId())
+                        ,loaiKTX.getImage(),loaiKTX.getDescription()));
+            }
+        }catch (Exception e){
+            logger.error("Out of viewable time");
+            return null;
         }
         if(roomDetailsList.isEmpty()){
-            System.out.println("List Room is Empty (3)");
+            logger.error("List Room is Empty (3)");
             return null;
         }
 
