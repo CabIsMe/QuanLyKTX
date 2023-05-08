@@ -150,7 +150,6 @@ public class HopDongKTXService {
             logger.error("Is not authenticated");
             return null;
         }
-
         return authentication.getName();
     }
 

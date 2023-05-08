@@ -92,11 +92,11 @@ public class LoaiKTXService {
     public ResponseEntity<?> deleteLoaiKTX(Integer id){
         Date date= new Date();
         if(termRepository.existsByNgayMoDangKyBeforeAndNgayKetThucDangKyAfter(date,date)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to perform corrections at this time");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to delete at this time");
         }
         Optional<LoaiKTX>  optional =loaiKTXRepository.findById(id);
         if(optional.isEmpty())
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID TypeRoom invalid");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID not found");
 
         LoaiKTX loaiKTX= optional.get();
         try {
@@ -104,7 +104,7 @@ public class LoaiKTXService {
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("It already contains room");
         }
-        return ResponseEntity.ok(true);
+        return ResponseEntity.ok("Delete type room successfully!");
 
     }
 
@@ -128,12 +128,12 @@ public class LoaiKTXService {
 
     public ResponseEntity<?> updateLoaiKTX(Integer id, MultipartFile file, LoaiKTXDto loaiKTXDto) {
         if(checkEditTypeRoom(id)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to perform corrections at this time");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to update at this time");
         }
         Optional<LoaiKTX>  optional =loaiKTXRepository.findById(id);
         if(optional.isEmpty())
         {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("loaiKTX invalid");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID not found");
         }
         LoaiKTX loaiKTX_root = optional.get();
         try{
@@ -146,10 +146,10 @@ public class LoaiKTXService {
                 loaiKTX_root.setImage(urlFile);
             }
             loaiKTXRepository.save(loaiKTX_root);
-            return ResponseEntity.ok(true);
+            return ResponseEntity.ok("Update type room successfully!");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("update loaiKTX failed");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update type room failed");
         }
     }
 

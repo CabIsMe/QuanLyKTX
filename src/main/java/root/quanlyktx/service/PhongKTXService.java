@@ -72,36 +72,36 @@ public class PhongKTXService {
 
     public ResponseEntity<?> deletePhongKTX(Integer id){
         if(checkExistRoomInContract(id))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to perform corrections at this time");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to delete at this time");
         Optional<PhongKTX> optional = phongKTXRepository.findById(id);
         if(optional.isEmpty())
         {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PhongKTX invalid");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID not found");
         }
         PhongKTX phongKTX = optional.get();
                 phongKTX.setTrangThai(!phongKTX.isTrangThai());
                 phongKTXRepository.save(phongKTX);
-                return ResponseEntity.ok(true);
+                return ResponseEntity.ok("Delete Room Successfully!");
     }
 
     public ResponseEntity<?> updatePhongKTX(Integer id, Integer idLoaiKTX){
         if(checkExistRoomInContract(id))
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to perform corrections at this time");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Unable to update at this time");
         Optional<PhongKTX> optional = phongKTXRepository.findById(id);
         if(optional.isEmpty())
         {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PhongKTX invalid");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID not found");
         }
 
                 try{
                     PhongKTX phongKTX_root= optional.get();
                     phongKTX_root.setIdLoaiKTX(idLoaiKTX);
                     phongKTXRepository.save(phongKTX_root);
-                    return ResponseEntity.ok(true);
+                    return ResponseEntity.ok("Update Room Successfully!");
                 }
                 catch (Exception e){
                     e.printStackTrace();
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("update phongKTX failed");
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update phongKTX failed");
                 }
     }
 
@@ -180,7 +180,7 @@ public class PhongKTXService {
         LoaiKTX loaiKTX=loaiKTXRepository.findLoaiKTXById(idLoaiPhong);
         List<PhongKTX> phongKTXDTOList=phongKTXRepository .findAllByIdLoaiKTXAndTrangThaiTrue(idLoaiPhong);
         if(loaiKTX==null || phongKTXDTOList.isEmpty()){
-            logger.error("List Room is Empty (1)");
+            logger.error("List Room is Empty ");
             return null;
         }
 
@@ -193,10 +193,6 @@ public class PhongKTXService {
             }
         }catch (Exception e){
             logger.error("Out of viewable time");
-            return null;
-        }
-        if(roomDetailsList.isEmpty()){
-            logger.error("List Room is Empty (3)");
             return null;
         }
 

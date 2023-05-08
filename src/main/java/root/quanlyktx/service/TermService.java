@@ -107,7 +107,7 @@ public class TermService {
     public ResponseEntity<?> deleteTerm(Integer id){
         Optional <Term> optional=termRepository.findById(id);
         if(optional.isEmpty())
-             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID not found");
         Term term=optional.get();
         if(hopDongKTXRepository.existsByIdTerm(term.getId())){
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -117,7 +117,7 @@ public class TermService {
             termRepository.delete(term);
         }catch (Exception e){
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Delete term failed");
         }
         return ResponseEntity.noContent().build();

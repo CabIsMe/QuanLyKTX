@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import root.quanlyktx.entity.HopDongKTX;
 
 
-
+import javax.annotation.Nullable;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +43,7 @@ public interface HopDongKTXRepository extends JpaRepository<HopDongKTX, Integer>
     List<HopDongKTX> findAllByMSSVLike(String mssv);
     boolean existsByIdTermAndIdPhongKTX(Integer idTerm,Integer idPhong);
     Integer countHopDongKTXByTrangThaiTrueAndTerm_Id(Integer idTerm);
+    HopDongKTX findFirstByMSSVAndTrangThaiTrueOrderByNgayLamDonDesc(@Nullable String MSSV);
 //    @Query("SELECT COUNT(hd) AS amountGenderTrue, (SELECT COUNT(hd) FROM HopDongKTX hd JOIN hd.term t WHERE t.ngayKetThucDangKy <= :curDate AND t.ngayKetThuc >= :curDate) AS total FROM HopDongKTX hd JOIN hd.term t JOIN hd.phongKTX p JOIN p.loaiKTX l WHERE t.ngayKetThucDangKy <= :curDate AND t.ngayKetThuc >= :curDate AND l.gerder = true")
 //    List<Object[]> countHdInCurrentTermWithTrueGenderAndTotal(@Param("curDate") Date curDate);
 }
