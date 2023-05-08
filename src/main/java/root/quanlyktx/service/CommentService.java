@@ -25,7 +25,7 @@ public class CommentService {
     @Autowired
     HopDongKTXRepository hopDongKTXRepository;
     private static final Logger logger = LoggerFactory.getLogger(CommentService.class);
-    private final long timePeriodCommented= 86400000L * 3;
+    private final long timePeriodCommented= 86400000L * 10;
 
     public static String getUsernameFromSecurityContextHolder(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -36,7 +36,7 @@ public class CommentService {
         return authentication.getName();
     }
 
-    public ResponseEntity<String> addComment(String content){
+    public ResponseEntity<?> addComment(String content){
         String mssv= getUsernameFromSecurityContextHolder();
         HopDongKTX hopDongKTX= hopDongKTXRepository.findFirstByMSSVAndTrangThaiTrueOrderByNgayLamDonDesc(mssv);
         if(mssv==null || hopDongKTX==null)
@@ -53,7 +53,8 @@ public class CommentService {
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
-        return ResponseEntity.noContent().build();
+        List<Comment> comments= commentRepository.findAllByMssv(mssv);
+        return ResponseEntity.ok(comments);
     }
 
     public List<Comment> readComments(Integer idRoom){

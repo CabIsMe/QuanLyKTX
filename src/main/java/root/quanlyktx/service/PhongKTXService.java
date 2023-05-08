@@ -111,7 +111,8 @@ public class PhongKTXService {
         if (term == null) {
             term = termRepository.getByNgayKetThucDangKyBeforeAndNgayKetThucAfter(date, date);
         }
-        return hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndIdTerm(idRoom, term.getId());
+
+        return term == null? 0: hopDongKTXRepository.countHopDongKTXByIdPhongKTXAndIdTerm(idRoom, term.getId());
 
     }
     public List<CurrentInfoRoom> getALL(boolean status, Boolean sortByType){

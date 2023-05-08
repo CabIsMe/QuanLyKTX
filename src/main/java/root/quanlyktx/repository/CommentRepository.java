@@ -10,4 +10,5 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     List<Comment> findAllByIdRoom(Integer idRoom);
     Comment findByIdAndMssv(Integer id, String mssv);
+    List<Comment> findAllByMssv(String mssv);
 }
