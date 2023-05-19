@@ -1,6 +1,8 @@
 package root.quanlyktx.firebase;
 
 import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
@@ -49,14 +51,18 @@ public class FBBillService {
             }
 
             List<PhongKTX> phongKTXList= phongKTXRepository.findAllByTrangThaiTrue();
+            Firestore dbFirestore = FirestoreClient.getFirestore();
+            InputBillPerMonth inputBillPerMonth= new InputBillPerMonth();
+            CollectionReference billsCollection = dbFirestore.collection("bills");
+            Iterable<DocumentReference> documentReferences= billsCollection.listDocuments();
+            for (DocumentReference documentRef : documentReferences) {
+                documentRef.delete();
+            }
             for (PhongKTX phongKTX: phongKTXList){
 
                 if(hopDongKTXRepository.existsByIdPhongKTXAndIdTermAndTrangThaiTrue(phongKTX.getId(), currentTerm)){
-                    Firestore dbFirestore = FirestoreClient.getFirestore();
-                    InputBillPerMonth inputBillPerMonth= new InputBillPerMonth();
 
-                    dbFirestore.collection("bills")
-                            .document(phongKTX.getId().toString()).set(inputBillPerMonth);
+                    billsCollection.document(phongKTX.getId().toString()).set(inputBillPerMonth);
                     System.out.println(inputBillPerMonth.toString());
 
                 }

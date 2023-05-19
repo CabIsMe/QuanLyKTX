@@ -19,6 +19,4 @@ public class AdminDto {
     private String mail;
     private OTP otp;
     private Role role;
-
-
 }

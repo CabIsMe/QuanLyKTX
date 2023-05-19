@@ -140,7 +140,8 @@ public class LoaiKTXService {
             loaiKTX_root.setGiaPhong(loaiKTXDto.getGiaPhong());
             loaiKTX_root.setSoGiuong(loaiKTXDto.getSoGiuong());
             loaiKTX_root.setTenLoai(loaiKTXDto.getTenLoai());
-            if(!file.isEmpty()){
+            loaiKTX_root.setDescription(loaiKTXDto.getDescription());
+            if(file!= null){
                 String fileName = fbImageService.save(file);
                 String urlFile = fbImageService.getImageUrl(fileName);
                 loaiKTX_root.setImage(urlFile);

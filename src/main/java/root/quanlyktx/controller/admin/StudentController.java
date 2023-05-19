@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.StudentDto;
 import root.quanlyktx.entity.Student;
@@ -15,6 +16,8 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/manage/student")
+@PreAuthorize("hasAuthority('admin')")
+
 public class StudentController {
 
     @Autowired

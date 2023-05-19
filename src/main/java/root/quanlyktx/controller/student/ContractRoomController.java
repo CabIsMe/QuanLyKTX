@@ -34,7 +34,6 @@ public class ContractRoomController {
 
     @GetMapping("/create/{idPhong}")
     public boolean registerDormitory(@PathVariable("idPhong") Integer idPhong){
-
         return hopDongKTXService.createContract(idPhong);
     }
     @GetMapping("/extend")

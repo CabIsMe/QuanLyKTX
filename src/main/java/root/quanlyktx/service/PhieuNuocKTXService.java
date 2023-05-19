@@ -30,8 +30,6 @@ import java.util.stream.Collectors;
 public class PhieuNuocKTXService {
 
     @Autowired
-    private TermRepository termRepository;
-    @Autowired
     private HopDongKTXRepository hopDongKTXRepository;
     @Autowired
     private PhieuNuocKTXRepository phieuNuocKTXRepository;

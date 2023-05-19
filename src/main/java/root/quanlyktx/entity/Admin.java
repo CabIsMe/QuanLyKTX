@@ -1,10 +1,13 @@
 package root.quanlyktx.entity;
 
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
 @Table(name = "admins")
+@ToString
 public class Admin {
     @Id
     @Column(name = "MSCB")
@@ -57,11 +60,15 @@ public class Admin {
         this.password = password;
     }
 
-    public Admin(String username, String hoTen, String password) {
+    public Admin(String username, String hoTen, String mail, String password, Integer role_id) {
         this.username = username;
-        this.hoTen = hoTen;
+        this.hoTen=hoTen;
+        this.mail = mail;
         this.password = password;
+        this.role_id = role_id;
     }
+
+
 
     public String getUsername() {
         return username;

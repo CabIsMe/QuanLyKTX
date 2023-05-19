@@ -11,6 +11,7 @@ import root.quanlyktx.dto.LoaiKTXDto;
 import root.quanlyktx.entity.LoaiKTX;
 import root.quanlyktx.service.LoaiKTXService;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 @RestController
@@ -43,7 +44,7 @@ public class LoaiKTXController {
         return loaiKTXService.deleteLoaiKTX(id);
     }
     @PutMapping("/update/{id}")
-    ResponseEntity<?> updateLoaiKTX(@PathVariable("id") Integer id, @RequestParam("file") MultipartFile file
+    ResponseEntity<?> updateLoaiKTX(@PathVariable("id") Integer id, @RequestParam("file") @Nullable MultipartFile file
             , @ModelAttribute LoaiKTXDto loaiKTXDto){
         return loaiKTXService.updateLoaiKTX(id, file, loaiKTXDto);
     }

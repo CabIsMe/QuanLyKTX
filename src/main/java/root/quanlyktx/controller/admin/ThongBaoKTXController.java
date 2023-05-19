@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 //@PreAuthorize("hasAuthority('student')")
-@RequestMapping("/api/thongbaoktx")
+@RequestMapping("/api/manage/notification")
 public class ThongBaoKTXController {
     @Autowired
     ThongBaoKTXService thongBaoKTXService;

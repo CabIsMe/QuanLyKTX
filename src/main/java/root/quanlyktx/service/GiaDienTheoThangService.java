@@ -26,7 +26,7 @@ public class GiaDienTheoThangService {
     }
 
 //    @Scheduled(fixedRate = 10000)
-    @Scheduled(cron = "0 0 0 1 * ?")
+//    @Scheduled(cron = "0 0 0 1 * ?")
     public void addGiaDienNextMonth(){
         LocalDate currentDate = LocalDate.now();
         Integer month = currentDate.getMonth().getValue();

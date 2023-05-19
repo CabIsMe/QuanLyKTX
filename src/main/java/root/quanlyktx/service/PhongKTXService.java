@@ -118,10 +118,9 @@ public class PhongKTXService {
     public List<CurrentInfoRoom> getALL(boolean status, Boolean sortByType){
         List<CurrentInfoRoom> infoRooms=new ArrayList<>();
         List<PhongKTX> phongKTXList = phongKTXRepository.findAllByTrangThai(status);
-        if(sortByType){
-            phongKTXList= phongKTXList.stream().sorted(Comparator.comparing(PhongKTX::getIdLoaiKTX))
+        if(sortByType)
+            phongKTXList =  phongKTXList.stream().sorted(Comparator.comparing(PhongKTX::getIdLoaiKTX))
                     .collect(Collectors.toList());
-        }
         for(PhongKTX phongKTX: phongKTXList){
             infoRooms.add(new CurrentInfoRoom(modelMapper.map(phongKTX, PhongKTXDTO.class), amountContractRoom(phongKTX.getId())));
         }

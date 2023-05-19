@@ -11,7 +11,7 @@ import root.quanlyktx.service.PhongKTXService;
 import root.quanlyktx.service.ThongKeService;
 
 @RestController
-@RequestMapping("api/analysis")
+@RequestMapping("api/manage/analysis")
 public class ThongKeController {
     @Autowired
     ThongKeService thongKeService;
