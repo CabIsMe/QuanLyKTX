@@ -25,7 +25,7 @@ public class CommentService {
     @Autowired
     HopDongKTXRepository hopDongKTXRepository;
     private static final Logger logger = LoggerFactory.getLogger(CommentService.class);
-    private final long timePeriodCommented= 86400000L * 10;
+    private final long timePeriodCommented= 86400000L * 12;
 
     public static String getUsernameFromSecurityContextHolder(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -43,8 +43,8 @@ public class CommentService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("MSSV not found!");
         long endTerm=hopDongKTX.getTerm().getNgayKetThuc().getTime();
         long currentTime= new Date().getTime();
-        // Nếu trước thời gian kết thúc hđ và sau thời gian kết thúc hđ(>3 ngày) không được cmt
-        if(currentTime - endTerm < 0 || currentTime - endTerm > timePeriodCommented){
+        // Before and after 15 days are not allowed to comment
+        if(Math.abs(currentTime - endTerm) > timePeriodCommented){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Can't comment at the moment!");
         }
         try{
