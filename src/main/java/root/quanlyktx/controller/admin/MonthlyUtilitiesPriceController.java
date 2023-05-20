@@ -4,6 +4,7 @@ import com.google.firebase.database.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.entity.GiaDienTheoThang;
 import root.quanlyktx.entity.GiaNuocTheoThang;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/manage/price")
+
 public class MonthlyUtilitiesPriceController {
     @Autowired
     private GiaNuocTheoThangSerive giaNuocTheoThangSerive;

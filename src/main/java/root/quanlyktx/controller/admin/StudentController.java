@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/manage/student")
-@PreAuthorize("hasAuthority('admin')")
 
 public class StudentController {
 

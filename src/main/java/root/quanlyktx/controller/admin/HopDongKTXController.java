@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.HopDongKTXDTO;
 import root.quanlyktx.entity.HopDongKTX;
@@ -16,7 +17,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/manage/contract")
-
 public class HopDongKTXController {
     @Autowired
     private HopDongKTXService hopDongKTXService;

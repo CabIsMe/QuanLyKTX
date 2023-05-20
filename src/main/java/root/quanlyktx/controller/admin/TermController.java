@@ -11,7 +11,6 @@ import root.quanlyktx.service.TermService;
 import java.util.List;
 
 @RestController
-//@PreAuthorize("hasAuthority('student')")
 @RequestMapping("/api/manage/term")
 public class TermController {
     @Autowired

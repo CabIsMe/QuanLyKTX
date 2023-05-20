@@ -2,6 +2,7 @@ package root.quanlyktx.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import root.quanlyktx.dto.AdminDto;
 import root.quanlyktx.entity.Admin;
@@ -13,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/owner")
-//@PreAuthorize("hasAuthority('owner')")
 public class OwnerController {
     @Autowired
     AdminService adminService;

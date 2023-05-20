@@ -3,10 +3,11 @@ package root.quanlyktx.controller.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,7 @@ import root.quanlyktx.entity.OTP;
 import root.quanlyktx.model.OTPCode;
 import root.quanlyktx.service.OtpService;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,5 +96,11 @@ public class AdminAuthController {
             return ResponseEntity.ok(new JwtResponse(jwt,userDetails.getUsername(),roles));
         }
         return ResponseEntity.badRequest().body("Time out or OTP incorrect");
+    }
+    @PreAuthorize("hasAnyAuthority('admin', 'censor', 'owner')")
+    @GetMapping("/authority")
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getAuthorities();
     }
 }

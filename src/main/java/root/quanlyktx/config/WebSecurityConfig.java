@@ -72,11 +72,19 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
-//                .antMatchers("/api/owner/**").hasAuthority("owner")
+                .antMatchers("/api/owner/**").hasAuthority("owner")
+                .antMatchers("/api/manage/contract/**").hasAnyAuthority("admin", "censor", "owner")
+                .antMatchers("/api/manage/invoices/**").hasAnyAuthority("admin", "censor", "owner")
+                .antMatchers("/api/manage/price/**").hasAnyAuthority("admin", "censor", "owner")
+                .antMatchers("/api/manage/student/**").hasAnyAuthority("admin", "censor", "owner")
+                .antMatchers("/api/manage/room-type/**").hasAnyAuthority("admin", "owner")
+                .antMatchers("/api/manage/room/**").hasAnyAuthority("admin", "owner")
+                .antMatchers("/api/manage/term/**").hasAnyAuthority("admin", "owner")
+//                Permit URL Login, sign up...
                 .antMatchers("/api/admin/**").permitAll()
-//                .anyRequest().authenticated();
+                .anyRequest().authenticated();
                 // dòng trên để filter url, dòng dưới để tắt đi cho dễ test
-                .antMatchers("/api/**").permitAll();
+//                .antMatchers("/api/**").permitAll();
 
         http.authenticationProvider(authenticationProvider());
 
