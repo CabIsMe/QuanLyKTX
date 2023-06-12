@@ -21,16 +21,6 @@ public class HandleAdminDetail implements UserDetails {
         this.admin = admin;
         this.authorities=authorities;
     }
-//    public static HandleUserDetail build(User user) {
-//        List<GrantedAuthority> authorities= new ArrayList<>();
-//        if(user.getRole()==4)
-//            authorities.add(new SimpleGrantedAuthority("student"));
-//        else if(user.getRole()==3)
-//            authorities.add(new SimpleGrantedAuthority("admin"));
-//
-//
-//        return new HandleUserDetail(user, authorities);
-//    }
     public static HandleAdminDetail build(Admin admin) {
         List<GrantedAuthority> authorities= new ArrayList<>();
 
