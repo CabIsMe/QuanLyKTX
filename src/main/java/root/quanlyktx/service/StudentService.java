@@ -56,12 +56,14 @@ public class StudentService {
     private static final Logger logger = LoggerFactory.getLogger(StudentService.class);
     private static final int PASSWORD_LENGTH = 10;
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstu0123456789";
+
     @PreAuthorize("hasAuthority('student')")
     public StudentDto getInfo(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.isAuthenticated()){
             Student student = studentRepository.findByUsername(authentication.getName());
             if(student!=null){
+
                 return modelMapper.map(student, StudentDto.class);
             }
         }
@@ -212,9 +214,9 @@ public class StudentService {
             calendar.set(2001, Calendar.FEBRUARY, 2);
             Date date = calendar.getTime();
             student.setNgaySinh(date);
-            student.setPassword(encoder.encode("123"));
-            student.setStatus(true);
             student.setMail("n19dccn018@student.ptithcm.edu.vn");
+            student.setStatus(true);
+            student.setPassword(encoder.encode("123"));
 //-----------------------
             studentRepository.save(student);
         });

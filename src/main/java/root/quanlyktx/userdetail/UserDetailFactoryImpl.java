@@ -29,8 +29,10 @@ public class UserDetailFactoryImpl implements UserDetailFactory{
         }
         if (student == null) {
 
-            return HandleAdminDetail.build(admin);
+//            return HandleAdminDetail.build(admin);
+            return AbstractHandleDetail.buildAdminDetail(admin);
         }
-        return HandleStudentDetail.build(student);
+//        return HandleStudentDetail.build(student);
+        return AbstractHandleDetail.buildStudentDetail(student);
     }
 }
